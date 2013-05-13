@@ -10,12 +10,16 @@ import javax.swing.JFrame;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.util.Rotation;
 
 public class Graph extends JFrame {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private ChartPanel ratiochart, maxfailschart;
 	private DefaultPieDataset ratiodataSet, maxfailsdataset;
@@ -29,8 +33,7 @@ public class Graph extends JFrame {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-				System.out.println(" Fails:" + fails + " wins=" + wins
-						+ " ratio=" + (((double) wins / (double) fails) * 100));
+				System.out.println(" Fails:" + fails + " wins=" + wins + " ratio=" + (((double) wins / (double) fails) * 100));
 				System.exit(0);
 			}
 		});
@@ -40,6 +43,7 @@ public class Graph extends JFrame {
 		getContentPane().add(ratiochart, BorderLayout.NORTH);
 		getContentPane().add(maxfailschart, BorderLayout.CENTER);
 		pack();
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 
@@ -48,8 +52,7 @@ public class Graph extends JFrame {
 		ratiodataSet.setValue("wins", wins);
 		ratiodataSet.setValue("fails", fails);
 		// based on the dataset we create the chart
-		ratiochart = new ChartPanel(ChartFactory.createPieChart3D("ratio",
-				ratiodataSet, true, true, false));
+		ratiochart = new ChartPanel(ChartFactory.createPieChart3D("ratio", ratiodataSet, true, true, false));
 		PiePlot plot = (PiePlot) ratiochart.getChart().getPlot();
 		plot.setStartAngle(290);
 		plot.setDirection(Rotation.CLOCKWISE);
@@ -59,8 +62,7 @@ public class Graph extends JFrame {
 
 	private void initMaxFails() {
 		maxfailsdataset = new DefaultPieDataset();
-		maxfailschart = new ChartPanel(ChartFactory.createPieChart3D(
-				"maxfails", maxfailsdataset, true, true, false));
+		maxfailschart = new ChartPanel(ChartFactory.createPieChart3D("maxfails", maxfailsdataset, true, true, false));
 		PiePlot plot = (PiePlot) maxfailschart.getChart().getPlot();
 		plot.setStartAngle(290);
 		plot.setDirection(Rotation.CLOCKWISE);
@@ -71,10 +73,8 @@ public class Graph extends JFrame {
 	public void addData(int cptFailsMax, int portefeuille, int cptRuns) {
 		// System.out.println(" Fails:" + cptFailsMax + "portefeuille=" +
 		// portefeuille + "     lancé n°" + cptRuns);
-		if (portefeuille < 0)
-			fails++;
-		if (portefeuille > 0)
-			wins++;
+		if (portefeuille < 0)			fails++;
+		if (portefeuille > 0)			wins++;
 
 		if (failsMax.containsKey(cptFailsMax)) {
 			failsMax.put(cptFailsMax, failsMax.remove(cptFailsMax) + 1);
@@ -88,9 +88,7 @@ public class Graph extends JFrame {
 		// Creates a sample dataset
 		ratiodataSet.setValue("wins", wins);
 		ratiodataSet.setValue("fails", fails);
-		ratiochart.getChart().setTitle(
-				"Jeux=" + (wins + fails) + " ratio="
-						+ (int) (((double) wins / (double) fails) * 100));
+		ratiochart.getChart().setTitle("Jeux=" + (wins + fails) + " ratio=" + (int) (((double) wins / (double) fails) * 100));
 		ratiochart.getChart().fireChartChanged();
 
 		for (Integer i : failsMax.keySet())

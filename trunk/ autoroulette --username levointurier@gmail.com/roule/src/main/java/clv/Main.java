@@ -7,7 +7,7 @@ public class Main {
 
 	private static HashMap<Integer, RouletteNumber> table = new HashMap<Integer, RouletteNumber>();
 
-	private int[] mises = { 1, 2, 5, 15, 45};
+	private int[] mises = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512,1024,2048 };
 	private int portefeuilleStart = 10000;
 	private RouletteColor pari = RouletteColor.RED;
 	private Graph g;
@@ -27,7 +27,6 @@ public class Main {
 		for (int i = 0; i <= 36; i++) {
 			System.out.print(table.get(i));
 		}
-		System.out.println("***");
 		Main m1 = new Main();
 		m1.joue();
 
@@ -39,6 +38,7 @@ public class Main {
 	}
 
 	public Main() {
+		System.out.println("***" + mises.length);
 		g = new Graph();
 	}
 
@@ -49,8 +49,7 @@ public class Main {
 			int cptFailsMax = 0;
 			int cptRuns = 0;
 			int portefeuille = portefeuilleStart;
-			while (cptFails < mises.length
-					&& portefeuille < portefeuilleStart * 2 && portefeuille > 0) {
+			while (cptFails < mises.length && portefeuille < portefeuilleStart * 2 && portefeuille > 0) {
 				RouletteNumber lance = table.get(r.nextInt(37));
 				cptRuns++;
 				portefeuille -= mises[cptFails] * 200;
@@ -69,8 +68,7 @@ public class Main {
 						// cptRuns);
 					} else {
 						cptFails++;
-						cptFailsMax = cptFails > cptFailsMax ? cptFails
-								: cptFailsMax;
+						cptFailsMax = cptFails > cptFailsMax ? cptFails : cptFailsMax;
 						// System.out.println("Pari:" + pari + "-" + lance +
 						// "=FAIL, gain=" + (portefeuille - 10000) + " Fails:" +
 						// cptFails + "     lancé n°" + cptRuns);
@@ -78,10 +76,9 @@ public class Main {
 				}
 			}
 			g.addData(cptFailsMax, portefeuille, cptRuns);
-		/**	try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-			}**/
+			/**
+			 * try { Thread.sleep(100); } catch (InterruptedException e) { }
+			 **/
 		}
 	}
 
