@@ -1,7 +1,10 @@
 package clv;
 
+import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JFrame;
 
@@ -14,51 +17,86 @@ import org.jfree.util.Rotation;
 
 public class Graph extends JFrame {
 
-	private ChartPanel chart;
-	private DefaultPieDataset dataSet;
+	private ChartPanel ratiochart, maxfailschart;
+	private DefaultPieDataset ratiodataSet, maxfailsdataset;
 	private int wins = 0, fails = 0;
+
+	private HashMap<Integer, Integer> failsMax = new HashMap<Integer, Integer>();
 
 	public Graph() {
 		super("graphs");
-			addWindowListener(new WindowAdapter() {
+		addWindowListener(new WindowAdapter() {
 
-		    @Override
-		    public void windowClosing(WindowEvent e) {
-		    	System.out.println(" Fails:" + fails + " wins="	+ wins+ " ratio="+(((double)wins/(double)fails)*100));
-			System.exit(0);
-		    }
+			@Override
+			public void windowClosing(WindowEvent e) {
+				System.out.println(" Fails:" + fails + " wins=" + wins
+						+ " ratio=" + (((double) wins / (double) fails) * 100));
+				System.exit(0);
+			}
 		});
-		dataSet = new DefaultPieDataset();
-		dataSet.setValue("wins", wins);
-		dataSet.setValue("fails", fails);
-		// based on the dataset we create the chart
-		chart = new ChartPanel(ChartFactory.createPieChart3D("pokpok", dataSet,
-				true, true, false));
-		chart.setPreferredSize(new java.awt.Dimension(500, 270));
-		getContentPane().removeAll();
-		setContentPane(chart);
-    	PiePlot plot = (PiePlot) chart.getChart().getPlot();
-		plot.setStartAngle(290);
-		plot.setDirection(Rotation.CLOCKWISE);
-		plot.setForegroundAlpha(0.5f);
+
+		initRadio();
+		initMaxFails();
+		getContentPane().add(ratiochart, BorderLayout.NORTH);
+		getContentPane().add(maxfailschart, BorderLayout.CENTER);
 		pack();
 		setVisible(true);
 	}
 
+	private void initRadio() {
+		ratiodataSet = new DefaultPieDataset();
+		ratiodataSet.setValue("wins", wins);
+		ratiodataSet.setValue("fails", fails);
+		// based on the dataset we create the chart
+		ratiochart = new ChartPanel(ChartFactory.createPieChart3D("ratio",
+				ratiodataSet, true, true, false));
+		PiePlot plot = (PiePlot) ratiochart.getChart().getPlot();
+		plot.setStartAngle(290);
+		plot.setDirection(Rotation.CLOCKWISE);
+		plot.setForegroundAlpha(0.5f);
+		ratiochart.setPreferredSize(new java.awt.Dimension(500, 220));
+	}
+
+	private void initMaxFails() {
+		maxfailsdataset = new DefaultPieDataset();
+		maxfailschart = new ChartPanel(ChartFactory.createPieChart3D(
+				"maxfails", maxfailsdataset, true, true, false));
+		PiePlot plot = (PiePlot) maxfailschart.getChart().getPlot();
+		plot.setStartAngle(290);
+		plot.setDirection(Rotation.CLOCKWISE);
+		plot.setForegroundAlpha(0.5f);
+		maxfailschart.setPreferredSize(new java.awt.Dimension(500, 220));
+	}
+
 	public void addData(int cptFailsMax, int portefeuille, int cptRuns) {
-		//System.out.println(" Fails:" + cptFailsMax + "portefeuille="	+ portefeuille + "     lancé n°" + cptRuns);
+		// System.out.println(" Fails:" + cptFailsMax + "portefeuille=" +
+		// portefeuille + "     lancé n°" + cptRuns);
 		if (portefeuille < 0)
 			fails++;
 		if (portefeuille > 0)
 			wins++;
-		updateChart();
+
+		if (failsMax.containsKey(cptFailsMax)) {
+			failsMax.put(cptFailsMax, failsMax.remove(cptFailsMax) + 1);
+		} else {
+			failsMax.put(cptFailsMax, 1);
+		}
+		updateCharts();
 	}
 
-	private void updateChart() {
+	private void updateCharts() {
 		// Creates a sample dataset
-		dataSet.setValue("wins", wins);
-		dataSet.setValue("fails", fails);
-		chart.getChart().fireChartChanged();
+		ratiodataSet.setValue("wins", wins);
+		ratiodataSet.setValue("fails", fails);
+		ratiochart.getChart().setTitle(
+				"Jeux=" + (wins + fails) + " ratio="
+						+ (int) (((double) wins / (double) fails) * 100));
+		ratiochart.getChart().fireChartChanged();
+
+		for (Integer i : failsMax.keySet())
+			maxfailsdataset.setValue(i, failsMax.get(i));
+		maxfailschart.getChart().fireChartChanged();
+
 		repaint();
 	}
 

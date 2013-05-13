@@ -7,7 +7,7 @@ public class Main {
 
 	private static HashMap<Integer, RouletteNumber> table = new HashMap<Integer, RouletteNumber>();
 
-	private int[] mises = { 1, 2, 4, 9, 20, 45, 100 };
+	private int[] mises = { 1, 2, 5, 15, 45};
 	private int portefeuilleStart = 10000;
 	private RouletteColor pari = RouletteColor.RED;
 	private Graph g;
