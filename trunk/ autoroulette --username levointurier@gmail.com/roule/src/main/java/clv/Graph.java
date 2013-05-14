@@ -21,11 +21,12 @@ public class Graph extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private ChartPanel ratiochart, maxfailschart;
-	private DefaultPieDataset ratiodataSet, maxfailsdataset;
+	private ChartPanel ratiochart, maxfailschart, numRunsChart;
+	private DefaultPieDataset ratiodataSet = new DefaultPieDataset(), maxfailsdataset = new DefaultPieDataset(), runsdataset = new DefaultPieDataset();
 	private int wins = 0, fails = 0;
 
 	private HashMap<Integer, Integer> failsMax = new HashMap<Integer, Integer>();
+	private HashMap<Integer, Integer> runs = new HashMap<Integer, Integer>();
 
 	public Graph() {
 		super("graphs");
@@ -38,49 +39,55 @@ public class Graph extends JFrame {
 			}
 		});
 
-		initRadio();
-		initMaxFails();
-		getContentPane().add(ratiochart, BorderLayout.NORTH);
+		initCharts();
 		getContentPane().add(maxfailschart, BorderLayout.CENTER);
+		getContentPane().add(ratiochart, BorderLayout.NORTH);
+		getContentPane().add(numRunsChart, BorderLayout.SOUTH);
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 
-	private void initRadio() {
-		ratiodataSet = new DefaultPieDataset();
+	private void initCharts() {
+		numRunsChart = initChart(runsdataset, "runs");
+		maxfailschart = initChart(maxfailsdataset, "maxfails");
 		ratiodataSet.setValue("wins", wins);
 		ratiodataSet.setValue("fails", fails);
-		// based on the dataset we create the chart
-		ratiochart = new ChartPanel(ChartFactory.createPieChart3D("ratio", ratiodataSet, true, true, false));
-		PiePlot plot = (PiePlot) ratiochart.getChart().getPlot();
-		plot.setStartAngle(290);
-		plot.setDirection(Rotation.CLOCKWISE);
-		plot.setForegroundAlpha(0.5f);
-		ratiochart.setPreferredSize(new java.awt.Dimension(500, 220));
+		ratiochart = initChart(ratiodataSet, "ratio");
 	}
 
-	private void initMaxFails() {
-		maxfailsdataset = new DefaultPieDataset();
-		maxfailschart = new ChartPanel(ChartFactory.createPieChart3D("maxfails", maxfailsdataset, true, true, false));
-		PiePlot plot = (PiePlot) maxfailschart.getChart().getPlot();
+	private ChartPanel initChart(DefaultPieDataset d, String title) {
+		ChartPanel c = new ChartPanel(ChartFactory.createPieChart3D(title, d, true, true, false));
+		PiePlot plot = (PiePlot) c.getChart().getPlot();
 		plot.setStartAngle(290);
 		plot.setDirection(Rotation.CLOCKWISE);
 		plot.setForegroundAlpha(0.5f);
-		maxfailschart.setPreferredSize(new java.awt.Dimension(500, 220));
+		c.setPreferredSize(new java.awt.Dimension(500, 200));
+		return c;
 	}
 
 	public void addData(int cptFailsMax, int portefeuille, int cptRuns) {
 		// System.out.println(" Fails:" + cptFailsMax + "portefeuille=" +
 		// portefeuille + "     lancé n°" + cptRuns);
-		if (portefeuille < 0)			fails++;
-		if (portefeuille > 0)			wins++;
+		if (portefeuille < 0)
+			fails++;
+		if (portefeuille > 0)
+			wins++;
 
 		if (failsMax.containsKey(cptFailsMax)) {
 			failsMax.put(cptFailsMax, failsMax.remove(cptFailsMax) + 1);
 		} else {
 			failsMax.put(cptFailsMax, 1);
 		}
+
+		int nbr = cptRuns / 50;
+		int index = nbr * 50;
+		if (runs.containsKey(index)) {
+			runs.put(index, runs.remove(index) + 1);
+		} else {
+			runs.put(index, 1);
+		}
+
 		updateCharts();
 	}
 
@@ -95,6 +102,9 @@ public class Graph extends JFrame {
 			maxfailsdataset.setValue(i, failsMax.get(i));
 		maxfailschart.getChart().fireChartChanged();
 
+		for (Integer i : runs.keySet())
+			runsdataset.setValue(i, runs.get(i));
+		numRunsChart.getChart().fireChartChanged();
 		repaint();
 	}
 
