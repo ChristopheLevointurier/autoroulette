@@ -23,14 +23,15 @@ public class Graph extends JFrame {
 
 	private ChartPanel ratiochart, maxfailschart, numRunsChart;
 	private DefaultPieDataset ratiodataSet = new DefaultPieDataset(), maxfailsdataset = new DefaultPieDataset(), runsdataset = new DefaultPieDataset();
-	private int wins = 0, fails = 0;
+	private int wins = 0, fails = 0, portefeuilleStart=0, nbrmisesmax=0;
 
 	private HashMap<Integer, Integer> failsMax = new HashMap<Integer, Integer>();
 	private HashMap<Integer, Integer> runs = new HashMap<Integer, Integer>();
 
-	public Graph() {
-		super("graphs");
-		
+	public Graph(int _portefeuilleStart,int _nbrmisesmax) {
+		super("Start="+_portefeuilleStart+" Nbr de mises:"+_nbrmisesmax);
+		portefeuilleStart=_portefeuilleStart;
+		nbrmisesmax=_nbrmisesmax;
 		initCharts();
 		getContentPane().add(maxfailschart, BorderLayout.CENTER);
 		getContentPane().add(ratiochart, BorderLayout.NORTH);
@@ -61,9 +62,9 @@ public class Graph extends JFrame {
 	public void addData(int cptFailsMax, int portefeuille, int cptRuns) {
 		// System.out.println(" Fails:" + cptFailsMax + "portefeuille=" +
 		// portefeuille + "     lancé n°" + cptRuns);
-		if (portefeuille < 0)
+		if (portefeuille < portefeuilleStart)
 			fails++;
-		if (portefeuille > 0)
+		if (portefeuille >  portefeuilleStart)
 			wins++;
 
 		if (failsMax.containsKey(cptFailsMax)) {
@@ -87,7 +88,7 @@ public class Graph extends JFrame {
 		// Creates a sample dataset
 		ratiodataSet.setValue("wins", wins);
 		ratiodataSet.setValue("fails", fails);
-		ratiochart.getChart().setTitle("Jeux=" + (wins + fails) + " ratio=" + (int) (((double) wins / (double) fails) * 100));
+		ratiochart.getChart().setTitle(" Jeux=" + (wins + fails) + " ratio=" + (int) (((double) wins / (double) fails) * 100));
 		ratiochart.getChart().fireChartChanged();
 
 		for (Integer i : failsMax.keySet())
