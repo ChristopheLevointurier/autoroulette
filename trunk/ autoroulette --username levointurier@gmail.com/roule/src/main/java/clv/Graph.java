@@ -14,7 +14,7 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.util.Rotation;
 
-public class Graph extends JFrame {
+public class Graph extends JFrame{
 
 	/**
 	 * 
@@ -32,21 +32,17 @@ public class Graph extends JFrame {
 		super("Start="+_portefeuilleStart+" Nbr de mises:"+_nbrmisesmax);
 		portefeuilleStart=_portefeuilleStart;
 		nbrmisesmax=_nbrmisesmax;
-		initCharts();
+		numRunsChart = initChart(runsdataset, "runs");
+		maxfailschart = initChart(maxfailsdataset, "maxfails");
+		ratiodataSet.setValue("wins", wins);
+		ratiodataSet.setValue("fails", fails);
+		ratiochart = initChart(ratiodataSet, "ratio");
 		getContentPane().add(maxfailschart, BorderLayout.CENTER);
 		getContentPane().add(ratiochart, BorderLayout.NORTH);
 		getContentPane().add(numRunsChart, BorderLayout.SOUTH);
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
-	}
-
-	private void initCharts() {
-		numRunsChart = initChart(runsdataset, "runs");
-		maxfailschart = initChart(maxfailsdataset, "maxfails");
-		ratiodataSet.setValue("wins", wins);
-		ratiodataSet.setValue("fails", fails);
-		ratiochart = initChart(ratiodataSet, "ratio");
 	}
 
 	private ChartPanel initChart(DefaultPieDataset d, String title) {
@@ -60,8 +56,7 @@ public class Graph extends JFrame {
 	}
 
 	public void addData(int cptFailsMax, int portefeuille, int cptRuns) {
-		// System.out.println(" Fails:" + cptFailsMax + "portefeuille=" +
-		// portefeuille + "     lancé n°" + cptRuns);
+		 //System.out.println(" Fails:" + cptFailsMax + "portefeuille=" + portefeuille + "     lancé n°" + cptRuns);
 		if (portefeuille < portefeuilleStart)
 			fails++;
 		if (portefeuille >  portefeuilleStart)
