@@ -27,7 +27,7 @@ public class Main extends JFrame {
 	private JComboBox misesBox;
 	private final DefaultComboBoxModel model = new DefaultComboBoxModel(new String[] { "1", "2", "5", "10", "20", "40", "80", "160", "256", "512", "1024", "2048", "4096", "9192" });
 	private JButton go, addComboValue, delcombovalue;
-	private JTextField portef = new JTextField("10000");
+	private JTextField portef = new JTextField("100");
 	private final Player play = new Player();;
 //	private static Main instance;
 

@@ -48,9 +48,9 @@ public class Player implements Runnable {
 			while (cptFails < mises.size() && portefeuille < portefeuilleStart * 2 && portefeuille > 0) {
 				RouletteNumber lance = Main.table.get(r.nextInt(37));
 				cptRuns++;
-				portefeuille -= mises.get(cptFails) * 200;
+				portefeuille -= mises.get(cptFails);
 				if (lance.getCoul() == pari) {
-					portefeuille += mises.get(cptFails) * 2 * 200;
+					portefeuille += mises.get(cptFails) * 2 ;
 					cptFails = 0;
 					// System.out.println("Pari:" + pari + "-" + lance +
 					// "=WIN, gain=" + (portefeuille - 10000) + "     lancé n°"
@@ -58,7 +58,7 @@ public class Player implements Runnable {
 					switchh();
 				} else {
 					if (lance.getCoul() == RouletteColor.GREEN) {
-						portefeuille += (mises.get(cptFails) / 2) * 200;
+						portefeuille += (mises.get(cptFails) / 2);
 						// System.out.println("Pari:" + pari + "-" + lance +
 						// "gain="+ (portefeuille - 10000) + "     lancé n°" +
 						// cptRuns);
