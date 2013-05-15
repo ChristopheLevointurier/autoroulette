@@ -30,15 +30,7 @@ public class Graph extends JFrame {
 
 	public Graph() {
 		super("graphs");
-		addWindowListener(new WindowAdapter() {
-
-			@Override
-			public void windowClosing(WindowEvent e) {
-				System.out.println(" Fails:" + fails + " wins=" + wins + " ratio=" + (((double) wins / (double) fails) * 100));
-				System.exit(0);
-			}
-		});
-
+		
 		initCharts();
 		getContentPane().add(maxfailschart, BorderLayout.CENTER);
 		getContentPane().add(ratiochart, BorderLayout.NORTH);

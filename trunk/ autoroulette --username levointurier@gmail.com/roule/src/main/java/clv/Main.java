@@ -1,13 +1,26 @@
 package clv;
 
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Random;
 
-public class Main {
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+
+public class Main extends JFrame {
 
 	private static HashMap<Integer, RouletteNumber> table = new HashMap<Integer, RouletteNumber>();
 
-	private int[] mises = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512,1024,2048 };
+	private JComboBox misesBox;
+	private JButton go;
+
+	private int[] mises = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048 };
 	private int portefeuilleStart = 10000;
 	private RouletteColor pari = RouletteColor.RED;
 	private Graph g;
@@ -27,9 +40,8 @@ public class Main {
 		for (int i = 0; i <= 36; i++) {
 			System.out.print(table.get(i));
 		}
-		Main m1 = new Main();
-		m1.joue();
-
+		Main m = new Main();
+		m.joue();
 	}
 
 	public enum RouletteColor {
@@ -38,12 +50,43 @@ public class Main {
 	}
 
 	public Main() {
-		System.out.println("***" + mises.length);
+		super("Roulette");
+		addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+		});
+		getContentPane().setLayout(new FlowLayout());
 		g = new Graph();
+		misesBox = new JComboBox(new String[] { "1", "2", "4" });
+		misesBox.setEditable(true);
+		misesBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// misesBox.removeActionListener(this);
+				misesBox.insertItemAt(misesBox.getSelectedItem(), 0);
+				// misesBox.addActionListener(this);
+			}
+		});
+		add(misesBox);
+
+		go = new JButton("Launch");
+		go.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				g = new Graph();
+				// joue();
+			}
+		});
+		add(go);
+		pack();
+		setLocationRelativeTo(null);
+		setVisible(true);
+
 	}
 
 	private void joue() {
-
 		while (true) {
 			int cptFails = 0;
 			int cptFailsMax = 0;
