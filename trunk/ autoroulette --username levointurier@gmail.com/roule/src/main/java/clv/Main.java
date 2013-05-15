@@ -25,11 +25,10 @@ public class Main extends JFrame {
 	public static HashMap<Integer, RouletteNumber> table = new HashMap<Integer, RouletteNumber>();
 
 	private JComboBox misesBox;
-	private final DefaultComboBoxModel model = new DefaultComboBoxModel(new String[] { "1", "2", "5", "10", "20", "40", "80", "160", "256", "512", "1024", "2048", "4096", "9192" });
+	private final DefaultComboBoxModel model = new DefaultComboBoxModel(new String[] { "1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024"});
 	private JButton go, addComboValue, delcombovalue;
 	private JTextField portef = new JTextField("100");
 	private final Player play = new Player();;
-//	private static Main instance;
 
 	static {
 		for (int i = 0; i <= 36; i++) {
@@ -46,9 +45,7 @@ public class Main extends JFrame {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// init
-	//	instance =
-				new Main();
+		new Main();
 	}
 
 	public enum RouletteColor {
@@ -78,7 +75,7 @@ public class Main extends JFrame {
 				} else if ("comboBoxEdited".equals(e.getActionCommand())) {
 					Object newValue = model.getSelectedItem();
 					model.removeElementAt(selectedIndex);
-					model.addElement(newValue);
+					model.insertElementAt(newValue, selectedIndex);
 					misesBox.setSelectedItem(newValue);
 					selectedIndex = model.getIndexOf(newValue);
 				}
