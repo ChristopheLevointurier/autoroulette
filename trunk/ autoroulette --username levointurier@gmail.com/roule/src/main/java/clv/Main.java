@@ -14,6 +14,7 @@ import java.util.Random;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
@@ -25,9 +26,10 @@ public class Main extends JFrame {
 	public static HashMap<Integer, RouletteNumber> table = new HashMap<Integer, RouletteNumber>();
 
 	private JComboBox misesBox;
-	private final DefaultComboBoxModel model = new DefaultComboBoxModel(new String[] { "1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024"});
+	private final DefaultComboBoxModel model = new DefaultComboBoxModel(new String[] { "1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024" });
 	private JButton go, addComboValue, delcombovalue;
 	private JTextField portef = new JTextField("100");
+	private JCheckBox boost = new JCheckBox("BoostePogne", true);
 	private final Player play = new Player();;
 
 	static {
@@ -83,6 +85,7 @@ public class Main extends JFrame {
 		});
 
 		add(misesBox);
+		add(boost);
 
 		go = new JButton("Launch");
 		addComboValue = new JButton("Ajout tour de mise");
@@ -91,7 +94,7 @@ public class Main extends JFrame {
 
 			public void actionPerformed(ActionEvent e) {
 				play.stop();
-				play.start(Integer.parseInt("" + portef.getText()), model);
+				play.start(Integer.parseInt("" + portef.getText()), model, boost.isSelected());
 			}
 		});
 
