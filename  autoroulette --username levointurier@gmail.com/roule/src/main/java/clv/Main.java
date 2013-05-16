@@ -71,7 +71,13 @@ public class Main extends JFrame {
 			}
 		});
 		getContentPane().setLayout(new FlowLayout());
-		model.addElement("1                   ");
+		model.addElement("1                     ");
+		model.addElement("1");
+		model.addElement("1");
+		model.addElement("1");
+		model.addElement("1");
+		model.addElement("1");
+		model.addElement("1");
 		model.addElement("1");
 		model.addElement("1");
 		model.addElement("1");
@@ -151,5 +157,4 @@ public class Main extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
-
 }

@@ -32,7 +32,7 @@ public class Player implements Runnable {
 	public void start(int _portefeuilleStart, ListModel _mises, boolean _useBoostPogne) {
 		mises.clear();
 		for (int i = 0; i < _mises.getSize(); i++) {
-			mises.add((Integer.parseInt((String) _mises.getElementAt(i))));
+			mises.add((Integer.parseInt(((String) _mises.getElementAt(i)).trim())));
 		}
 		portefeuilleStart = _portefeuilleStart;
 		useBoostPogne = _useBoostPogne;
@@ -74,9 +74,7 @@ public class Player implements Runnable {
 				}
 			}
 			g.addData(cptFailsMax, portefeuille, cptRuns);
-
-			// try { Thread.sleep(100); } catch (InterruptedException e) { }
-
+		//	 try { Thread.sleep(1000); } catch (InterruptedException e) { }
 		}
 	}
 
