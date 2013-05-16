@@ -10,6 +10,7 @@ public class Player implements Runnable {
 	private ArrayList<Integer> mises = new ArrayList<Integer>();
 	private int portefeuilleStart;
 	private boolean running = true;
+	private int amountData = 0;
 	private boolean useBoostPogne = true;
 	private Graph g;
 	private static Random r = new Random(System.currentTimeMillis());
@@ -73,8 +74,10 @@ public class Player implements Runnable {
 					}
 				}
 			}
+			amountData++;
 			g.addData(cptFailsMax, portefeuille, cptRuns);
-		//	 try { Thread.sleep(1000); } catch (InterruptedException e) { }
+			running = amountData < 1000000;
+			// try { Thread.sleep(1000); } catch (InterruptedException e) { }
 		}
 	}
 
