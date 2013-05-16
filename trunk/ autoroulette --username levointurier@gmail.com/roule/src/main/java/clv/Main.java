@@ -3,21 +3,22 @@ package clv;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
+import third.EditListAction;
+import third.ListAction;
 
 public class Main extends JFrame {
 
@@ -25,10 +26,15 @@ public class Main extends JFrame {
 
 	public static HashMap<Integer, RouletteNumber> table = new HashMap<Integer, RouletteNumber>();
 
-	private JComboBox misesBox;
-	private final DefaultComboBoxModel model = new DefaultComboBoxModel(new String[] { "1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024" });
-	private JButton go, addComboValue, delcombovalue;
-	private JTextField portef = new JTextField("100");
+	private JList misesBox;
+
+	private String[] suiteNormale = new String[] { "1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024" };
+	private String[] suitePlus1 = new String[] { "1", "3", "7", "15", "31", "63", "127", "255", "511", "1023" };
+	private String[] suitePlusCroissante = new String[] { "1", "3", "8", "19", "42", "89", "184", "375", "758" };
+
+	private final DefaultListModel model = new DefaultListModel();
+	private JButton go, addComboValue, delcombovalue, setNormal, setPlus1, setPlusCrois;
+	private JTextField portef = new JTextField("50");
 	private JCheckBox boost = new JCheckBox("BoostePogne", true);
 	private final Player play = new Player();;
 
@@ -65,31 +71,29 @@ public class Main extends JFrame {
 			}
 		});
 		getContentPane().setLayout(new FlowLayout());
-		misesBox = new JComboBox(model);
-		misesBox.setEditable(true);
-		misesBox.addActionListener(new ActionListener() {
-			private int selectedIndex = -1;
+		model.addElement("1                   ");
+		model.addElement("1");
+		model.addElement("1");
+		model.addElement("1");
+		misesBox = new JList(model);
+		new ListAction(misesBox, new EditListAction());
+		JScrollPane scrollList = new JScrollPane(misesBox);
 
-			public void actionPerformed(ActionEvent e) {
-				int index = misesBox.getSelectedIndex();
-				if (index >= 0) {
-					selectedIndex = index;
-				} else if ("comboBoxEdited".equals(e.getActionCommand())) {
-					Object newValue = model.getSelectedItem();
-					model.removeElementAt(selectedIndex);
-					model.insertElementAt(newValue, selectedIndex);
-					misesBox.setSelectedItem(newValue);
-					selectedIndex = model.getIndexOf(newValue);
-				}
-			}
-		});
-
-		add(misesBox);
+		add(scrollList);
 		add(boost);
 
 		go = new JButton("Launch");
+
+		JPanel listButs = new JPanel();
+		listButs.setLayout(new BoxLayout(listButs, BoxLayout.Y_AXIS));
+
 		addComboValue = new JButton("Ajout tour de mise");
 		delcombovalue = new JButton("Suppression tour de mise");
+
+		setNormal = new JButton("setnormal");
+		setPlus1 = new JButton("set +1");
+		setPlusCrois = new JButton("set +croiss");
+
 		go.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -98,12 +102,34 @@ public class Main extends JFrame {
 			}
 		});
 
+		setNormal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				model.removeAllElements();
+				for (String s : suiteNormale)
+					model.addElement(s);
+			}
+		});
+		setPlus1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				model.removeAllElements();
+				for (String s : suitePlus1)
+					model.addElement(s);
+			}
+		});
+		setPlusCrois.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				model.removeAllElements();
+				for (String s : suitePlusCroissante)
+					model.addElement(s);
+			}
+		});
 		addComboValue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				model.addElement("000");
 				misesBox.setSelectedIndex(model.getSize() - 1);
 			}
 		});
+
 		delcombovalue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (model.getSize() > 1) {
@@ -113,8 +139,12 @@ public class Main extends JFrame {
 			}
 		});
 
-		add(addComboValue);
-		add(delcombovalue);
+		listButs.add(addComboValue);
+		listButs.add(delcombovalue);
+		listButs.add(setNormal);
+		listButs.add(setPlus1);
+		listButs.add(setPlusCrois);
+		add(listButs);
 		add(portef);
 		add(go);
 		pack();
