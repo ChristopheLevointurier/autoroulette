@@ -98,7 +98,7 @@ public class Graph extends JFrame {
 		// Creates a sample dataset
 		ratiodataSet.setValue("wins", wins);
 		ratiodataSet.setValue("fails", fails);
-		ratiochart.getChart().setTitle(" Jeux=" + (wins + fails) + " ratio=" + (int) (((double) wins / (double) (wins + fails)) * 100));
+		ratiochart.getChart().setTitle(" Jeux=" + (wins + fails) + " ratio=" + (int) (((double) wins / (double) (wins + fails)) * 100)+"% wins");
 		ratiochart.getChart().fireChartChanged();
 
 		maxfailschart.getChart().fireChartChanged();
