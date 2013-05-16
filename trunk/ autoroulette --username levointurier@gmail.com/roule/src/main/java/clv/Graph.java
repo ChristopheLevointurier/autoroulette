@@ -40,8 +40,6 @@ public class Graph extends JFrame {
 		numRunsWhenWinChart = initChart(runsWhenWindataset, "runs pendant victoire");
 		maxfailschart = initChart(maxfailsdataset, "maxfails");
 		failsMaxWhenWinChart = initChart(failsMaxWhenWindataset, "maxfails pendant victoire");
-		ratiodataSet.setValue("wins", wins);
-		ratiodataSet.setValue("fails", fails);
 		ratiochart = initChart(ratiodataSet, "ratio");
 
 		JPanel mainCharts = new JPanel();
@@ -84,12 +82,12 @@ public class Graph extends JFrame {
 			fails++;
 		}
 		if (portefeuille > portefeuilleStart) {
-			failsMaxWhenWindataset.add(cptFailsMax, true);
-			runsWhenWindataset.add(cptRuns, true);
+			failsMaxWhenWindataset.add(cptFailsMax);
+			runsWhenWindataset.add(cptRuns);
 			wins++;
 		}
-		maxfailsdataset.add(cptFailsMax, true);
-		runsdataset.add(cptRuns, true);
+		maxfailsdataset.add(cptFailsMax);
+		runsdataset.add(cptRuns);
 
 		updateCharts();
 	}
@@ -98,14 +96,13 @@ public class Graph extends JFrame {
 		// Creates a sample dataset
 		ratiodataSet.setValue("wins", wins);
 		ratiodataSet.setValue("fails", fails);
-		ratiochart.getChart().setTitle(" Jeux=" + (wins + fails) + " ratio=" + (int) (((double) wins / (double) (wins + fails)) * 100)+"% wins");
+		ratiochart.getChart().setTitle(" Jeux=" + (wins + fails) + " ratio=" + (int) (((double) wins / (double) (wins + fails)) * 100) + "% wins");
 		ratiochart.getChart().fireChartChanged();
 
 		maxfailschart.getChart().fireChartChanged();
 		numRunsChart.getChart().fireChartChanged();
 		numRunsWhenWinChart.getChart().fireChartChanged();
 		failsMaxWhenWinChart.getChart().fireChartChanged();
-
 		repaint();
 	}
 
