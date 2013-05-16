@@ -79,6 +79,7 @@ public class Player implements Runnable {
 			running = amountData < 1000000;
 			// try { Thread.sleep(1000); } catch (InterruptedException e) { }
 		}
+		amountData = 0;
 	}
 
 }

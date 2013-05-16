@@ -24,7 +24,7 @@ public class Graph extends JFrame {
 
 	private ChartPanel ratiochart, maxfailschart, numRunsChart, numRunsWhenWinChart, failsMaxWhenWinChart;
 	private DefaultPieDataset ratiodataSet = new DefaultPieDataset();
-	private DynamicPieDataSet failsMaxWhenWindataset = new DynamicPieDataSet(), maxfailsdataset = new DynamicPieDataSet(), runsWhenWindataset = new DynamicPieDataSet(), runsdataset = new DynamicPieDataSet();
+	private DynamicPieDataSet failsMaxWhenWindataset = new DynamicPieDataSet("maxfails pendant victoire"), maxfailsdataset = new DynamicPieDataSet("maxfails"), runsWhenWindataset = new DynamicPieDataSet("runs pendant victoire"), runsdataset = new DynamicPieDataSet("runs");
 	private int wins = 0, fails = 0, portefeuilleStart = 0, nbrmisesmax = 0;
 
 	private HashMap<Integer, Integer> failsMax = new HashMap<Integer, Integer>();
@@ -36,10 +36,10 @@ public class Graph extends JFrame {
 		super("Start=" + ((_portefeuilleStart * 200) / 1000) + "kcfp,  Nbr de mises:" + _nbrmisesmax + " boostpogne=" + boostpogne);
 		portefeuilleStart = _portefeuilleStart;
 		nbrmisesmax = _nbrmisesmax;
-		numRunsChart = initChart(runsdataset, "runs");
-		numRunsWhenWinChart = initChart(runsWhenWindataset, "runs pendant victoire");
-		maxfailschart = initChart(maxfailsdataset, "maxfails");
-		failsMaxWhenWinChart = initChart(failsMaxWhenWindataset, "maxfails pendant victoire");
+		numRunsChart = initChart(runsdataset);
+		numRunsWhenWinChart = initChart(runsWhenWindataset);
+		maxfailschart = initChart(maxfailsdataset);
+		failsMaxWhenWinChart = initChart(failsMaxWhenWindataset);
 		ratiochart = initChart(ratiodataSet, "ratio");
 
 		JPanel mainCharts = new JPanel();
@@ -64,6 +64,10 @@ public class Graph extends JFrame {
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
+	}
+
+	private ChartPanel initChart(DynamicPieDataSet dataset) {
+		return initChart(dataset, dataset.getTitle());
 	}
 
 	private ChartPanel initChart(DefaultPieDataset d, String title) {
