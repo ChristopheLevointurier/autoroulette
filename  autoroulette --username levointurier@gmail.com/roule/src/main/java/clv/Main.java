@@ -28,17 +28,17 @@ public class Main extends JFrame {
 
 	private JList misesBox;
 
-	private String[] suiteNormale = new String[] { "1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024" };
-	private String[] suitePlus1 = new String[] { "1", "3", "7", "15", "31", "63", "127", "255", "511", "1023" };
-	private String[] suitePlusCroissante = new String[] { "1", "3", "8", "19", "42", "89", "184", "375", "758" };
+	private String[] suitePlus1 = new String[] { "1", "3", "7", "15", "31", "63", "127", "255", "511", "1023", "2047" };
+	private String[] suitePlusCroissante = new String[] { "1", "3", "8", "19", "42", "89", "184", "375", "758", "1525" };
 
 	private final DefaultListModel model = new DefaultListModel();
-	private JButton go, addComboValue, delcombovalue, setNormal, setPlus1, setPlusCrois, setmultipl;
+	private JButton go, setNormal, setPlus1, setPlusCrois, setmultipl;
 	private JTextField multip = new JTextField("2.000");
 	private JTextField portefName = new JTextField("Nombre jetons start:");
-	private JTextField portef = new JTextField("50");
+	private JTextField portef = new JTextField("50      ");
+	private JTextField goalName = new JTextField("condition win:");
+	private JTextField goalf = new JTextField("2      ");
 	private JCheckBox boost = new JCheckBox("BoostePogne", true);
-	private Player play;
 
 	static {
 		for (int i = 0; i <= 36; i++) {
@@ -74,29 +74,27 @@ public class Main extends JFrame {
 		});
 		getContentPane().setLayout(new FlowLayout());
 		model.addElement("1                     ");
-		model.addElement("1");
-		model.addElement("1");
-		model.addElement("1");
-		model.addElement("1");
-		model.addElement("1");
-		model.addElement("1");
-		model.addElement("1");
-		model.addElement("1");
-		model.addElement("1");
+		model.addElement("2");
+		model.addElement("4");
+		model.addElement("8");
+		model.addElement("16");
+		model.addElement("32");
+		model.addElement("64");
+		model.addElement("128");
+		model.addElement("256");
+		model.addElement("512");
+		model.addElement("1024");
+		model.addElement("2048");
+		model.addElement("4096");
 		misesBox = new JList(model);
 		new ListAction(misesBox, new EditListAction());
 		JScrollPane scrollList = new JScrollPane(misesBox);
 
 		add(scrollList);
-		add(boost);
-
 		go = new JButton("Launch");
 
 		JPanel listButs = new JPanel();
 		listButs.setLayout(new BoxLayout(listButs, BoxLayout.Y_AXIS));
-
-		addComboValue = new JButton("Ajout tour de mise");
-		delcombovalue = new JButton("Suppression tour de mise");
 
 		setNormal = new JButton("setnormal");
 		setPlus1 = new JButton("set +1");
@@ -105,17 +103,11 @@ public class Main extends JFrame {
 		go.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				play = new Player(Integer.parseInt("" + portef.getText()), model, boost.isSelected());
+				new Player(Integer.parseInt("" + portef.getText().trim()), model, boost.isSelected(), Double.parseDouble(goalf.getText().trim()));
 			}
 		});
 
-		setNormal.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				model.removeAllElements();
-				for (String s : suiteNormale)
-					model.addElement(s);
-			}
-		});
+	
 		setPlus1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				model.removeAllElements();
@@ -130,29 +122,13 @@ public class Main extends JFrame {
 					model.addElement(s);
 			}
 		});
-		addComboValue.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				model.addElement("000");
-				misesBox.setSelectedIndex(model.getSize() - 1);
-			}
-		});
-
-		delcombovalue.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (model.getSize() > 1) {
-					model.removeElementAt(model.getSize() - 1);
-					misesBox.setSelectedIndex(model.getSize() - 1);
-				}
-			}
-		});
 
 		setmultipl = new JButton("set multiplication");
 		setmultipl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int cap = model.capacity();
 				model.removeAllElements();
 				double val = 1;
-				for (int i = 0; i < cap; i++) {
+				for (int i = 0; i < 13; i++) {
 					model.addElement("" + (int) val);
 					val *= Double.parseDouble("" + multip.getText());
 				}
@@ -163,23 +139,32 @@ public class Main extends JFrame {
 		mulpanel.setLayout(new FlowLayout());
 		mulpanel.add(multip);
 		mulpanel.add(setmultipl);
-		add(mulpanel);
-
-		listButs.add(addComboValue);
-		listButs.add(delcombovalue);
+		listButs.add(mulpanel);
 		listButs.add(setNormal);
 
 		listButs.add(setPlus1);
 		listButs.add(setPlusCrois);
+		listButs.add(boost);
 		add(listButs);
+
+		JPanel launchp = new JPanel();
+		launchp.setLayout(new BoxLayout(launchp, BoxLayout.Y_AXIS));
 
 		JPanel porte = new JPanel();
 		porte.setLayout(new FlowLayout());
 		portefName.setEditable(false);
 		porte.add(portefName);
 		porte.add(portef);
-		add(porte);
-		add(go);
+		launchp.add(porte);
+		JPanel goalp = new JPanel();
+		goalp.setLayout(new FlowLayout());
+		portefName.setEditable(false);
+		goalName.setEditable(false);
+		goalp.add(goalName);
+		goalp.add(goalf);
+		launchp.add(goalp);
+		launchp.add(go);
+		add(launchp);
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
