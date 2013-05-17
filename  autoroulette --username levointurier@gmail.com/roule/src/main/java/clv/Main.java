@@ -36,7 +36,7 @@ public class Main extends JFrame {
 	private JButton go, addComboValue, delcombovalue, setNormal, setPlus1, setPlusCrois;
 	private JTextField portef = new JTextField("50");
 	private JCheckBox boost = new JCheckBox("BoostePogne", true);
-	private final Player play = new Player();;
+	private Player play;
 
 	static {
 		for (int i = 0; i <= 36; i++) {
@@ -103,8 +103,7 @@ public class Main extends JFrame {
 		go.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				play.stop();
-				play.start(Integer.parseInt("" + portef.getText()), model, boost.isSelected());
+				play= new Player(Integer.parseInt("" + portef.getText()), model, boost.isSelected());
 			}
 		});
 

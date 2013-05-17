@@ -2,6 +2,8 @@ package clv.sub;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -9,12 +11,13 @@ public class DynamicPieDataSet extends DefaultPieDataset {
 
 	private static final long serialVersionUID = -2664525063788462972L;
 
-	private final int NBR_PARTS = 5;
+	private final int NBR_PARTS = 4;
 	private ArrayList<Integer> rawdata = new ArrayList<Integer>();
 	private HashMap<String, Integer> data = new HashMap<String, Integer>();
 	private HashMap<Integer, String> labels = new HashMap<Integer, String>();
 	private String title;
 	private int delta = 1;
+	//private Lock l = new ReentrantLock();
 
 	public DynamicPieDataSet(String _title) {
 		super();
@@ -23,6 +26,7 @@ public class DynamicPieDataSet extends DefaultPieDataset {
 	}
 
 	public void add(int i) {
+		// l.lock(); try {
 		rawdata.add(i);
 		int index = (i / delta);
 		// System.out.println("i=" + i + " index=" + index);
@@ -32,6 +36,7 @@ public class DynamicPieDataSet extends DefaultPieDataset {
 			addInData(index);
 		}
 		majModel();
+		// } finally { l.unlock(); }
 	}
 
 	private void majModel() {
@@ -41,8 +46,8 @@ public class DynamicPieDataSet extends DefaultPieDataset {
 	}
 
 	private void addInData(int index) {// index=0,1,2,3...
-		if (data.containsKey(labels.get(index))) {
-			String lab = labels.get(index);
+		String lab = labels.get(index);
+		if (data.containsKey(lab)) {
 			data.put(lab, data.remove(lab) + 1);
 		} else {
 			// data.put("OMG:" + index, 1);
@@ -52,9 +57,9 @@ public class DynamicPieDataSet extends DefaultPieDataset {
 
 	private void reset(int valToPut) {
 		delta = (valToPut / NBR_PARTS) + 1;
-		data.clear();
-		labels.clear();
 		clear();
+		labels.clear();
+		data.clear();
 		System.out.print("\n--- " + title + ": Reset for " + valToPut + ":delta=" + delta + " labels:");
 		for (Integer iip = 0; iip < NBR_PARTS; iip++) {
 			String lab = (iip * delta) + "-" + (((iip + 1) * delta - 1));
