@@ -53,7 +53,7 @@ public class Player implements Runnable {
 			int cptRuns = 0;
 			int portefeuille = portefeuilleStart;
 			boolean boostepogne = false;
-			while (portefeuille < portefeuilleStart * goalWin && portefeuille > 0) {
+			while (portefeuille < (portefeuilleStart * goalWin) && portefeuille > 0) {
 				RouletteNumber lance = Main.table.get(r.nextInt(37));
 				cptRuns++;
 				int miseEnJeu = mises.get(cptFails);
