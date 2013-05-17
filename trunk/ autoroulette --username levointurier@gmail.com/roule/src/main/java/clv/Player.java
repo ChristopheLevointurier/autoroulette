@@ -2,6 +2,8 @@ package clv;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
 import clv.Main.RouletteColor;
 
@@ -16,21 +18,7 @@ public class Player implements Runnable {
 	private static Random r = new Random(System.currentTimeMillis());
 	private RouletteColor pari = RouletteColor.RED;
 
-	public Player() {
-	}
-
-	private void switchh() {
-		if (pari == RouletteColor.RED) {
-			pari = RouletteColor.BLACK;
-		} else
-			pari = RouletteColor.RED;
-	}
-
-	public void stop() {
-		running = false;
-	}
-
-	public void start(int _portefeuilleStart, ListModel _mises, boolean _useBoostPogne) {
+	public Player(int _portefeuilleStart, ListModel _mises, boolean _useBoostPogne) {
 		mises.clear();
 		for (int i = 0; i < _mises.getSize(); i++) {
 			mises.add((Integer.parseInt(((String) _mises.getElementAt(i)).trim())));
@@ -40,9 +28,21 @@ public class Player implements Runnable {
 		new Thread(this).start();
 	}
 
+	private void switchh() {
+		if (pari == RouletteColor.RED) {
+			pari = RouletteColor.BLACK;
+		} else
+			pari = RouletteColor.RED;
+	}
+
 	public void run() {
 
-		g = new Graph(portefeuilleStart, mises.size(), useBoostPogne);
+		StringBuilder misesString = new StringBuilder();
+		for (int mi : mises) {
+			misesString.append(mi).append("#");
+		}
+
+		g = new Graph(portefeuilleStart, mises.size(), useBoostPogne, misesString.toString());
 		running = true;
 		while (running) {
 			int cptFails = 0;
