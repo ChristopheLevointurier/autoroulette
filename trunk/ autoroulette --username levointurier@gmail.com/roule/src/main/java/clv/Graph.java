@@ -26,10 +26,10 @@ public class Graph extends JFrame {
 	private DefaultPieDataset ratiodataSet = new DefaultPieDataset();
 	private DynamicPieDataSet failsMaxWhenWindataset = new DynamicPieDataSet("maxfails pendant victoire"), maxfailsdataset = new DynamicPieDataSet("maxfails"), runsWhenWindataset = new DynamicPieDataSet("runs pendant victoire"), runsdataset = new DynamicPieDataSet("runs");
 	private int wins = 0, fails = 0, portefeuilleStart = 0;
+	private double goal = 2;
 
-
-	public Graph(int _portefeuilleStart, int nbrmisesmax, boolean boostpogne, String misesString) {
-		super("Start=" + ((_portefeuilleStart * 200) / 1000) + "kcfp,Nbr mises:" + nbrmisesmax +":" +misesString+" boost=" + boostpogne);
+	public Graph(int _portefeuilleStart, int nbrmisesmax, boolean boostpogne, String misesString, double _goal) {
+		super("Start=" + ((_portefeuilleStart * 200) / 1000) + "kcfp, Mises:" + misesString + " goal:" + _goal + " boost=" + boostpogne);
 		portefeuilleStart = _portefeuilleStart;
 		numRunsChart = initChart(runsdataset);
 		numRunsWhenWinChart = initChart(runsWhenWindataset);
@@ -78,7 +78,7 @@ public class Graph extends JFrame {
 
 	public void addData(int cptFailsMax, int portefeuille, int cptRuns) {
 		// System.out.println(" Fails:" + cptFailsMax + "portefeuille=" +portefeuille + "     lancé n°" + cptRuns);
-		if (portefeuille < portefeuilleStart) {
+		if (portefeuille < portefeuilleStart * goal) {
 			fails++;
 		}
 		if (portefeuille > portefeuilleStart) {
