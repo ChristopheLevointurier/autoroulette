@@ -9,6 +9,7 @@ import clv.Main.RouletteColor;
 
 public class Player implements Runnable {
 
+	private static final int MAX_RUNS=400000;
 	private ArrayList<Integer> mises = new ArrayList<Integer>();
 	private int portefeuilleStart;
 	private boolean running = true;
@@ -76,7 +77,7 @@ public class Player implements Runnable {
 			}
 			amountData++;
 			g.addData(cptFailsMax, portefeuille, cptRuns);
-			running = amountData < 1000000;
+			running = amountData < MAX_RUNS;
 			// try { Thread.sleep(1000); } catch (InterruptedException e) { }
 		}
 		amountData = 0;

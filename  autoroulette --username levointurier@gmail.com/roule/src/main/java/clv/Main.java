@@ -33,7 +33,9 @@ public class Main extends JFrame {
 	private String[] suitePlusCroissante = new String[] { "1", "3", "8", "19", "42", "89", "184", "375", "758" };
 
 	private final DefaultListModel model = new DefaultListModel();
-	private JButton go, addComboValue, delcombovalue, setNormal, setPlus1, setPlusCrois;
+	private JButton go, addComboValue, delcombovalue, setNormal, setPlus1, setPlusCrois, setmultipl;
+	private JTextField multip = new JTextField("2.000");
+	private JTextField portefName = new JTextField("Nombre jetons start:");
 	private JTextField portef = new JTextField("50");
 	private JCheckBox boost = new JCheckBox("BoostePogne", true);
 	private Player play;
@@ -103,7 +105,7 @@ public class Main extends JFrame {
 		go.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				play= new Player(Integer.parseInt("" + portef.getText()), model, boost.isSelected());
+				play = new Player(Integer.parseInt("" + portef.getText()), model, boost.isSelected());
 			}
 		});
 
@@ -144,13 +146,39 @@ public class Main extends JFrame {
 			}
 		});
 
+		setmultipl = new JButton("set multiplication");
+		setmultipl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int cap = model.capacity();
+				model.removeAllElements();
+				double val = 1;
+				for (int i = 0; i < cap; i++) {
+					model.addElement("" + (int) val);
+					val *= Double.parseDouble("" + multip.getText());
+				}
+			}
+		});
+
+		JPanel mulpanel = new JPanel();
+		mulpanel.setLayout(new FlowLayout());
+		mulpanel.add(multip);
+		mulpanel.add(setmultipl);
+		add(mulpanel);
+
 		listButs.add(addComboValue);
 		listButs.add(delcombovalue);
 		listButs.add(setNormal);
+
 		listButs.add(setPlus1);
 		listButs.add(setPlusCrois);
 		add(listButs);
-		add(portef);
+
+		JPanel porte = new JPanel();
+		porte.setLayout(new FlowLayout());
+		portefName.setEditable(false);
+		porte.add(portefName);
+		porte.add(portef);
+		add(porte);
 		add(go);
 		pack();
 		setLocationRelativeTo(null);
