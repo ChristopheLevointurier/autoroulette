@@ -17,7 +17,8 @@ public class DynamicPieDataSet extends DefaultPieDataset {
 	private HashMap<Integer, String> labels = new HashMap<Integer, String>();
 	private String title;
 	private int delta = 1;
-	//private Lock l = new ReentrantLock();
+
+	// private Lock l = new ReentrantLock();
 
 	public DynamicPieDataSet(String _title) {
 		super();
@@ -47,12 +48,12 @@ public class DynamicPieDataSet extends DefaultPieDataset {
 
 	private void addInData(int index) {// index=0,1,2,3...
 		String lab = labels.get(index);
-		if (data.containsKey(lab)) {
-			data.put(lab, data.remove(lab) + 1);
-		} else {
-			// data.put("OMG:" + index, 1);
-			System.out.println("bordel:" + index);
-		}
+		//System.out.print("#add:" + lab);// + ":" + data.get(lab));
+		data.put(lab, data.remove(lab) + 1);
+
+		/**
+		 * if (data.containsKey(lab)) { data.put(lab, data.remove(lab) + 1); } else { data.put("OMG:" + index, 1); System.out.println("bordel:" + index); }
+		 **/
 	}
 
 	private void reset(int valToPut) {
