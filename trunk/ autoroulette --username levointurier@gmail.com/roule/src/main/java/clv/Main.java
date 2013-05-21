@@ -39,8 +39,8 @@ public class Main extends JFrame {
 	private JTextField portefName = new JTextField("Nombre jetons start:");
 	private JTextField portef = new JTextField("50      ");
 	private JTextField goalName = new JTextField("condition win:");
-	private JTextField goalf = new JTextField("2      ");
-	private JCheckBox boost = new JCheckBox("BoostePogne", true);
+	private JTextField goalf = new JTextField("1.83      ");
+	private JCheckBox boost = new JCheckBox("BoostePogne", false);
 
 	static {
 		for (int i = 0; i <= 36; i++) {
