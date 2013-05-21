@@ -12,6 +12,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.util.Rotation;
+import org.jfree.util.SortOrder;
 
 import clv.sub.DynamicPieDataSet;
 
@@ -114,4 +115,13 @@ public class Graph extends JFrame {
 		runsdataset.removeEmptyParts();
 		updateCharts();
 	}
+
+	public void sort(boolean key, SortOrder order) {
+		failsMaxWhenWindataset.sort(key, order);
+		maxfailsdataset.sort(key, order);
+		runsWhenWindataset.sort(key, order);
+		runsdataset.sort(key, order);
+		updateCharts();
+	}
+
 }
