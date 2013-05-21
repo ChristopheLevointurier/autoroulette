@@ -5,12 +5,15 @@ import java.util.Random;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
+
+import org.jfree.util.SortOrder;
+
 import clv.Main.RouletteColor;
 import clv.sub.RouletteNumber;
 
 public class Player implements Runnable {
 
-	private static final int MAX_RUNS = 400000;
+	private static final int MAX_RUNS = 100000;
 	private ArrayList<Integer> mises = new ArrayList<Integer>();
 	private int portefeuilleStart;
 	private boolean running = true;
@@ -70,7 +73,7 @@ public class Player implements Runnable {
 					portefeuille += miseEnJeu * 2;
 					cptFails = 0;
 					// System.out.println("Pari:" + pari + "-" + lance + "=WIN, gain=" + (portefeuille - 10000) + "     lancé n°" + cptRuns);
-					boostepogne = (portefeuille > portefeuilleStart) && useBoostPogne;
+					boostepogne = (portefeuille > portefeuilleStart / 2) && useBoostPogne;
 					switchh();
 				} else {
 					if (lance.getCoul() == RouletteColor.GREEN) {
@@ -86,9 +89,10 @@ public class Player implements Runnable {
 			amountData++;
 			g.addData(cptFailsMax, portefeuille, cptRuns);
 			running = amountData < MAX_RUNS;
-			// try { Thread.sleep(1000); } catch (InterruptedException e) { }
+			// try { Thread.sleep(1); } catch (InterruptedException e) { }
 		}
 		g.removeEmptyParts();
+		g.sort(false, SortOrder.DESCENDING);
 	}
 
 }
