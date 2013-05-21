@@ -30,7 +30,7 @@ public class Graph extends JFrame {
 
 	public Graph(int _portefeuilleStart, int nbrmisesmax, boolean boostpogne, String misesString, double _goal) {
 		super("Start=" + ((_portefeuilleStart * 200) / 1000) + "kcfp, Mises:" + misesString + " goal:" + _goal + " boost=" + boostpogne);
-		goal=_goal;
+		goal = _goal;
 		portefeuilleStart = _portefeuilleStart;
 		numRunsChart = initChart(runsdataset);
 		numRunsWhenWinChart = initChart(runsWhenWindataset);
@@ -82,7 +82,7 @@ public class Graph extends JFrame {
 		if (portefeuille < (portefeuilleStart * goal)) {
 			fails++;
 		}
-		if (portefeuille > portefeuilleStart) {
+		if (portefeuille >= (portefeuilleStart * goal)) {
 			failsMaxWhenWindataset.add(cptFailsMax);
 			runsWhenWindataset.add(cptRuns);
 			wins++;
@@ -107,4 +107,11 @@ public class Graph extends JFrame {
 		repaint();
 	}
 
+	public void removeEmptyParts() {
+		failsMaxWhenWindataset.removeEmptyParts();
+		maxfailsdataset.removeEmptyParts();
+		runsWhenWindataset.removeEmptyParts();
+		runsdataset.removeEmptyParts();
+		updateCharts();
+	}
 }

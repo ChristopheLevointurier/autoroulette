@@ -1,10 +1,7 @@
 package clv.sub;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -12,9 +9,9 @@ public class DynamicPieDataSet extends DefaultPieDataset {
 
 	private static final long serialVersionUID = -2664525063788462972L;
 
-	private final int NBR_PARTS = 4;
+	private final int NBR_PARTS = 5;
 	private ArrayList<Integer> rawdata = new ArrayList<Integer>();
-	 private HashMap<String, Integer> data = new HashMap<String, Integer>();
+	private HashMap<String, Integer> data = new HashMap<String, Integer>();
 	private HashMap<Integer, String> labels = new HashMap<Integer, String>();
 	private String title;
 	private int delta = 1;
@@ -34,27 +31,37 @@ public class DynamicPieDataSet extends DefaultPieDataset {
 		} else // >= a cause du 0.
 		{
 			reset(i);
-			clear();
 		}
 		majModel();
 
 	}
 
 	private void majModel() {
-		 for (String ifinal : data.keySet())
-		 setValue(ifinal, data.get(ifinal));
-
+		for (String ifinal : data.keySet())
+			setValue(ifinal, data.get(ifinal));
 	}
 
 	private void addInData(int index) {// index=0,1,2,3...
 		String lab = labels.get(index);
 		data.put(lab, data.get(lab) + 1);
-		//setValue(index, new BigInteger("" + getValue(index).intValue() + 1));
-		
+	}
+
+	private void removeInData(String key) {
+		setValue(key, -1);
+	}
+
+	public void removeEmptyParts() {
+		for (String key : data.keySet()) {
+			if (data.get(key) == 0)
+				removeInData(key);
+		}
 	}
 
 	private void reset(int valToPut) {
 		delta = (valToPut / NBR_PARTS) + 1;
+		for (String ifinal : data.keySet()) {
+			removeInData(ifinal);
+		}
 		labels.clear();
 		data.clear();
 		System.out.print("\n--- " + title + ": Reset for " + valToPut + ":delta=" + delta + " labels:");
@@ -65,13 +72,13 @@ public class DynamicPieDataSet extends DefaultPieDataset {
 			}
 			System.out.print(lab + " ");
 			labels.put(iip, lab);
-			//insertValue(iip, lab, new BigInteger("0"));
 			data.put(labels.get(iip), 0);
 		}
 		System.out.print(" ---  refilling " + rawdata.size() + " values ");
 		for (Integer ii : rawdata) {
 			addInData(ii / delta);
 		}
+
 		System.out.println("done.");
 	}
 

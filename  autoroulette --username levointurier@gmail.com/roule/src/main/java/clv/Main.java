@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import clv.sub.RouletteNumber;
+
 import third.EditListAction;
 import third.ListAction;
 

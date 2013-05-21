@@ -6,6 +6,7 @@ import java.util.Random;
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
 import clv.Main.RouletteColor;
+import clv.sub.RouletteNumber;
 
 public class Player implements Runnable {
 
@@ -87,7 +88,7 @@ public class Player implements Runnable {
 			running = amountData < MAX_RUNS;
 			// try { Thread.sleep(1000); } catch (InterruptedException e) { }
 		}
-		amountData = 0;
+		g.removeEmptyParts();
 	}
 
 }
