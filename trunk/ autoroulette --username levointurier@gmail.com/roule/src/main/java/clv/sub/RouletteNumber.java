@@ -1,5 +1,6 @@
-package clv;
+package clv.sub;
 
+import clv.Main;
 import clv.Main.RouletteColor;
 
 public class RouletteNumber {
