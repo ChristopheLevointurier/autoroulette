@@ -8,12 +8,14 @@ import java.awt.event.WindowEvent;
 import java.util.HashMap;
 
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
@@ -30,17 +32,16 @@ public class Main extends JFrame {
 
 	private JList misesBox;
 
-	private String[] suitePlus1 = new String[] { "1", "3", "7", "15", "31", "63", "127", "255", "511", "1023", "2047" };
-	private String[] suitePlusCroissante = new String[] { "1", "3", "8", "19", "42", "89", "184", "375", "758", "1525" };
-
 	private final DefaultListModel model = new DefaultListModel();
-	private JButton go, setNormal, setPlus1, setPlusCrois, setmultipl;
+	private JButton go, calclist;
 	private JTextField multip = new JTextField("2.000");
+	private JTextField multfield = new JTextField("multiplicateur");
 	private JTextField portefName = new JTextField("Nombre jetons start:");
 	private JTextField portef = new JTextField("50      ");
 	private JTextField goalName = new JTextField("condition win:");
 	private JTextField goalf = new JTextField("1.83      ");
 	private JCheckBox boost = new JCheckBox("BoostePogne", false);
+	private JRadioButton setPlus1 = new JRadioButton("+1", false), setPlus0 = new JRadioButton("+0", true), setPlusCrois = new JRadioButton("+1,2,3,4..", false);
 
 	static {
 		for (int i = 0; i <= 36; i++) {
@@ -93,14 +94,16 @@ public class Main extends JFrame {
 		JScrollPane scrollList = new JScrollPane(misesBox);
 
 		add(scrollList);
+
+		ButtonGroup b = new ButtonGroup();
+		b.add(setPlus1);
+		b.add(setPlusCrois);
+		b.add(setPlus0);
+
 		go = new JButton("Launch");
 
 		JPanel listButs = new JPanel();
 		listButs.setLayout(new BoxLayout(listButs, BoxLayout.Y_AXIS));
-
-		setNormal = new JButton("setnormal");
-		setPlus1 = new JButton("set +1");
-		setPlusCrois = new JButton("set +croiss");
 
 		go.addActionListener(new ActionListener() {
 
@@ -109,30 +112,18 @@ public class Main extends JFrame {
 			}
 		});
 
-	
-		setPlus1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				model.removeAllElements();
-				for (String s : suitePlus1)
-					model.addElement(s);
-			}
-		});
-		setPlusCrois.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				model.removeAllElements();
-				for (String s : suitePlusCroissante)
-					model.addElement(s);
-			}
-		});
-
-		setmultipl = new JButton("set multiplication");
-		setmultipl.addActionListener(new ActionListener() {
+		calclist = new JButton("calculer liste");
+		calclist.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				model.removeAllElements();
 				double val = 1;
 				for (int i = 0; i < 13; i++) {
 					model.addElement("" + (int) val);
 					val *= Double.parseDouble("" + multip.getText());
+					if (setPlus1.isSelected())
+						val += 1;
+					if (setPlusCrois.isSelected())
+						val += (i + 1);
 				}
 			}
 		});
@@ -140,13 +131,14 @@ public class Main extends JFrame {
 		JPanel mulpanel = new JPanel();
 		mulpanel.setLayout(new FlowLayout());
 		mulpanel.add(multip);
-		mulpanel.add(setmultipl);
+		mulpanel.add(multfield);
 		listButs.add(mulpanel);
-		listButs.add(setNormal);
 
+		listButs.add(setPlus0);
 		listButs.add(setPlus1);
 		listButs.add(setPlusCrois);
 		listButs.add(boost);
+		listButs.add(calclist);
 		add(listButs);
 
 		JPanel launchp = new JPanel();
@@ -162,6 +154,7 @@ public class Main extends JFrame {
 		goalp.setLayout(new FlowLayout());
 		portefName.setEditable(false);
 		goalName.setEditable(false);
+		multfield.setEditable(false);
 		goalp.add(goalName);
 		goalp.add(goalf);
 		launchp.add(goalp);

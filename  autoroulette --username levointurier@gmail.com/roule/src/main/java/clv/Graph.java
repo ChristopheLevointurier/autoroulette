@@ -140,6 +140,8 @@ public class Graph extends JFrame {
 		for (DynamicPieDataSet d : datasetlist) {
 			d.sort(key, order);
 		}
+
+		ratiodataSet.sortByValues(SortOrder.DESCENDING);
 		updateCharts();
 	}
 
