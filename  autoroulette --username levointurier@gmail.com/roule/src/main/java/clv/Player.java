@@ -39,7 +39,7 @@ public class Player implements Runnable {
 		if (pari == RouletteColor.RED) {
 			pari = RouletteColor.BLACK;
 		} else
-			pari = RouletteColor.RED;
+			{pari = RouletteColor.RED;}
 	}
 
 	public void run() {
@@ -54,6 +54,7 @@ public class Player implements Runnable {
 		while (running) {
 			int cptFails = 0;
 			int cptFailsMax = 0;
+			int nbrswitch=0;
 			int cptRuns = 0;
 			int portefeuille = portefeuilleStart;
 			boolean boostepogne = false;
@@ -75,6 +76,7 @@ public class Player implements Runnable {
 					// System.out.println("Pari:" + pari + "-" + lance + "=WIN, gain=" + (portefeuille - 10000) + "     lancé n°" + cptRuns);
 					boostepogne = (portefeuille > portefeuilleStart / 2) && useBoostPogne;
 					switchh();
+					nbrswitch++;
 				} else {
 					if (lance.getCoul() == RouletteColor.GREEN) {
 						portefeuille += miseEnJeu / 2;
@@ -87,7 +89,7 @@ public class Player implements Runnable {
 				}
 			}
 			amountData++;
-			g.addData(cptFailsMax, portefeuille, cptRuns);
+			g.addData(cptFailsMax, portefeuille, cptRuns,nbrswitch);
 			running = amountData < MAX_RUNS;
 			// try { Thread.sleep(1); } catch (InterruptedException e) { }
 		}
