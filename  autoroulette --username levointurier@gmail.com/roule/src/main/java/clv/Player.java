@@ -44,12 +44,8 @@ public class Player implements Runnable {
 
 	public void run() {
 
-		StringBuilder misesString = new StringBuilder();
-		for (int mi : mises) {
-			misesString.append(mi).append("#");
-		}
 
-		g = new Graph(portefeuilleStart, mises.size(), useBoostPogne, misesString.toString(), goalWin);
+		g = new Graph(portefeuilleStart, mises.size(), useBoostPogne, mises, goalWin);
 		running = true;
 		while (running) {
 			int cptFails = 0;
