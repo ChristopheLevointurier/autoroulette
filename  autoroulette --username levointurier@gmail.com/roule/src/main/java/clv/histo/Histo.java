@@ -20,7 +20,6 @@ public class Histo implements Runnable {
 	private boolean switchOnO = false;
 
 	private HistoGraph g;
-	private int nbrswitch = 0;
 	private int cptRuns = 0;
 
 	public Histo(boolean selected) {
@@ -36,18 +35,18 @@ public class Histo implements Runnable {
 		} else {
 			pari = RouletteColor.RED;
 		}
-		nbrswitch++;
 	}
 
 	public void run() {
 		int cptFails = 0;
 		int cptWinws = 0;
-		while (nbrswitch < MAX_RUNS) {
+		while (cptRuns < MAX_RUNS) {
 			RouletteNumber lance = Main.table.get(r.nextInt(37));
 			cptRuns++;
 
 			if (lance.getCoul() == pari) {
-				g.addFailSerie(cptFails, nbrswitch);
+				if (cptFails != 0)
+					g.addFailSerie(cptFails);
 				cptFails = 0;
 				cptWinws++;
 				switchh();
@@ -57,15 +56,16 @@ public class Histo implements Runnable {
 						switchh();
 					}
 				} else {
-					g.addWinSerie(cptFails, nbrswitch);
+					if (cptWinws != 0)
+						g.addWinSerie(cptWinws);
 					cptWinws = 0;
 					cptFails++;
 				}
 			}
 		}
 		// try { Thread.sleep(1); } catch (InterruptedException e) { }
-		// g.removeEmptyParts();
-		// g.sort(false, SortOrder.DESCENDING);
+		g.removeEmptyParts();
+		g.sort();
 	}
 
 }
