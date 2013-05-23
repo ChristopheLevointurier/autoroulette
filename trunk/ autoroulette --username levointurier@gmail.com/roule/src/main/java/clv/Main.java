@@ -34,12 +34,14 @@ public class Main extends JFrame {
 
 	private final DefaultListModel model = new DefaultListModel();
 	private JButton go, calclist;
+	private JTextField deb = new JTextField("1");
 	private JTextField multip = new JTextField("2.000");
+	private JTextField debfield = new JTextField("miseInit");
 	private JTextField multfield = new JTextField("multiplicateur");
 	private JTextField portefName = new JTextField("Nombre jetons start:");
 	private JTextField portef = new JTextField("50      ");
 	private JTextField goalName = new JTextField("condition win:");
-	private JTextField goalf = new JTextField("1.83      ");
+	private JTextField goalf = new JTextField("1.83      "); // 1.28 pour 75%
 	private JCheckBox boost = new JCheckBox("BoostePogne", false);
 	private JRadioButton setPlus1 = new JRadioButton("+1", false), setPlus0 = new JRadioButton("+0", true), setPlusCrois = new JRadioButton("+1,2,3,4..", false);
 
@@ -116,7 +118,7 @@ public class Main extends JFrame {
 		calclist.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				model.removeAllElements();
-				double val = 1;
+				double val = Integer.parseInt("" + deb.getText());
 				for (int i = 0; i < 13; i++) {
 					model.addElement("" + (int) val);
 					val *= Double.parseDouble("" + multip.getText());
@@ -127,6 +129,11 @@ public class Main extends JFrame {
 				}
 			}
 		});
+		JPanel debpanel = new JPanel();
+		debpanel.setLayout(new FlowLayout());
+		debpanel.add(deb);
+		debpanel.add(debfield);
+		listButs.add(debpanel);
 
 		JPanel mulpanel = new JPanel();
 		mulpanel.setLayout(new FlowLayout());
@@ -155,6 +162,7 @@ public class Main extends JFrame {
 		portefName.setEditable(false);
 		goalName.setEditable(false);
 		multfield.setEditable(false);
+		debfield.setEditable(false);
 		goalp.add(goalName);
 		goalp.add(goalf);
 		launchp.add(goalp);

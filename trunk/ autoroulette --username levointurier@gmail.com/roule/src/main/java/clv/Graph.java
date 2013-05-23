@@ -96,7 +96,7 @@ public class Graph extends JFrame {
 		plot.setStartAngle(90);
 		plot.setDirection(Rotation.ANTICLOCKWISE);
 		plot.setForegroundAlpha(0.5f);
-		c.setPreferredSize(new java.awt.Dimension(250, 200));
+		c.setPreferredSize(new java.awt.Dimension(200, 200));
 		return c;
 	}
 
