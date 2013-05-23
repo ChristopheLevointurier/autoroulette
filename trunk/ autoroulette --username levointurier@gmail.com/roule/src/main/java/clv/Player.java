@@ -8,8 +8,8 @@ import javax.swing.ListModel;
 
 import org.jfree.util.SortOrder;
 
-import clv.Main.RouletteColor;
 import clv.sub.RouletteNumber;
+import clv.sub.RouletteNumber.*;
 
 public class Player implements Runnable {
 
@@ -38,19 +38,19 @@ public class Player implements Runnable {
 	private void switchh() {
 		if (pari == RouletteColor.RED) {
 			pari = RouletteColor.BLACK;
-		} else
-			{pari = RouletteColor.RED;}
+		} else {
+			pari = RouletteColor.RED;
+		}
 	}
 
 	public void run() {
-
 
 		g = new Graph(portefeuilleStart, mises.size(), useBoostPogne, mises, goalWin);
 		running = true;
 		while (running) {
 			int cptFails = 0;
 			int cptFailsMax = 0;
-			int nbrswitch=0;
+			int nbrswitch = 0;
 			int cptRuns = 0;
 			int portefeuille = portefeuilleStart;
 			boolean boostepogne = false;
@@ -85,7 +85,7 @@ public class Player implements Runnable {
 				}
 			}
 			amountData++;
-			g.addData(cptFailsMax, portefeuille, cptRuns,nbrswitch);
+			g.addData(cptFailsMax, portefeuille, cptRuns, nbrswitch);
 			running = amountData < MAX_RUNS;
 			// try { Thread.sleep(1); } catch (InterruptedException e) { }
 		}

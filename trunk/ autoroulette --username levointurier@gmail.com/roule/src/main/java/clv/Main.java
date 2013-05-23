@@ -63,10 +63,7 @@ public class Main extends JFrame {
 		new Main();
 	}
 
-	public enum RouletteColor {
-		BLACK, RED, GREEN;
-
-	}
+	
 
 	public Main() {
 		super("Roulette");
