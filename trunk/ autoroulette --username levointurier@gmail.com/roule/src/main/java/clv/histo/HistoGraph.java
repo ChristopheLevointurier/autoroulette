@@ -66,14 +66,14 @@ public class HistoGraph extends JFrame {
 		return c;
 	}
 
-	public void addFailSerie(int cpt, int nbrswitch) {
+	public void addFailSerie(int cpt) {
 		failseriedataset.add(cpt);
 		fails++;
 		updateCharts();
 
 	}
 
-	public void addWinSerie(int cpt, int nbrswitch) {
+	public void addWinSerie(int cpt) {
 		winseriedataset.add(cpt);
 		wins++;
 		updateCharts();
@@ -97,9 +97,9 @@ public class HistoGraph extends JFrame {
 		updateCharts();
 	}
 
-	public void sort(boolean key, SortOrder order) {
-		winseriedataset.sortByKeys(SortOrder.ASCENDING);
-		failseriedataset.sortByKeys(SortOrder.ASCENDING);
+	public void sort() {
+		winseriedataset.sortByValues(SortOrder.DESCENDING);
+		failseriedataset.sortByValues(SortOrder.DESCENDING);
 		ratiodataSet.sortByValues(SortOrder.DESCENDING);
 		updateCharts();
 	}
