@@ -6,7 +6,9 @@ import java.util.HashMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -28,14 +30,17 @@ public class Graph extends JFrame {
 	private ArrayList<ChartPanel> chartlist = new ArrayList<ChartPanel>();
 	private ArrayList<DynamicPieDataSet> datasetlist = new ArrayList<DynamicPieDataSet>();
 	private DefaultPieDataset ratiodataSet = new DefaultPieDataset();
+	private JList liste;
 	private DynamicPieDataSet failsMaxWhenWindataset = new DynamicPieDataSet("maxfails pendant victoire"), maxfailsdataset = new DynamicPieDataSet("maxfails"), runsWhenWindataset = new DynamicPieDataSet("runs pendant victoire"), runsdataset = new DynamicPieDataSet("runs"), switchWhenWindataset = new DynamicPieDataSet("switch pendant victoire"),
 			switchdataset = new DynamicPieDataSet("switch");
 	private int wins = 0, fails = 0, portefeuilleStart = 0;
 	private double goal = 0;
 
-	public Graph(int _portefeuilleStart, int nbrmisesmax, boolean boostpogne, String misesString, double _goal) {
-		super("Start=" + ((_portefeuilleStart * 200) / 1000) + "kcfp, Mises:" + misesString + " goal:" + _goal + " boost=" + boostpogne);
+	public Graph(int _portefeuilleStart, int nbrmisesmax, boolean boostpogne, ArrayList<Integer> mises, double _goal) {
+		super("Start=" + ((_portefeuilleStart * 200) / 1000) + "kcfp, goal:" + _goal * ((_portefeuilleStart * 200) / 1000) + "kcfp.  boost=" + boostpogne);
 		goal = _goal;
+
+		liste = new JList(mises.toArray());
 		portefeuilleStart = _portefeuilleStart;
 		runsChart = initChart(runsdataset);
 		runsWhenWinChart = initChart(runsWhenWindataset);
@@ -77,7 +82,12 @@ public class Graph extends JFrame {
 		mainCharts.add(globalCharts);
 		mainCharts.add(winsCharts);
 
-		getContentPane().add(ratiochart, BorderLayout.NORTH);
+		JPanel topCharts = new JPanel();
+		topCharts.setLayout(new BoxLayout(topCharts, BoxLayout.X_AXIS));
+		topCharts.add(ratiochart);
+		topCharts.add(new JScrollPane(liste));
+
+		getContentPane().add(topCharts, BorderLayout.NORTH);
 		getContentPane().add(mainCharts, BorderLayout.CENTER);
 
 		pack();
