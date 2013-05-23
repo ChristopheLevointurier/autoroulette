@@ -68,14 +68,14 @@ public class HistoGraph extends JFrame {
 
 	public void addFailSerie(int cpt) {
 		failseriedataset.add(cpt);
-		fails++;
+		fails += cpt;
 		updateCharts();
 
 	}
 
 	public void addWinSerie(int cpt) {
 		winseriedataset.add(cpt);
-		wins++;
+		wins += cpt;
 		updateCharts();
 
 	}
