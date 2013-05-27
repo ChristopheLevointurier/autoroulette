@@ -69,18 +69,18 @@ public class Player implements Runnable {
 				if (lance.getCoul() == pari) {
 					portefeuille += miseEnJeu * 2;
 					cptFails = 0;
-					// System.out.println("Pari:" + pari + "-" + lance + "=WIN, gain=" + (portefeuille - 10000) + "     lancé n°" + cptRuns);
+					// System.out.println("Pari:" + pari + "-" + lance + "=WIN, gain=" + (portefeuille - portefeuilleStart) + "     lancé n°" + cptRuns);
 					boostepogne = (portefeuille > portefeuilleStart / 2) && useBoostPogne;
 					switchh();
 					nbrswitch++;
 				} else {
 					if (lance.getCoul() == RouletteColor.GREEN) {
 						portefeuille += miseEnJeu / 2;
-						// System.out.println("Pari:" + pari + "-" + lance + "gain="+ (portefeuille - 10000) + "     lancé n°" + cptRuns);
+				//		 System.out.println("Pari:" + pari + "-" + lance + "gain="+ (portefeuille - portefeuilleStart) + "     lancé n°" + cptRuns);
 					} else {
 						cptFails++;
 						cptFailsMax = cptFails > cptFailsMax ? cptFails : cptFailsMax;
-						// System.out.println("Pari:" + pari + "-" + lance + "=FAIL, gain=" + (portefeuille - 10000) + " Fails:" + cptFails + "     lancé n°" + cptRuns);
+				//		 System.out.println("Pari:" + pari + "-" + lance + "=FAIL, gain=" + (portefeuille - portefeuilleStart) + " Fails:" + cptFails + "     lancé n°" + cptRuns);
 					}
 				}
 			}
