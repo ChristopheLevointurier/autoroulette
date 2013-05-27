@@ -34,7 +34,7 @@ public class Main extends JFrame {
 
 	private final DefaultListModel model = new DefaultListModel();
 	private JButton go, calclist;
-	private JTextField deb = new JTextField("1");
+	private JTextField deb = new JTextField("001");
 	private JTextField multip = new JTextField("2.000");
 	private JTextField debfield = new JTextField("miseInit");
 	private JTextField multfield = new JTextField("multiplicateur");
@@ -75,19 +75,7 @@ public class Main extends JFrame {
 			}
 		});
 		getContentPane().setLayout(new FlowLayout());
-		model.addElement("1                     ");
-		model.addElement("2");
-		model.addElement("4");
-		model.addElement("8");
-		model.addElement("16");
-		model.addElement("32");
-		model.addElement("64");
-		model.addElement("128");
-		model.addElement("256");
-		model.addElement("512");
-		model.addElement("1024");
-		model.addElement("2048");
-		model.addElement("4096");
+		model.addElement("                     ");
 		misesBox = new JList(model);
 		new ListAction(misesBox, new EditListAction());
 		JScrollPane scrollList = new JScrollPane(misesBox);
@@ -116,7 +104,7 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				model.removeAllElements();
 				double val = Integer.parseInt("" + deb.getText());
-				for (int i = 0; i < 13; i++) {
+				for (int i = 0; i < 20; i++) {
 					model.addElement("" + (int) val);
 					val *= Double.parseDouble("" + multip.getText());
 					if (setPlus1.isSelected())
@@ -165,7 +153,8 @@ public class Main extends JFrame {
 		launchp.add(goalp);
 		launchp.add(go);
 		add(launchp);
-		pack();
+		calclist.doClick();
+	    pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
