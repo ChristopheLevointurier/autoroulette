@@ -1,7 +1,7 @@
 package clv.sub;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.util.SortOrder;
@@ -11,9 +11,9 @@ public class DynamicPieDataSet extends DefaultPieDataset {
 	private static final long serialVersionUID = -2664525063788462972L;
 
 	private final int NBR_PARTS = 10;
-	private ArrayList<Integer> rawdata = new ArrayList<Integer>();
-	private HashMap<String, Integer> data = new HashMap<String, Integer>();
-	private HashMap<Integer, String> labels = new HashMap<Integer, String>();
+	private ArrayList<Integer> rawdata = new ArrayList<>();
+	private ConcurrentHashMap<String, Integer> data = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<Integer, String> labels = new ConcurrentHashMap<>();
 	private String title;
 	private int delta = 1;
 

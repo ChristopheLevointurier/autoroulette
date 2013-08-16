@@ -1,13 +1,6 @@
 package clv.histo;
 
-import java.awt.BorderLayout;
 import java.util.Random;
-
-import javax.swing.JFrame;
-
-import org.jfree.util.SortOrder;
-
-import clv.Graph;
 import clv.Main;
 import clv.sub.RouletteNumber;
 import clv.sub.RouletteNumber.RouletteColor;

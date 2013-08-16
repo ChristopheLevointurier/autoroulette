@@ -1,96 +1,81 @@
 package clv;
 
-import java.util.ArrayList;
+import clv.Controller.SessionController;
+import clv.common.Config;
+import clv.common.Report;
+import clv.common.Session;
 import java.util.Random;
-
-import javax.swing.DefaultListModel;
-import javax.swing.ListModel;
-
 import org.jfree.util.SortOrder;
-
 import clv.sub.RouletteNumber;
 import clv.sub.RouletteNumber.*;
+import com.sun.corba.se.impl.orbutil.graph.Graph;
+import java.util.ArrayList;
 
 public class Player implements Runnable {
 
-	private static final int MAX_RUNS = 100000;
-	private ArrayList<Integer> mises = new ArrayList<Integer>();
-	private int portefeuilleStart;
-	private boolean running = true;
-	private int amountData = 0;
-	private double goalWin;
-	private boolean useBoostPogne = true;
-	private Graph g;
-	private static Random r = new Random(System.currentTimeMillis());
-	private RouletteColor pari = RouletteColor.RED;
+    private boolean running = true;
+    private int amountData = 0;
+    private static Random r = new Random(System.currentTimeMillis());
+    private RouletteColor pari = RouletteColor.RED;
 
-	public Player(int _portefeuilleStart, ListModel _mises, boolean _useBoostPogne, double _goalWin) {
-		mises.clear();
-		for (int i = 0; i < _mises.getSize(); i++) {
-			mises.add((Integer.parseInt(((String) _mises.getElementAt(i)).trim())));
-		}
-		portefeuilleStart = _portefeuilleStart;
-		useBoostPogne = _useBoostPogne;
-		goalWin = _goalWin;
-		new Thread(this).start();
-	}
+    public Player() {
+        new Thread(this).start();
+    }
 
-	private void switchh() {
-		if (pari == RouletteColor.RED) {
-			pari = RouletteColor.BLACK;
-		} else {
-			pari = RouletteColor.RED;
-		}
-	}
+    private void switchh() {
+        if (pari == RouletteColor.RED) {
+            pari = RouletteColor.BLACK;
+        } else {
+            pari = RouletteColor.RED;
+        }
+    }
 
-	public void run() {
+    @Override
+    public void run() {
+        running = true;
+        while (running) {
+            int cptFails = 0;
+            int cptFailsMax = 0;
+            int nbrswitch = 0;
+            ArrayList<Integer> hist = new ArrayList<>();
+            int portefeuille = Config.getPortefeuilleStart();
+            boolean boostepogne = false;
+            int  rollsAfterWin=0;
+            while (portefeuille < (Config.getPortefeuilleStart() * Config.getGoalWin()) && portefeuille > 0) {
+                RouletteNumber lance = Main.table.get(r.nextInt(37));
+                int miseEnJeu = Config.getMises().get(cptFails);
+                
+                if (boostepogne) {
+                    miseEnJeu *= 2;
+                }
+                if (miseEnJeu > portefeuille) {
+                    miseEnJeu = portefeuille;
+                }
+                portefeuille -= miseEnJeu;
 
-		g = new Graph(portefeuilleStart, mises.size(), useBoostPogne, mises, goalWin);
-		running = true;
-		while (running) {
-			int cptFails = 0;
-			int cptFailsMax = 0;
-			int nbrswitch = 0;
-			int cptRuns = 0;
-			int portefeuille = portefeuilleStart;
-			boolean boostepogne = false;
-			while (portefeuille < (portefeuilleStart * goalWin) && portefeuille > 0) {
-				RouletteNumber lance = Main.table.get(r.nextInt(37));
-				cptRuns++;
-				int miseEnJeu = mises.get(cptFails);
-				if (boostepogne) {
-					miseEnJeu *= 2;
-				}
-				if (miseEnJeu > portefeuille) {
-					miseEnJeu = portefeuille;
-				}
-				portefeuille -= miseEnJeu;
-
-				if (lance.getCoul() == pari) {
-					portefeuille += miseEnJeu * 2;
-					cptFails = 0;
-					// System.out.println("Pari:" + pari + "-" + lance + "=WIN, gain=" + (portefeuille - portefeuilleStart) + "     lancé n°" + cptRuns);
-					boostepogne = (portefeuille > portefeuilleStart / 2) && useBoostPogne;
-					switchh();
-					nbrswitch++;
-				} else {
-					if (lance.getCoul() == RouletteColor.GREEN) {
-						portefeuille += miseEnJeu / 2;
-				//		 System.out.println("Pari:" + pari + "-" + lance + "gain="+ (portefeuille - portefeuilleStart) + "     lancé n°" + cptRuns);
-					} else {
-						cptFails++;
-						cptFailsMax = cptFails > cptFailsMax ? cptFails : cptFailsMax;
-				//		 System.out.println("Pari:" + pari + "-" + lance + "=FAIL, gain=" + (portefeuille - portefeuilleStart) + " Fails:" + cptFails + "     lancé n°" + cptRuns);
-					}
-				}
-			}
-			amountData++;
-			g.addData(cptFailsMax, portefeuille, cptRuns, nbrswitch);
-			running = amountData < MAX_RUNS;
-			// try { Thread.sleep(1); } catch (InterruptedException e) { }
-		}
-		g.removeEmptyParts();
-		g.sort(false, SortOrder.DESCENDING);
-	}
-
+                if (lance.getCoul() == pari) {
+                    portefeuille += miseEnJeu * 2;
+                    cptFails = 0;
+                    // System.out.println("Pari:" + pari + "-" + lance + "=WIN, gain=" + (portefeuille - portefeuilleStart) + "     lance n" + cptRuns);
+                    boostepogne = (Config.isUseBoostPogne() && portefeuille > Config.getPortefeuilleStart() / 2);
+                    switchh();
+                    nbrswitch++;
+                } else {
+                    if (lance.getCoul() == RouletteColor.GREEN) {
+                        portefeuille += miseEnJeu / 2;
+                        //		 System.out.println("Pari:" + pari + "-" + lance + "gain="+ (portefeuille - portefeuilleStart) + "     lance n" + cptRuns);
+                    } else {
+                        cptFails++;
+                        cptFailsMax = cptFails > cptFailsMax ? cptFails : cptFailsMax;
+                        //		 System.out.println("Pari:" + pari + "-" + lance + "=FAIL, gain=" + (portefeuille - portefeuilleStart) + " Fails:" + cptFails + "     lance n" + cptRuns);
+                    }
+                }
+                hist.add(portefeuille);
+            }
+            amountData++;
+            SessionController.addSession(new Session(hist, cptFailsMax, nbrswitch));
+            running = amountData < Config.getMAX_RUNS();
+        }
+        new FailsWinsGraph();
+    }
 }
