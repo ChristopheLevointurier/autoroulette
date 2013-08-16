@@ -8,77 +8,64 @@ import java.awt.event.WindowEvent;
 import java.util.HashMap;
 
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 
 import clv.sub.RouletteNumber;
 
-import third.EditListAction;
-import third.ListAction;
-
 public class MainHisto extends JFrame {
 
-	private static final long serialVersionUID = 25977765461500313L;
+    private static final long serialVersionUID = 25977765461500313L;
+    public static HashMap<Integer, RouletteNumber> table = new HashMap<Integer, RouletteNumber>();
+    private JButton go;
+    private JCheckBox boost = new JCheckBox("switchOnGreen", false);
 
-	public static HashMap<Integer, RouletteNumber> table = new HashMap<Integer, RouletteNumber>();
+    static {
+        for (int i = 0; i <= 36; i++) {
+            table.put(i, new RouletteNumber(i));
+        }
 
-	private JButton go;
-	private JCheckBox boost = new JCheckBox("switchOnGreen", false);
+        System.out.println("init:");
+        for (RouletteNumber r : table.values()) {
+            System.out.println(r);
+        }
+    }
 
-	static {
-		for (int i = 0; i <= 36; i++) {
-			table.put(i, new RouletteNumber(i));
-		}
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        new MainHisto();
+    }
 
-		System.out.println("init:");
-		for (RouletteNumber r : table.values()) {
-			System.out.println(r);
-		}
-	}
+    public MainHisto() {
+        super("Roulette");
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
+        getContentPane().setLayout(new FlowLayout());
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		new MainHisto();
-	}
+        go = new JButton("Launch");
 
-	public MainHisto() {
-		super("Roulette");
-		addWindowListener(new WindowAdapter() {
+        JPanel listButs = new JPanel();
+        listButs.setLayout(new BoxLayout(listButs, BoxLayout.Y_AXIS));
 
-			@Override
-			public void windowClosing(WindowEvent e) {
-				System.exit(0);
-			}
-		});
-		getContentPane().setLayout(new FlowLayout());
+        go.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new Histo(boost.isSelected());
+            }
+        });
 
-		go = new JButton("Launch");
-
-		JPanel listButs = new JPanel();
-		listButs.setLayout(new BoxLayout(listButs, BoxLayout.Y_AXIS));
-
-		go.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				 new Histo(boost.isSelected());
-			}
-		});
-
-		listButs.add(go);
-		listButs.add(boost);
-		add(listButs);
-		pack();
-		setLocationRelativeTo(null);
-		setVisible(true);
-	}
+        listButs.add(go);
+        listButs.add(boost);
+        add(listButs);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
 }
