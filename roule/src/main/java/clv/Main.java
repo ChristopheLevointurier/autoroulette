@@ -98,12 +98,14 @@ public class Main extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Config.setGoalWin(Double.parseDouble(goalf.getText().trim()));
                 Config.setPortefeuilleStart(Integer.parseInt("" + portef.getText().trim()));
+                Config.setUseavoid(avoid.isSelected());
+                Config.setUseBoostPogne(boost.isSelected());
                 ArrayList<Integer> mises = new ArrayList<>();
                 for (int i = 0; i < model.getSize(); i++) {
                     mises.add((Integer.parseInt(((String) model.getElementAt(i)).trim())));
                 }
                 Config.setMises(mises);
-                  SessionController.addSessionListener(Report.getInstance());
+                SessionController.addSessionListener(Report.getInstance());
                 new Player();
             }
         });

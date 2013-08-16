@@ -2,13 +2,10 @@ package clv;
 
 import clv.Controller.SessionController;
 import clv.common.Config;
-import clv.common.Report;
 import clv.common.Session;
 import java.util.Random;
-import org.jfree.util.SortOrder;
 import clv.sub.RouletteNumber;
 import clv.sub.RouletteNumber.*;
-import com.sun.corba.se.impl.orbutil.graph.Graph;
 import java.util.ArrayList;
 
 public class Player implements Runnable {
@@ -40,11 +37,14 @@ public class Player implements Runnable {
             ArrayList<Integer> hist = new ArrayList<>();
             int portefeuille = Config.getPortefeuilleStart();
             boolean boostepogne = false;
-            int  rollsAfterWin=0;
+            int rollsAfterWin = 0;
             while (portefeuille < (Config.getPortefeuilleStart() * Config.getGoalWin()) && portefeuille > 0) {
                 RouletteNumber lance = Main.table.get(r.nextInt(37));
                 int miseEnJeu = Config.getMises().get(cptFails);
-                
+                if (Config.isUseavoid() && rollsAfterWin == 0) {
+                    miseEnJeu = 0;
+                    System.out.println("avoid,p="+portefeuille);
+                }
                 if (boostepogne) {
                     miseEnJeu *= 2;
                 }
@@ -58,6 +58,7 @@ public class Player implements Runnable {
                     cptFails = 0;
                     // System.out.println("Pari:" + pari + "-" + lance + "=WIN, gain=" + (portefeuille - portefeuilleStart) + "     lance n" + cptRuns);
                     boostepogne = (Config.isUseBoostPogne() && portefeuille > Config.getPortefeuilleStart() / 2);
+                    rollsAfterWin = 0;
                     switchh();
                     nbrswitch++;
                 } else {
@@ -65,8 +66,13 @@ public class Player implements Runnable {
                         portefeuille += miseEnJeu / 2;
                         //		 System.out.println("Pari:" + pari + "-" + lance + "gain="+ (portefeuille - portefeuilleStart) + "     lance n" + cptRuns);
                     } else {
-                        cptFails++;
-                        cptFailsMax = cptFails > cptFailsMax ? cptFails : cptFailsMax;
+
+                        if (Config.isUseavoid() && cptFails == 0) {
+                            rollsAfterWin++;
+                        } else {
+                            cptFails++;
+                            cptFailsMax = cptFails > cptFailsMax ? cptFails : cptFailsMax;
+                        }
                         //		 System.out.println("Pari:" + pari + "-" + lance + "=FAIL, gain=" + (portefeuille - portefeuilleStart) + " Fails:" + cptFails + "     lance n" + cptRuns);
                     }
                 }
