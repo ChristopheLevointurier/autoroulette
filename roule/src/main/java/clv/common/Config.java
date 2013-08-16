@@ -17,7 +17,7 @@ public class Config {
     private static boolean useavoid = false;
     private static ArrayList<Integer> mises = new ArrayList<>();
     private static double goalWin;
-    private static final int MAX_RUNS = 100000;
+    private static int MAX_RUNS = 100000;
 
     public static int getPortefeuilleStart() {
         return portefeuilleStart;
@@ -62,4 +62,10 @@ public class Config {
     public static int getMAX_RUNS() {
         return MAX_RUNS;
     }
+
+    public static void setMAX_RUNS(int MAX_RUNS) {
+        Config.MAX_RUNS = MAX_RUNS;
+    }
+    
+    
 }
