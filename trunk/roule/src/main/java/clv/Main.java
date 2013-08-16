@@ -41,7 +41,7 @@ public class Main extends JFrame {
     private JTextField multip = new JTextField("2.000");
     private JTextField debfield = new JTextField("miseInit");
     private JTextField multfield = new JTextField("multiplicateur");
-     private JTextField runsName = new JTextField("Nombre runs:");
+    private JTextField runsName = new JTextField("Nombre runs:");
     private JTextField runsf = new JTextField("100000   ");
     private JTextField portefName = new JTextField("Nombre jetons start:");
     private JTextField portef = new JTextField("50      ");
@@ -50,10 +50,8 @@ public class Main extends JFrame {
     private JCheckBox boost = new JCheckBox("BoostePogne", false);
     private JCheckBox avoid = new JCheckBox("EchapFaibleProba", false);
     private JRadioButton setPlus1 = new JRadioButton("+1", false), setPlus0 = new JRadioButton("+0", true), setPlusCrois = new JRadioButton("+1,2,3,4..", false);
+    public static JProgressBar bar = new JProgressBar();
 
-    public static JProgressBar bar= new JProgressBar();
-    
-    
     static {
         for (int i = 0; i <= 36; i++) {
             table.put(i, new RouletteNumber(i));
@@ -102,6 +100,7 @@ public class Main extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Report.getReport().clear();
+                System.out.println("  Report.getReport().clear()  " + Report.getReport().size());
                 Config.setMAX_RUNS(Integer.parseInt("" + runsf.getText().trim()));
                 Config.setGoalWin(Double.parseDouble(goalf.getText().trim()));
                 Config.setPortefeuilleStart(Integer.parseInt("" + portef.getText().trim()));
@@ -122,8 +121,8 @@ public class Main extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 model.removeAllElements();
-                if (avoid.isSelected()){
-                  model.addElement("0");
+                if (avoid.isSelected()) {
+                    model.addElement("0");
                 }
                 double val = Integer.parseInt("" + deb.getText());
                 for (int i = 0; i < 20; i++) {
@@ -167,13 +166,13 @@ public class Main extends JFrame {
         runs.add(runsName);
         runs.add(runsf);
         launchp.add(runs);
-         JPanel porte = new JPanel();
+        JPanel porte = new JPanel();
         porte.setLayout(new FlowLayout());
         portefName.setEditable(false);
         porte.add(portefName);
         porte.add(portef);
         launchp.add(porte);
-       JPanel goalp = new JPanel();
+        JPanel goalp = new JPanel();
         goalp.setLayout(new FlowLayout());
         portefName.setEditable(false);
         goalName.setEditable(false);
@@ -185,7 +184,7 @@ public class Main extends JFrame {
         launchp.add(go);
         launchp.add(bar);
         add(launchp);
-         calclist.doClick();
+        calclist.doClick();
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
