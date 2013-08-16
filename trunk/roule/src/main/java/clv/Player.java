@@ -43,7 +43,7 @@ public class Player implements Runnable {
                 int miseEnJeu = Config.getMises().get(cptFails);
                 if (Config.isUseavoid() && rollsAfterWin == 0) {
                     miseEnJeu = 0;
-                    System.out.println("avoid,p="+portefeuille);
+                 //   System.out.println("avoid,p="+portefeuille);
                 }
                 if (boostepogne) {
                     miseEnJeu *= 2;

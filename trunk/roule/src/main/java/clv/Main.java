@@ -24,8 +24,8 @@ import javax.swing.JTextField;
 
 import clv.sub.RouletteNumber;
 import java.util.ArrayList;
-import javax.swing.ListModel;
-import javax.swing.SwingUtilities;
+import javax.swing.JProgressBar;
+import javax.swing.plaf.ProgressBarUI;
 
 import third.EditListAction;
 import third.ListAction;
@@ -49,6 +49,9 @@ public class Main extends JFrame {
     private JCheckBox avoid = new JCheckBox("EchapFaibleProba", false);
     private JRadioButton setPlus1 = new JRadioButton("+1", false), setPlus0 = new JRadioButton("+0", true), setPlusCrois = new JRadioButton("+1,2,3,4..", false);
 
+    public static JProgressBar bar= new JProgressBar();
+    
+    
     static {
         for (int i = 0; i <= 36; i++) {
             table.put(i, new RouletteNumber(i));
@@ -167,8 +170,9 @@ public class Main extends JFrame {
         goalp.add(goalf);
         launchp.add(goalp);
         launchp.add(go);
+        launchp.add(bar);
         add(launchp);
-        calclist.doClick();
+         calclist.doClick();
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
