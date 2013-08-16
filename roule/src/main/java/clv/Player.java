@@ -2,6 +2,7 @@ package clv;
 
 import clv.Controller.SessionController;
 import clv.common.Config;
+import clv.common.Report;
 import clv.common.Session;
 import java.util.Random;
 import clv.sub.RouletteNumber;
@@ -73,6 +74,7 @@ public class Player implements Runnable {
             SessionController.addSession(new Session(hist, cptFailsMax, nbrswitch));
             running = amountData < Config.getMAX_RUNS();
         }
-        new FailsWinsGraph();
+             System.out.println("Config.getMAX_RUNS()"+Config.getMAX_RUNS()+" amountData="+amountData+" Report="+ Report.getReport().size());
+       new FailsWinsGraph();
     }
 }
