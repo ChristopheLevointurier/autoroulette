@@ -37,14 +37,10 @@ public class Player implements Runnable {
             ArrayList<Integer> hist = new ArrayList<>();
             int portefeuille = Config.getPortefeuilleStart();
             boolean boostepogne = false;
-            int rollsAfterWin = 0;
+            int miseEnJeu = 0;
             while (portefeuille < (Config.getPortefeuilleStart() * Config.getGoalWin()) && portefeuille > 0) {
                 RouletteNumber lance = Main.table.get(r.nextInt(37));
-                int miseEnJeu = Config.getMises().get(cptFails);
-                if (Config.isUseavoid() && rollsAfterWin == 0) {
-                    miseEnJeu = 0;
-                 //   System.out.println("avoid,p="+portefeuille);
-                }
+                 miseEnJeu = Config.getMises().get(cptFails);
                 if (boostepogne) {
                     miseEnJeu *= 2;
                 }
@@ -56,24 +52,19 @@ public class Player implements Runnable {
                 if (lance.getCoul() == pari) {
                     portefeuille += miseEnJeu * 2;
                     cptFails = 0;
-                    // System.out.println("Pari:" + pari + "-" + lance + "=WIN, gain=" + (portefeuille - portefeuilleStart) + "     lance n" + cptRuns);
+                   //         System.out.println("Pari:" + pari + "-" + lance + "=WIN, mise=" + miseEnJeu+ " Fails:" + cptFails);
                     boostepogne = (Config.isUseBoostPogne() && portefeuille > Config.getPortefeuilleStart() / 2);
-                    rollsAfterWin = 0;
                     switchh();
                     nbrswitch++;
                 } else {
                     if (lance.getCoul() == RouletteColor.GREEN) {
                         portefeuille += miseEnJeu / 2;
-                        //		 System.out.println("Pari:" + pari + "-" + lance + "gain="+ (portefeuille - portefeuilleStart) + "     lance n" + cptRuns);
-                    } else {
+                  //         System.out.println("Pari:" + pari + "-" + lance + "=VERT, mise=" + miseEnJeu+ " Fails:" + cptFails);
+                      } else {
 
-                        if (Config.isUseavoid() && cptFails == 0) {
-                            rollsAfterWin++;
-                        } else {
                             cptFails++;
                             cptFailsMax = cptFails > cptFailsMax ? cptFails : cptFailsMax;
-                        }
-                        //		 System.out.println("Pari:" + pari + "-" + lance + "=FAIL, gain=" + (portefeuille - portefeuilleStart) + " Fails:" + cptFails + "     lance n" + cptRuns);
+                 //           System.out.println("Pari:" + pari + "-" + lance + "=FAIL, mise=" + miseEnJeu+ " Fails:" + cptFails);
                     }
                 }
                 hist.add(portefeuille);
