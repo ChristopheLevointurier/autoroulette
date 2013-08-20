@@ -44,7 +44,7 @@ public class FailsWinsGraph extends JFrame {//, Runnable {
     private double goal = 0;
 
     public FailsWinsGraph() {
-        super("Start=" + ((Config.getPortefeuilleStart() * 200) / 1000) + "kcfp, goal:" + Config.getGoalWin() * ((Config.getPortefeuilleStart() * 200) / 1000) + "kcfp.  boost=" + Config.isUseBoostPogne() + " avoid=" + Config.getAvoid());
+        super("Start=" + ((Config.getPortefeuilleStart() * 200) / 1000) + "kcfp, goal:" + Config.getGoalWin() * ((Config.getPortefeuilleStart() * 200) / 1000) + "kcfp.  boost=" + Config.isUseBoostPogne());
         goal = Config.getGoalWin();
         liste = new JList(Config.getMises().toArray());
         portefeuilleStart = Config.getPortefeuilleStart();
