@@ -5,15 +5,21 @@ import clv.common.Report;
 import clv.common.Session;
 import clv.sub.DynamicPieDataSet;
 import java.awt.BorderLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.KeyStroke;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.plot.PiePlot;
@@ -128,6 +134,20 @@ public class FailsWinsGraph extends JFrame {//, Runnable {
             c.getChart().fireChartChanged();
         }
         repaint();
+
+
+
+        JPanel content = (JPanel) getContentPane();
+        InputMap inputMap = content.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap.put(KeyStroke.getKeyStroke("ESCAPE"), "CLOSE");
+        final JFrame frame = this;
+        content.getActionMap().put("CLOSE", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+            }
+        });
+
     }
 
     /**
