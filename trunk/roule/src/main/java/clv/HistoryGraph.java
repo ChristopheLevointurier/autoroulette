@@ -53,7 +53,7 @@ public class HistoryGraph extends JFrame implements SessionListener {//, Runnabl
         goal = Config.getGoalWin();
         liste = new JList(Config.getMises().toArray());
 
-        histchart = new ChartPanel(ChartFactory.createTimeSeriesChart("...", "runs", "value", xyseriescollection, false, false, false));
+        histchart = new ChartPanel(ChartFactory.createTimeSeriesChart("", "runs", "value", xyseriescollection, false, false, false));
         XYPlot plot = histchart.getChart().getXYPlot();
         // plot.setRenderer(new XYDotRenderer());
         plot.setDomainCrosshairVisible(true);

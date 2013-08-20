@@ -40,7 +40,7 @@ public class FailsWinsGraph extends JFrame {//, Runnable {
     private JList liste;
     private DynamicPieDataSet failsMaxWhenWindataset = new DynamicPieDataSet("maxfails pdt win"), maxfailsWhenLoosedataset = new DynamicPieDataSet("maxfails pdt loose"), runsWhenWindataset = new DynamicPieDataSet("runs pdt win"), runsWhenLoosedataset = new DynamicPieDataSet("runs pdt loose"), switchWhenWindataset = new DynamicPieDataSet("switch pdt win"),
             switchWhenLoosedataset = new DynamicPieDataSet("switch pdt loose");
-    private int wins = 0, fails = 0, portefeuilleStart = 0;
+    private int wins = 0, fails = 0, drop = 0, portefeuilleStart = 0;
     private double goal = 0;
 
     public FailsWinsGraph() {
@@ -106,7 +106,7 @@ public class FailsWinsGraph extends JFrame {//, Runnable {
 
 
         for (Session s : Report.getReport()) {
-            if (s.getLastPortefeuilleValue() < (portefeuilleStart * goal)) {
+            if (s.getLastPortefeuilleValue() < (portefeuilleStart)) {
                 maxfailsWhenLoosedataset.add(s.getCptFailsMax());
                 runsWhenLoosedataset.add(s.getCptRuns());
                 switchWhenLoosedataset.add(s.getNbrswitch());
@@ -118,6 +118,9 @@ public class FailsWinsGraph extends JFrame {//, Runnable {
                 switchWhenWindataset.add(s.getNbrswitch());
                 wins++;
             }
+            if ((s.getLastPortefeuilleValue() >= (portefeuilleStart)) && (s.getLastPortefeuilleValue() < (portefeuilleStart * goal))) {
+                drop++;
+            }
         }
         for (DynamicPieDataSet d : datasetlist) {
             d.removeEmptyParts();
@@ -128,7 +131,8 @@ public class FailsWinsGraph extends JFrame {//, Runnable {
         ratiodataSet.sortByValues(SortOrder.DESCENDING);
         ratiodataSet.setValue("wins", wins);
         ratiodataSet.setValue("fails", fails);
-        ratiochart.getChart().setTitle(" Jeux=" + (wins + fails) + " ratio=" + (int) (((double) wins / (double) (wins + fails)) * 100) + "% wins");
+        ratiodataSet.setValue("drop", drop);
+        ratiochart.getChart().setTitle(" Jeux=" + (wins + fails + drop) + " ratio=" + (int) (((double) wins / (double) (wins + fails + drop)) * 100) + "% wins," + (int) (((double) drop / (double) (wins + fails + drop)) * 100) + "% drop");
 
         for (ChartPanel c : chartlist) {
             c.getChart().fireChartChanged();
