@@ -14,7 +14,7 @@ public class Config {
 
     private static int portefeuilleStart = 50;
     private static boolean useBoostPogne = false;
-    private static boolean useavoid = false;
+    private static int avoid = 0;
     private static ArrayList<Integer> mises = new ArrayList<>();
     private static double goalWin;
     private static int MAX_RUNS = 100000;
@@ -33,14 +33,6 @@ public class Config {
 
     public static void setUseBoostPogne(boolean useBoostPogne) {
         Config.useBoostPogne = useBoostPogne;
-    }
-
-    public static boolean isUseavoid() {
-        return useavoid;
-    }
-
-    public static void setUseavoid(boolean useavoid) {
-        Config.useavoid = useavoid;
     }
 
     public static ArrayList<Integer> getMises() {
@@ -65,6 +57,14 @@ public class Config {
 
     public static void setMAX_RUNS(int MAX_RUNS) {
         Config.MAX_RUNS = MAX_RUNS;
+    }
+
+    public static int getAvoid() {
+        return avoid;
+    }
+
+    public static void setAvoid(int avoid) {
+        Config.avoid = avoid;
     }
     
     
