@@ -40,13 +40,15 @@ public class Main extends JFrame {
     private JTextField multip = new JTextField("2.000");
     private JTextField debfield = new JTextField("miseInit");
     private JTextField multfield = new JTextField("multiplicateur");
-    private JTextField runsName = new JTextField("Nombre runs:");
+    private JTextField runsName = new JTextField("Nombre sessions:");
     private JTextField runsf = new JTextField("100000   ");
     private JTextField portefName = new JTextField("Nombre jetons start:");
     private JTextField portef = new JTextField("50      ");
     private JTextField goalName = new JTextField("condition win:");
     private JTextField goalf = new JTextField("1.85      "); // 1.28 pour 75%
     private JCheckBox boost = new JCheckBox("BoostePogne", false);
+    private JCheckBox cloud = new JCheckBox("CloudGraph", false);
+    private JCheckBox history = new JCheckBox("HistoryGraph", false);
     private JTextField avoid = new JTextField("EchapFaibleProba");
     private JTextField avoidf = new JTextField("1   ");
     private JRadioButton setPlus1 = new JRadioButton("+1", false), setPlus0 = new JRadioButton("+0", true), setPlusCrois = new JRadioButton("+1,2,3,4..", false);
@@ -110,6 +112,8 @@ public class Main extends JFrame {
                     mises.add((Integer.parseInt(((String) model.getElementAt(i)).trim())));
                 }
                 Config.setMises(mises);
+              if (cloud.isSelected())  SessionController.addSessionListener(new CloudGraph());
+              if (history.isSelected())  SessionController.addSessionListener(new HistoryGraph());
                 new Player();
             }
         });
@@ -186,6 +190,8 @@ public class Main extends JFrame {
         goalp.add(goalName);
         goalp.add(goalf);
         launchp.add(goalp);
+        launchp.add(cloud);
+        launchp.add(history);
         launchp.add(go);
         launchp.add(bar);
         add(launchp);
