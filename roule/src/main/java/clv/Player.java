@@ -37,8 +37,7 @@ public class Player implements Runnable {
             int portefeuille = Config.getPortefeuilleStart();
             boolean boostepogne = false;
             int miseEnJeu = 0;
-            while (portefeuille < (Config.getPortefeuilleStart() * Config.getGoalWin()) && portefeuille > 0 && (!isdropped ||(isdropped && portefeuille <= Config.getPortefeuilleStart()))) {
-                isdropped = isdropped ? isdropped : (Config.isUseDropManagenull() && portefeuille < Config.getPortefeuilleStart() / 2);
+            while (portefeuille < (Config.getPortefeuilleStart() * Config.getGoalWin()) && portefeuille > 0 && (!isdropped || (isdropped && portefeuille <= Config.getPortefeuilleStart()))) {
                 RouletteNumber lance = Main.table.get(r.nextInt(37));
                 miseEnJeu = Config.getMises().get(cptFails);
                 if (boostepogne) {
@@ -48,6 +47,7 @@ public class Player implements Runnable {
                     miseEnJeu = portefeuille;
                 }
                 portefeuille -= miseEnJeu;
+                isdropped = isdropped ? isdropped : (Config.isUseDropManagenull() && portefeuille < Config.getPortefeuilleStart() / 2);
 
                 if (lance.getCoul() == pari) {
                     portefeuille += miseEnJeu * 2;
