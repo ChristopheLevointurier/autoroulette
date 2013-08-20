@@ -1,19 +1,19 @@
 package clv;
 
-import clv.Controller.SessionListener;
 import clv.common.Config;
 import clv.common.Report;
 import clv.common.Session;
+import clv.sub.DynamicPieDataSet;
 import java.awt.BorderLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
+import javax.swing.JSplitPane;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.plot.PiePlot;
@@ -21,12 +21,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.util.Rotation;
 import org.jfree.util.SortOrder;
 
-import clv.sub.DynamicPieDataSet;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import javax.swing.JSplitPane;
-
-public class FailsWinsGraph extends JFrame{//, Runnable {
+public class FailsWinsGraph extends JFrame {//, Runnable {
 
     /**
      *
@@ -37,21 +32,21 @@ public class FailsWinsGraph extends JFrame{//, Runnable {
     private ArrayList<DynamicPieDataSet> datasetlist = new ArrayList<>();
     private DefaultPieDataset ratiodataSet = new DefaultPieDataset();
     private JList liste;
-    private DynamicPieDataSet failsMaxWhenWindataset = new DynamicPieDataSet("maxfails pendant victoire"), maxfailsdataset = new DynamicPieDataSet("maxfails"), runsWhenWindataset = new DynamicPieDataSet("runs pendant victoire"), runsdataset = new DynamicPieDataSet("runs"), switchWhenWindataset = new DynamicPieDataSet("switch pendant victoire"),
-            switchdataset = new DynamicPieDataSet("switch");
+    private DynamicPieDataSet failsMaxWhenWindataset = new DynamicPieDataSet("maxfails pdt win"), maxfailsWhenLoosedataset = new DynamicPieDataSet("maxfails pdt loose"), runsWhenWindataset = new DynamicPieDataSet("runs pdt win"), runsWhenLoosedataset = new DynamicPieDataSet("runs pdt loose"), switchWhenWindataset = new DynamicPieDataSet("switch pdt win"),
+            switchWhenLoosedataset = new DynamicPieDataSet("switch pdt loose");
     private int wins = 0, fails = 0, portefeuilleStart = 0;
     private double goal = 0;
 
     public FailsWinsGraph() {
-        super("Start=" + ((Config.getPortefeuilleStart() * 200) / 1000) + "kcfp, goal:" + Config.getGoalWin() * ((Config.getPortefeuilleStart() * 200) / 1000) + "kcfp.  boost=" + Config.isUseBoostPogne() + " avoid=" + Config.isUseavoid());
+        super("Start=" + ((Config.getPortefeuilleStart() * 200) / 1000) + "kcfp, goal:" + Config.getGoalWin() * ((Config.getPortefeuilleStart() * 200) / 1000) + "kcfp.  boost=" + Config.isUseBoostPogne() + " avoid=" + Config.getAvoid());
         goal = Config.getGoalWin();
         liste = new JList(Config.getMises().toArray());
         portefeuilleStart = Config.getPortefeuilleStart();
-        runsChart = initChart(runsdataset);
+        runsChart = initChart(runsWhenLoosedataset);
         runsWhenWinChart = initChart(runsWhenWindataset);
-        switchChart = initChart(switchdataset);
+        switchChart = initChart(switchWhenLoosedataset);
         switchWhenWinChart = initChart(switchWhenWindataset);
-        maxfailschart = initChart(maxfailsdataset);
+        maxfailschart = initChart(maxfailsWhenLoosedataset);
         failsMaxWhenWinChart = initChart(failsMaxWhenWindataset);
         ratiochart = initChart(ratiodataSet, "ratio");
 
@@ -63,11 +58,11 @@ public class FailsWinsGraph extends JFrame{//, Runnable {
         chartlist.add(failsMaxWhenWinChart);
         chartlist.add(ratiochart);
         datasetlist.add(failsMaxWhenWindataset);
-        datasetlist.add(maxfailsdataset);
+        datasetlist.add(maxfailsWhenLoosedataset);
         datasetlist.add(runsWhenWindataset);
-        datasetlist.add(runsdataset);
+        datasetlist.add(runsWhenLoosedataset);
         datasetlist.add(switchWhenWindataset);
-        datasetlist.add(switchdataset);
+        datasetlist.add(switchWhenLoosedataset);
 
         JPanel winsCharts = new JPanel();
         winsCharts.setLayout(new BoxLayout(winsCharts, BoxLayout.Y_AXIS));
@@ -82,7 +77,7 @@ public class FailsWinsGraph extends JFrame{//, Runnable {
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, globalCharts, winsCharts);
         splitPane.setOneTouchExpandable(true);
-        splitPane.setDividerLocation(150);
+        splitPane.setDividerLocation(200);
 
 
         JPanel topCharts = new JPanel();
@@ -99,29 +94,29 @@ public class FailsWinsGraph extends JFrame{//, Runnable {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-               dispose();
+                dispose();
             }
         });
-        
-        
-        for (Session s:Report.getReport()){
-               if (s.getLastPortefeuilleValue() < (portefeuilleStart * goal)) {
-            fails++;
+
+
+        for (Session s : Report.getReport()) {
+            if (s.getLastPortefeuilleValue() < (portefeuilleStart * goal)) {
+                maxfailsWhenLoosedataset.add(s.getCptFailsMax());
+                runsWhenLoosedataset.add(s.getCptRuns());
+                switchWhenLoosedataset.add(s.getNbrswitch());
+                fails++;
+            }
+            if (s.getLastPortefeuilleValue() >= (portefeuilleStart * goal)) {
+                failsMaxWhenWindataset.add(s.getCptFailsMax());
+                runsWhenWindataset.add(s.getCptRuns());
+                switchWhenWindataset.add(s.getNbrswitch());
+                wins++;
+            }
         }
-        if (s.getLastPortefeuilleValue() >= (portefeuilleStart * goal)) {
-            failsMaxWhenWindataset.add(s.getCptFailsMax());
-            runsWhenWindataset.add(s.getCptRuns());
-            switchWhenWindataset.add(s.getNbrswitch());
-            wins++;
-        }
-        maxfailsdataset.add(s.getCptFailsMax());
-        runsdataset.add(s.getCptRuns());
-        switchdataset.add(s.getNbrswitch());
-        }
-         for (DynamicPieDataSet d : datasetlist) {
+        for (DynamicPieDataSet d : datasetlist) {
             d.removeEmptyParts();
         }
-       for (DynamicPieDataSet d : datasetlist) {
+        for (DynamicPieDataSet d : datasetlist) {
             d.sort(false, SortOrder.DESCENDING);
         }
         ratiodataSet.sortByValues(SortOrder.DESCENDING);
@@ -137,8 +132,7 @@ public class FailsWinsGraph extends JFrame{//, Runnable {
 
     /**
      * @Override public void run() { while (RUNNING) { try { Thread.sleep((int)
-     * (1000 / FPS)); } catch (InterruptedException p) { } updateCharts(); }
-    }*
+     * (1000 / FPS)); } catch (InterruptedException p) { } updateCharts(); } }*
      */
     private ChartPanel initChart(DynamicPieDataSet dataset) {
         return initChart(dataset, dataset.getTitle());

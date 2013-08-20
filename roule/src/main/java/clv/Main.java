@@ -25,7 +25,6 @@ import javax.swing.JTextField;
 import clv.sub.RouletteNumber;
 import java.util.ArrayList;
 import javax.swing.JProgressBar;
-import javax.swing.plaf.ProgressBarUI;
 
 import third.EditListAction;
 import third.ListAction;
@@ -48,7 +47,8 @@ public class Main extends JFrame {
     private JTextField goalName = new JTextField("condition win:");
     private JTextField goalf = new JTextField("1.83      "); // 1.28 pour 75%
     private JCheckBox boost = new JCheckBox("BoostePogne", false);
-    private JCheckBox avoid = new JCheckBox("EchapFaibleProba", false);
+    private JTextField avoid = new JTextField("EchapFaibleProba");
+    private JTextField avoidf = new JTextField("0   ");
     private JRadioButton setPlus1 = new JRadioButton("+1", false), setPlus0 = new JRadioButton("+0", true), setPlusCrois = new JRadioButton("+1,2,3,4..", false);
     public static JProgressBar bar = new JProgressBar();
 
@@ -100,18 +100,16 @@ public class Main extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Report.getReport().clear();
-                System.out.println("  Report.getReport().clear()  " + Report.getReport().size());
                 Config.setMAX_RUNS(Integer.parseInt("" + runsf.getText().trim()));
                 Config.setGoalWin(Double.parseDouble(goalf.getText().trim()));
                 Config.setPortefeuilleStart(Integer.parseInt("" + portef.getText().trim()));
-                Config.setUseavoid(avoid.isSelected());
+                Config.setAvoid(Integer.parseInt("" + avoidf.getText().trim()));
                 Config.setUseBoostPogne(boost.isSelected());
                 ArrayList<Integer> mises = new ArrayList<>();
                 for (int i = 0; i < model.getSize(); i++) {
                     mises.add((Integer.parseInt(((String) model.getElementAt(i)).trim())));
                 }
                 Config.setMises(mises);
-                SessionController.addSessionListener(Report.getInstance());
                 new Player();
             }
         });
@@ -121,7 +119,7 @@ public class Main extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 model.removeAllElements();
-                if (avoid.isSelected()) {
+                for (int i = 0; i < Integer.parseInt("" + avoidf.getText().trim());i++) {
                     model.addElement("0");
                 }
                 double val = Integer.parseInt("" + deb.getText());
@@ -153,7 +151,14 @@ public class Main extends JFrame {
         listButs.add(setPlus1);
         listButs.add(setPlusCrois);
         listButs.add(boost);
-        listButs.add(avoid);
+
+        JPanel avoids = new JPanel();
+        avoids.setLayout(new FlowLayout());
+        avoid.setEditable(false);
+        avoids.add(avoid);
+        avoids.add(avoidf);
+
+        listButs.add(avoids);
         listButs.add(calclist);
         add(listButs);
 
@@ -188,5 +193,7 @@ public class Main extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+
+        SessionController.addSessionListener(Report.getInstance());
     }
 }
