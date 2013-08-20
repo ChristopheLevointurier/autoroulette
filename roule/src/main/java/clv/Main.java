@@ -47,6 +47,7 @@ public class Main extends JFrame {
     private JTextField goalName = new JTextField("condition win:");
     private JTextField goalf = new JTextField("1.85      "); // 1.28 pour 75%
     private JCheckBox boost = new JCheckBox("BoostePogne", false);
+    private JCheckBox drop = new JCheckBox("dropGetNull", false);
     private JCheckBox cloud = new JCheckBox("CloudGraph", false);
     private JCheckBox history = new JCheckBox("HistoryGraph", false);
     private JTextField avoid = new JTextField("EchapFaibleProba");
@@ -107,6 +108,7 @@ public class Main extends JFrame {
                 Config.setPortefeuilleStart(Integer.parseInt("" + portef.getText().trim()));
                 Config.setAvoid(Integer.parseInt("" + avoidf.getText().trim()));
                 Config.setUseBoostPogne(boost.isSelected());
+                Config.setUseDropManagenull(drop.isSelected());
                 ArrayList<Integer> mises = new ArrayList<>();
                 for (int i = 0; i < model.getSize(); i++) {
                     mises.add((Integer.parseInt(((String) model.getElementAt(i)).trim())));
@@ -155,7 +157,8 @@ public class Main extends JFrame {
         listButs.add(setPlus1);
         listButs.add(setPlusCrois);
         listButs.add(boost);
-
+        listButs.add(drop);
+        
         JPanel avoids = new JPanel();
         avoids.setLayout(new FlowLayout());
         avoid.setEditable(false);

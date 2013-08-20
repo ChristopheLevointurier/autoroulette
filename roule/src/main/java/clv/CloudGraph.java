@@ -61,7 +61,7 @@ public class CloudGraph extends JFrame implements SessionListener {//, Runnable 
         xyseriescollection.addSeries(cloudWinDataSet);
         xyseriescollection.addSeries(cloudLooseDataSet);
 
-        cloudchart = new ChartPanel(ChartFactory.createScatterPlot("...", "runs to the end", "final value", xyseriescollection, PlotOrientation.VERTICAL, false, false, false));
+        cloudchart = new ChartPanel(ChartFactory.createScatterPlot("", "runs to the end", "final value", xyseriescollection, PlotOrientation.VERTICAL, false, false, false));
         XYPlot plot = cloudchart.getChart().getXYPlot();
         plot.setRenderer(new XYDotRenderer());
         plot.setRangePannable(true);

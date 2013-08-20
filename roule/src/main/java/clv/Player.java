@@ -30,13 +30,15 @@ public class Player implements Runnable {
     public void run() {
         while (amountData < Config.getMAX_RUNS()) {
             int cptFails = 0;
+            boolean isdropped = false;
             int cptFailsMax = 0;
             int nbrswitch = 0;
             ArrayList<Integer> hist = new ArrayList<>();
             int portefeuille = Config.getPortefeuilleStart();
             boolean boostepogne = false;
             int miseEnJeu = 0;
-            while (portefeuille < (Config.getPortefeuilleStart() * Config.getGoalWin()) && portefeuille > 0) {
+            while (portefeuille < (Config.getPortefeuilleStart() * Config.getGoalWin()) && portefeuille > 0 && (!isdropped ||(isdropped && portefeuille <= Config.getPortefeuilleStart()))) {
+                isdropped = isdropped ? isdropped : (Config.isUseDropManagenull() && portefeuille < Config.getPortefeuilleStart() / 2);
                 RouletteNumber lance = Main.table.get(r.nextInt(37));
                 miseEnJeu = Config.getMises().get(cptFails);
                 if (boostepogne) {

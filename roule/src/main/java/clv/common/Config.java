@@ -14,6 +14,7 @@ public class Config {
 
     private static int portefeuilleStart = 50;
     private static boolean useBoostPogne = false;
+    private static boolean useDropManagenull = false;
     private static int avoid = 0;
     private static ArrayList<Integer> mises = new ArrayList<>();
     private static double goalWin;
@@ -65,6 +66,14 @@ public class Config {
 
     public static void setAvoid(int avoid) {
         Config.avoid = avoid;
+    }
+
+    public static boolean isUseDropManagenull() {
+        return useDropManagenull;
+    }
+
+    public static void setUseDropManagenull(boolean useDropManagenull) {
+        Config.useDropManagenull = useDropManagenull;
     }
     
     
