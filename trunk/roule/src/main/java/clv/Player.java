@@ -2,12 +2,11 @@ package clv;
 
 import clv.Controller.SessionController;
 import clv.common.Config;
-import clv.common.Report;
 import clv.common.Session;
-import java.util.Random;
 import clv.sub.RouletteNumber;
-import clv.sub.RouletteNumber.*;
+import clv.sub.RouletteNumber.RouletteColor;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Player implements Runnable {
 

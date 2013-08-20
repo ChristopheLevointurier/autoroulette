@@ -36,7 +36,7 @@ public class Main extends JFrame {
     private JList misesBox;
     private final DefaultListModel model = new DefaultListModel();
     private JButton go, calclist;
-    private JTextField deb = new JTextField("001");
+    private JTextField deb = new JTextField("002");
     private JTextField multip = new JTextField("2.000");
     private JTextField debfield = new JTextField("miseInit");
     private JTextField multfield = new JTextField("multiplicateur");
@@ -45,10 +45,10 @@ public class Main extends JFrame {
     private JTextField portefName = new JTextField("Nombre jetons start:");
     private JTextField portef = new JTextField("50      ");
     private JTextField goalName = new JTextField("condition win:");
-    private JTextField goalf = new JTextField("1.83      "); // 1.28 pour 75%
+    private JTextField goalf = new JTextField("1.85      "); // 1.28 pour 75%
     private JCheckBox boost = new JCheckBox("BoostePogne", false);
     private JTextField avoid = new JTextField("EchapFaibleProba");
-    private JTextField avoidf = new JTextField("0   ");
+    private JTextField avoidf = new JTextField("1   ");
     private JRadioButton setPlus1 = new JRadioButton("+1", false), setPlus0 = new JRadioButton("+0", true), setPlusCrois = new JRadioButton("+1,2,3,4..", false);
     public static JProgressBar bar = new JProgressBar();
 
