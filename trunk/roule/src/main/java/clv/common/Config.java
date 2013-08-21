@@ -14,6 +14,7 @@ public class Config {
 
     private static int portefeuilleStart = 50;
     private static boolean useBoostPogne = false;
+    private static boolean useswitch = true;
     private static boolean useDropManagenull = false;
     private static int avoid = 0;
     private static ArrayList<Integer> mises = new ArrayList<>();
@@ -74,6 +75,14 @@ public class Config {
 
     public static void setUseDropManagenull(boolean useDropManagenull) {
         Config.useDropManagenull = useDropManagenull;
+    }
+
+    public static boolean isUseswitch() {
+        return useswitch;
+    }
+
+    public static void setUseswitch(boolean useswitch) {
+        Config.useswitch = useswitch;
     }
     
     

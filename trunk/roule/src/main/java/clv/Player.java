@@ -19,11 +19,7 @@ public class Player implements Runnable {
     }
 
     private void switchh() {
-        if (pari == RouletteColor.RED) {
-            pari = RouletteColor.BLACK;
-        } else {
-            pari = RouletteColor.RED;
-        }
+        pari = pari == RouletteColor.RED ? RouletteColor.BLACK : RouletteColor.RED;
     }
 
     @Override
@@ -54,8 +50,10 @@ public class Player implements Runnable {
                     cptFails = 0;
                     //         System.out.println("Pari:" + pari + "-" + lance + "=WIN, mise=" + miseEnJeu+ " Fails:" + cptFails);
                     boostepogne = (Config.isUseBoostPogne() && portefeuille > Config.getPortefeuilleStart() / 2);
-                    switchh();
-                    nbrswitch++;
+                    if (Config.isUseswitch()) {
+                        switchh();
+                        nbrswitch++;
+                    }
                 } else {
                     if (lance.getCoul() == RouletteColor.GREEN) {
                         portefeuille += miseEnJeu / 2;

@@ -47,6 +47,7 @@ public class Main extends JFrame {
     private JTextField goalName = new JTextField("condition win:");
     private JTextField goalf = new JTextField("1.85      "); // 1.28 pour 75%
     private JCheckBox boost = new JCheckBox("BoostePogne", false);
+    private JCheckBox swi = new JCheckBox("Switch", true);
     private JCheckBox drop = new JCheckBox("dropGetNull", false);
     private JCheckBox cloud = new JCheckBox("CloudGraph", false);
     private JCheckBox history = new JCheckBox("HistoryGraph", false);
@@ -109,13 +110,18 @@ public class Main extends JFrame {
                 Config.setAvoid(Integer.parseInt("" + avoidf.getText().trim()));
                 Config.setUseBoostPogne(boost.isSelected());
                 Config.setUseDropManagenull(drop.isSelected());
+                Config.setUseswitch(swi.isSelected());
                 ArrayList<Integer> mises = new ArrayList<>();
                 for (int i = 0; i < model.getSize(); i++) {
                     mises.add((Integer.parseInt(((String) model.getElementAt(i)).trim())));
                 }
                 Config.setMises(mises);
-              if (cloud.isSelected())  SessionController.addSessionListener(new CloudGraph());
-              if (history.isSelected())  SessionController.addSessionListener(new HistoryGraph());
+                if (cloud.isSelected()) {
+                    SessionController.addSessionListener(new CloudGraph());
+                }
+                if (history.isSelected()) {
+                    SessionController.addSessionListener(new HistoryGraph());
+                }
                 new Player();
             }
         });
@@ -125,7 +131,7 @@ public class Main extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 model.removeAllElements();
-                for (int i = 0; i < Integer.parseInt("" + avoidf.getText().trim());i++) {
+                for (int i = 0; i < Integer.parseInt("" + avoidf.getText().trim()); i++) {
                     model.addElement("0");
                 }
                 double val = Integer.parseInt("" + deb.getText());
@@ -158,7 +164,8 @@ public class Main extends JFrame {
         listButs.add(setPlusCrois);
         listButs.add(boost);
         listButs.add(drop);
-        
+        listButs.add(swi);
+
         JPanel avoids = new JPanel();
         avoids.setLayout(new FlowLayout());
         avoid.setEditable(false);
