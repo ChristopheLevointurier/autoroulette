@@ -1,5 +1,6 @@
 package clv;
 
+import clv.Controller.SessionController;
 import clv.Controller.SessionListener;
 import clv.common.Config;
 import clv.common.Report;
@@ -71,9 +72,11 @@ public class HistoryGraph extends JFrame implements SessionListener {//, Runnabl
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+        final HistoryGraph instance=this;
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                SessionController.removeSessionListener(instance);
                 dispose();
             }
         });

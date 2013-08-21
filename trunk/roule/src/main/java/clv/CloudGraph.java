@@ -1,5 +1,6 @@
 package clv;
 
+import clv.Controller.SessionController;
 import clv.Controller.SessionListener;
 import clv.common.Config;
 import clv.common.Report;
@@ -79,9 +80,11 @@ public class CloudGraph extends JFrame implements SessionListener {//, Runnable 
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+        final CloudGraph instance=this;
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                SessionController.removeSessionListener(instance);
                 dispose();
             }
         });

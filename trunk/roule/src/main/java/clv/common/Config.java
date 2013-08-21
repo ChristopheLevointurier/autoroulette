@@ -15,6 +15,7 @@ public class Config {
     private static int portefeuilleStart = 50;
     private static boolean useBoostPogne = false;
     private static boolean useswitch = true;
+    private static boolean incOnFail = true;
     private static boolean useDropManagenull = false;
     private static int avoid = 0;
     private static ArrayList<Integer> mises = new ArrayList<>();
@@ -31,6 +32,14 @@ public class Config {
 
     public static boolean isUseBoostPogne() {
         return useBoostPogne;
+    }
+
+    public static boolean isDoubleOnFail() {
+        return incOnFail;
+    }
+
+    public static void setDoubleOnFail(boolean doubleOnFail) {
+        Config.incOnFail = doubleOnFail;
     }
 
     public static void setUseBoostPogne(boolean useBoostPogne) {
