@@ -36,7 +36,7 @@ public class Main extends JFrame {
     private JList misesBox;
     private final DefaultListModel model = new DefaultListModel();
     private JButton go, calclist;
-    private JTextField deb = new JTextField("002");
+    private JTextField deb = new JTextField("001");
     private JTextField multip = new JTextField("2.000");
     private JTextField debfield = new JTextField("miseInit");
     private JTextField multfield = new JTextField("multiplicateur");
@@ -48,11 +48,13 @@ public class Main extends JFrame {
     private JTextField goalf = new JTextField("1.85      "); // 1.28 pour 75%
     private JCheckBox boost = new JCheckBox("BoostePogne", false);
     private JCheckBox swi = new JCheckBox("Switch", true);
+    private JCheckBox inc = new JCheckBox("inc fail", true);
     private JCheckBox drop = new JCheckBox("dropGetNull", false);
     private JCheckBox cloud = new JCheckBox("CloudGraph", false);
+    private JCheckBox doublep = new JCheckBox("DoublePlayer", false);
     private JCheckBox history = new JCheckBox("HistoryGraph", false);
     private JTextField avoid = new JTextField("EchapFaibleProba");
-    private JTextField avoidf = new JTextField("1   ");
+    private JTextField avoidf = new JTextField("0   ");
     private JRadioButton setPlus1 = new JRadioButton("+1", false), setPlus0 = new JRadioButton("+0", true), setPlusCrois = new JRadioButton("+1,2,3,4..", false);
     public static JProgressBar bar = new JProgressBar();
 
@@ -111,6 +113,7 @@ public class Main extends JFrame {
                 Config.setUseBoostPogne(boost.isSelected());
                 Config.setUseDropManagenull(drop.isSelected());
                 Config.setUseswitch(swi.isSelected());
+                Config.setDoubleOnFail(inc.isSelected());
                 ArrayList<Integer> mises = new ArrayList<>();
                 for (int i = 0; i < model.getSize(); i++) {
                     mises.add((Integer.parseInt(((String) model.getElementAt(i)).trim())));
@@ -122,7 +125,11 @@ public class Main extends JFrame {
                 if (history.isSelected()) {
                     SessionController.addSessionListener(new HistoryGraph());
                 }
-                new Player();
+                if (doublep.isSelected()) {
+                    new DoublePlayer();
+                } else {
+                    new Player();
+                }
             }
         });
 
@@ -165,6 +172,8 @@ public class Main extends JFrame {
         listButs.add(boost);
         listButs.add(drop);
         listButs.add(swi);
+        listButs.add(inc);
+        
 
         JPanel avoids = new JPanel();
         avoids.setLayout(new FlowLayout());
@@ -202,6 +211,7 @@ public class Main extends JFrame {
         launchp.add(goalp);
         launchp.add(cloud);
         launchp.add(history);
+        launchp.add(doublep);
         launchp.add(go);
         launchp.add(bar);
         add(launchp);
