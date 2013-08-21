@@ -45,13 +45,13 @@ public class Main extends JFrame {
     private JTextField portefName = new JTextField("Nombre jetons start:");
     private JTextField portef = new JTextField("50      ");
     private JTextField goalName = new JTextField("condition win:");
-    private JTextField goalf = new JTextField("1.85      "); // 1.28 pour 75%
+    private JTextField goalf = new JTextField("1.92      "); // 1.28 pour 75%
     private JCheckBox boost = new JCheckBox("BoostePogne", false);
     private JCheckBox swi = new JCheckBox("Switch", true);
     private JCheckBox inc = new JCheckBox("inc fail", true);
     private JCheckBox drop = new JCheckBox("dropGetNull", false);
     private JCheckBox cloud = new JCheckBox("CloudGraph", false);
-    private JCheckBox doublep = new JCheckBox("DoublePlayer", false);
+    private JCheckBox doublep = new JCheckBox("DoublePlayer", true);
     private JCheckBox history = new JCheckBox("HistoryGraph", false);
     private JTextField avoid = new JTextField("EchapFaibleProba");
     private JTextField avoidf = new JTextField("0   ");
