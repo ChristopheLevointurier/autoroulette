@@ -22,12 +22,13 @@ public class DoublePlayer implements Runnable {
     @Override
     public void run() {
         while (amountData < Config.getMAX_RUNS()) {
+            boolean isdropped = false;
             int failRouge = 0;
             int failNoir = 0;
             ArrayList<Integer> hist = new ArrayList<>();
             int portefeuille = Config.getPortefeuilleStart();
 
-            while (portefeuille < (Config.getPortefeuilleStart() * Config.getGoalWin()) && portefeuille > 2) {
+            while (portefeuille < (Config.getPortefeuilleStart() * Config.getGoalWin()) && portefeuille > 2 && (!isdropped || (isdropped && portefeuille <= Config.getPortefeuilleStart()))) {
                 RouletteNumber lance = Main.table.get(r.nextInt(37));
                 if (Config.isDoubleOnFail()) {
                     pariRouge = Config.getMises().get(failRouge);
@@ -49,11 +50,12 @@ public class DoublePlayer implements Runnable {
                         failNoir--;
                     }
                 }
-              //  System.out.println(lance.getCoul() + " failRouge " + failRouge + " failNoir" + failNoir + " portefeuille" + portefeuille + " pariRouge" + pariRouge + " pariNoir" + pariNoir);
+                //System.out.println(" failRouge " + failRouge + " failNoir" + failNoir + " portefeuille" + portefeuille + " pariRouge" + pariRouge + " pariNoir" + pariNoir + "   tirage:" + lance.getCoul());
 
 
                 portefeuille -= pariRouge;
                 portefeuille -= pariNoir;
+                isdropped = isdropped ? isdropped : (Config.isUseDropManagenull() && portefeuille < Config.getPortefeuilleStart() / 2);
 
                 if (lance.getCoul() == RouletteColor.RED) {
                     portefeuille += pariRouge * 2;
@@ -67,6 +69,7 @@ public class DoublePlayer implements Runnable {
                 }
                 if (lance.getCoul() == RouletteColor.GREEN) {
                     portefeuille += (int) (pariRouge * 2);
+                    portefeuille += (int) (pariNoir * 2);
 
                 }
                 hist.add(portefeuille);

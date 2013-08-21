@@ -49,7 +49,7 @@ public class Player implements Runnable {
                     portefeuille += miseEnJeu * 2;
                     cptFails = 0;
                     //         System.out.println("Pari:" + pari + "-" + lance + "=WIN, mise=" + miseEnJeu+ " Fails:" + cptFails);
-                    boostepogne = (Config.isUseBoostPogne() && portefeuille > Config.getPortefeuilleStart() / 2);
+                    boostepogne = (Config.isUseBoostPogne() && portefeuille > Config.getPortefeuilleStart());
                     if (Config.isUseswitch()) {
                         switchh();
                         nbrswitch++;
