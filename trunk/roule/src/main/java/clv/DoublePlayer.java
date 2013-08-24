@@ -68,9 +68,7 @@ public class DoublePlayer implements Runnable {
                     failNoir = 0;
                 }
                 if (lance.getCoul() == RouletteColor.GREEN) {
-                    portefeuille += (int) (pariRouge * 2);
-                    portefeuille += (int) (pariNoir * 2);
-
+                    portefeuille += (int) ((pariRouge + pariNoir) / 2);
                 }
                 hist.add(portefeuille);
             }
