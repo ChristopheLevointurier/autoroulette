@@ -44,6 +44,7 @@ public class Player implements Runnable {
                 }
                 portefeuille -= miseEnJeu;
                 isdropped = isdropped ? isdropped : (Config.isUseDropManagenull() && portefeuille < Config.getPortefeuilleStart() / 2);
+            //    System.out.println("Pari:" + pari + "-" + lance + ", mise=" + miseEnJeu + " Fails:" + cptFails + " isdropped=" + isdropped + " portefeuille=" + portefeuille);
 
                 if (lance.getCoul() == pari) {
                     portefeuille += miseEnJeu * 2;
