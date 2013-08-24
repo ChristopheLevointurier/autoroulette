@@ -1,4 +1,4 @@
-package clv;
+package clv.view;
 
 import clv.common.Config;
 import clv.common.Report;

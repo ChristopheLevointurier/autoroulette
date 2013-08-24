@@ -1,4 +1,4 @@
-package clv;
+package clv.view;
 
 import clv.Controller.SessionController;
 import clv.Controller.SessionListener;
@@ -37,34 +37,42 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.util.Rotation;
 import org.jfree.util.SortOrder;
 
-public class HistoryGraph extends JFrame implements SessionListener {//, Runnable {
+public class CloudGraph extends JFrame implements SessionListener {//, Runnable {
 
     /**
      *
      */
     private static final long serialVersionUID = 1L;
-    private ChartPanel histchart;
+    private ChartPanel cloudchart;
     private XYSeriesCollection xyseriescollection = new XYSeriesCollection();
+    private XYSeries cloudWinDataSet;
+    private XYSeries cloudLooseDataSet;
     private int wins = 0, fails = 0;
     private JList liste;
     private double goal = 0;
 
-    public HistoryGraph() {
+    public CloudGraph() {
         super("Goal:" + Config.getGoalWin() + "  boost=" + Config.isUseBoostPogne());
         goal = Config.getGoalWin();
         liste = new JList(Config.getMises().toArray());
 
-        histchart = new ChartPanel(ChartFactory.createXYLineChart("", "runs", "value", xyseriescollection, PlotOrientation.VERTICAL,false, false, false));
-        XYPlot plot = histchart.getChart().getXYPlot();
-        // plot.setRenderer(new XYDotRenderer());
-        plot.setDomainCrosshairVisible(true);
-        plot.setRangeCrosshairVisible(true);
-        plot.setRangePannable(true);
-        histchart.setPreferredSize(new Dimension(200, 200));
-        histchart.setDomainZoomable(true);
-        histchart.setRangeZoomable(true);
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, liste, histchart);
+        cloudWinDataSet = new XYSeries(0, false, true);
+        cloudLooseDataSet = new XYSeries(1, false, true);
+        xyseriescollection.addSeries(cloudWinDataSet);
+        xyseriescollection.addSeries(cloudLooseDataSet);
+
+        cloudchart = new ChartPanel(ChartFactory.createScatterPlot("", "runs to the end", "final value", xyseriescollection, PlotOrientation.VERTICAL, false, false, false));
+        XYPlot plot = cloudchart.getChart().getXYPlot();
+        plot.setRenderer(new XYDotRenderer());
+        plot.setRangePannable(true);
+        plot.getRenderer().setSeriesPaint(0, Color.BLUE);
+        plot.getRenderer().setSeriesPaint(1, Color.RED);
+        cloudchart.setPreferredSize(new Dimension(200, 200));
+        cloudchart.setDomainZoomable(true);
+        cloudchart.setRangeZoomable(true);
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, liste, cloudchart);
         splitPane.setOneTouchExpandable(true);
         splitPane.setDividerLocation(20);
         getContentPane().add(splitPane, BorderLayout.CENTER);
@@ -72,7 +80,7 @@ public class HistoryGraph extends JFrame implements SessionListener {//, Runnabl
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        final HistoryGraph instance=this;
+        final CloudGraph instance=this;
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -96,13 +104,19 @@ public class HistoryGraph extends JFrame implements SessionListener {//, Runnabl
 
     @Override
     public void updateInternalData(Session s) {
-        int index = xyseriescollection.getSeriesCount();
-        XYSeries temp = new XYSeries(index, false, true);
-        for (int i = 0; i < s.getPortefeuilleHistory().size(); i++) {
-            temp.add(i, s.getPortefeuilleHistory().get(i));
+
+        int indexSerie = 1;
+        if (s.getLastPortefeuilleValue() < (Config.getPortefeuilleStart() * goal)) {
+            fails++;
         }
-        xyseriescollection.addSeries(temp);
-        //  histchart.getChart().getXYPlot().getRenderer().setSeriesPaint(index, Color.BLUE);
-        histchart.getChart().fireChartChanged();
+        if (s.getLastPortefeuilleValue() >= (Config.getPortefeuilleStart() * goal)) {
+            indexSerie = 0;
+            wins++;
+        }
+        xyseriescollection.getSeries(indexSerie).add(s.getCptRuns(), s.getLastPortefeuilleValue());
+
+
+        cloudchart.getChart().setTitle(" Jeux=" + (wins + fails) + " ratio=" + (int) (((double) wins / (double) (wins + fails)) * 100) + "% wins");
+        cloudchart.getChart().fireChartChanged();
     }
 }

@@ -1,5 +1,7 @@
 package clv;
 
+import clv.view.HistoryGraph;
+import clv.view.CloudGraph;
 import clv.Controller.SessionController;
 import clv.common.Config;
 import clv.common.Report;
@@ -25,6 +27,7 @@ import javax.swing.JTextField;
 import clv.sub.RouletteNumber;
 import java.util.ArrayList;
 import javax.swing.JProgressBar;
+import javax.swing.JSlider;
 
 import third.EditListAction;
 import third.ListAction;
@@ -36,16 +39,16 @@ public class Main extends JFrame {
     private JList misesBox;
     private final DefaultListModel model = new DefaultListModel();
     private JButton go, calclist;
-    private JTextField deb = new JTextField("001");
+    private JSlider deb = new JSlider(JSlider.HORIZONTAL, 0, 10, 1);
     private JTextField multip = new JTextField("2.000");
     private JTextField debfield = new JTextField("miseInit");
     private JTextField multfield = new JTextField("multiplicateur");
     private JTextField runsName = new JTextField("Nombre sessions:");
     private JTextField runsf = new JTextField("100000   ");
     private JTextField portefName = new JTextField("Nombre jetons start:");
-    private JTextField portef = new JTextField("50      ");
+    private JSlider portef = new JSlider(JSlider.HORIZONTAL, 0, 250, 50);
     private JTextField goalName = new JTextField("condition win:");
-    private JTextField goalf = new JTextField("1.92      "); // 1.28 pour 75%
+    private JTextField goalf = new JTextField("1.83      "); // 1.28 pour 75%
     private JCheckBox boost = new JCheckBox("BoostePogne", false);
     private JCheckBox swi = new JCheckBox("Switch", true);
     private JCheckBox inc = new JCheckBox("inc fail", true);
@@ -54,7 +57,7 @@ public class Main extends JFrame {
     private JCheckBox doublep = new JCheckBox("DoublePlayer", true);
     private JCheckBox history = new JCheckBox("HistoryGraph", false);
     private JTextField avoid = new JTextField("EchapFaibleProba");
-    private JTextField avoidf = new JTextField("0   ");
+    private JSlider avoidf = new JSlider(JSlider.HORIZONTAL, 0, 5, 1);
     private JRadioButton setPlus1 = new JRadioButton("+1", false), setPlus0 = new JRadioButton("+0", true), setPlusCrois = new JRadioButton("+1,2,3,4..", false);
     public static JProgressBar bar = new JProgressBar();
 
@@ -108,8 +111,8 @@ public class Main extends JFrame {
                 Report.getReport().clear();
                 Config.setMAX_RUNS(Integer.parseInt("" + runsf.getText().trim()));
                 Config.setGoalWin(Double.parseDouble(goalf.getText().trim()));
-                Config.setPortefeuilleStart(Integer.parseInt("" + portef.getText().trim()));
-                Config.setAvoid(Integer.parseInt("" + avoidf.getText().trim()));
+                Config.setPortefeuilleStart(portef.getValue());
+                Config.setAvoid(avoidf.getValue());
                 Config.setUseBoostPogne(boost.isSelected());
                 Config.setUseDropManagenull(drop.isSelected());
                 Config.setUseswitch(swi.isSelected());
@@ -138,10 +141,10 @@ public class Main extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 model.removeAllElements();
-                for (int i = 0; i < Integer.parseInt("" + avoidf.getText().trim()); i++) {
+                for (int i = 0; i < avoidf.getValue(); i++) {
                     model.addElement("0");
                 }
-                double val = Integer.parseInt("" + deb.getText());
+                double val = deb.getValue();
                 for (int i = 0; i < 20; i++) {
                     model.addElement("" + (int) val);
                     val *= Double.parseDouble("" + multip.getText());
@@ -173,7 +176,19 @@ public class Main extends JFrame {
         listButs.add(drop);
         listButs.add(swi);
         listButs.add(inc);
-        
+
+
+        avoidf.setMajorTickSpacing(1);
+        avoidf.setPaintTicks(true);
+        avoidf.setPaintLabels(true);
+        deb.setMajorTickSpacing(1);
+        deb.setPaintTicks(true);
+        deb.setPaintLabels(true);
+        portef.setMajorTickSpacing(100);
+        portef.setMinorTickSpacing(10);
+        portef.setPaintTicks(true);
+        portef.setPaintLabels(true);
+
 
         JPanel avoids = new JPanel();
         avoids.setLayout(new FlowLayout());
