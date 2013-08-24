@@ -1,5 +1,6 @@
 package clv;
 
+import clv.view.FailsWinsGraph;
 import clv.Controller.SessionController;
 import clv.common.Config;
 import clv.common.Session;
