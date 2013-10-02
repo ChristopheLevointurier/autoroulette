@@ -1,9 +1,10 @@
-package clv;
+package old;
 
 import clv.view.FailsWinsGraph;
 import clv.Controller.SessionController;
 import clv.common.Config;
 import clv.common.Session;
+import clv.sub.Roulette;
 import clv.sub.RouletteNumber;
 import clv.sub.RouletteNumber.RouletteColor;
 import java.util.ArrayList;
@@ -12,7 +13,6 @@ import java.util.Random;
 public class Player implements Runnable {
 
     private int amountData = 0;
-    private static Random r = new Random(System.currentTimeMillis());
     private RouletteColor pari = RouletteColor.RED;
 
     public Player() {
@@ -35,7 +35,7 @@ public class Player implements Runnable {
             boolean boostepogne = false;
             int miseEnJeu = 0;
             while (portefeuille < (Config.getPortefeuilleStart() * Config.getGoalWin()) && portefeuille > 0 && (!isdropped || (isdropped && portefeuille <= Config.getPortefeuilleStart()))) {
-                RouletteNumber lance = Main.table.get(r.nextInt(37));
+                RouletteNumber lance = Roulette.getNextNumber();
                 miseEnJeu = Config.getMises().get(cptFails);
                 if (boostepogne) {
                     miseEnJeu *= 2;
