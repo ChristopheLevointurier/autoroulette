@@ -1,18 +1,17 @@
-package clv;
+package old;
 
 import clv.view.FailsWinsGraph;
 import clv.Controller.SessionController;
 import clv.common.Config;
 import clv.common.Session;
+import clv.sub.Roulette;
 import clv.sub.RouletteNumber;
 import clv.sub.RouletteNumber.RouletteColor;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class DoublePlayer implements Runnable {
 
     private int amountData = 0;
-    private static Random r = new Random(System.currentTimeMillis());
     private int pariRouge = 1;
     private int pariNoir = 1;
 
@@ -30,7 +29,7 @@ public class DoublePlayer implements Runnable {
             int portefeuille = Config.getPortefeuilleStart();
 
             while (portefeuille < (Config.getPortefeuilleStart() * Config.getGoalWin()) && portefeuille > 2 && (!isdropped || (isdropped && portefeuille <= Config.getPortefeuilleStart()))) {
-                RouletteNumber lance = Main.table.get(r.nextInt(37));
+                RouletteNumber lance = Roulette.getNextNumber();
                 if (Config.isDoubleOnFail()) {
                     pariRouge = Config.getMises().get(failRouge);
                     pariNoir = Config.getMises().get(failNoir);

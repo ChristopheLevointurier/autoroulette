@@ -1,5 +1,7 @@
 package clv;
 
+import old.Player;
+import old.DoublePlayer;
 import clv.view.HistoryGraph;
 import clv.view.CloudGraph;
 import clv.Controller.SessionController;
@@ -35,7 +37,6 @@ import third.ListAction;
 public class Main extends JFrame {
 
     private static final long serialVersionUID = 2597779237651500313L;
-    public static HashMap<Integer, RouletteNumber> table = new HashMap<>();
     private JList misesBox;
     private final DefaultListModel model = new DefaultListModel();
     private JButton go, calclist;
@@ -61,16 +62,6 @@ public class Main extends JFrame {
     private JRadioButton setPlus1 = new JRadioButton("+1", false), setPlus0 = new JRadioButton("+0", true), setPlusCrois = new JRadioButton("+1,2,3,4..", false);
     public static JProgressBar bar = new JProgressBar();
 
-    static {
-        for (int i = 0; i <= 36; i++) {
-            table.put(i, new RouletteNumber(i));
-        }
-
-        System.out.println("init:");
-        for (RouletteNumber r : table.values()) {
-            System.out.println(r);
-        }
-    }
 
     /**
      * @param args
