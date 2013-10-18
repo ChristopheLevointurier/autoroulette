@@ -1,19 +1,18 @@
-package clv;
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package clv.view;
 
-import old.Player;
-import old.DoublePlayer;
-import clv.view.HistoryGraph;
-import clv.view.CloudGraph;
+import clv.AbstractPlayer;
 import clv.Controller.SessionController;
-import clv.common.Config;
+import static clv.Casino.bar;
+import clv.common.PlayerConfig;
 import clv.common.Report;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.HashMap;
-
+import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
@@ -24,21 +23,19 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-
-import clv.sub.RouletteNumber;
-import java.util.ArrayList;
-import javax.swing.JProgressBar;
 import javax.swing.JSlider;
-
+import javax.swing.JTextField;
 import third.EditListAction;
 import third.ListAction;
 
-public class Main extends JFrame {
+/**
+ *
+ * @author CLV
+ */
+public class PlayerConfigView extends JFrame {
 
-    private static final long serialVersionUID = 2597779237651500313L;
     private JList misesBox;
-    private final DefaultListModel model = new DefaultListModel();
+    private final DefaultListModel listModel = new DefaultListModel();
     private JButton go, calclist;
     private JSlider deb = new JSlider(JSlider.HORIZONTAL, 0, 10, 1);
     private JTextField multip = new JTextField("2.000");
@@ -60,27 +57,13 @@ public class Main extends JFrame {
     private JTextField avoid = new JTextField("EchapFaibleProba");
     private JSlider avoidf = new JSlider(JSlider.HORIZONTAL, 0, 5, 1);
     private JRadioButton setPlus1 = new JRadioButton("+1", false), setPlus0 = new JRadioButton("+0", true), setPlusCrois = new JRadioButton("+1,2,3,4..", false);
-    public static JProgressBar bar = new JProgressBar();
+    private AbstractPlayer model;
 
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        new Main();
-    }
-
-    public Main() {
-        super("Roulette");
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
-            }
-        });
+    public PlayerConfigView(AbstractPlayer _player) {
+        model = _player;
         getContentPane().setLayout(new FlowLayout());
-        model.addElement("                     ");
-        misesBox = new JList(model);
+        listModel.addElement("                     ");
+        misesBox = new JList(listModel);
         new ListAction(misesBox, new EditListAction());
         JScrollPane scrollList = new JScrollPane(misesBox);
 
@@ -91,7 +74,7 @@ public class Main extends JFrame {
         b.add(setPlusCrois);
         b.add(setPlus0);
 
-        go = new JButton("Launch");
+        go = new JButton("Ok");
 
         JPanel listButs = new JPanel();
         listButs.setLayout(new BoxLayout(listButs, BoxLayout.Y_AXIS));
@@ -100,29 +83,24 @@ public class Main extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Report.getReport().clear();
-                Config.setMAX_RUNS(Integer.parseInt("" + runsf.getText().trim()));
-                Config.setGoalWin(Double.parseDouble(goalf.getText().trim()));
-                Config.setPortefeuilleStart(portef.getValue());
-                Config.setAvoid(avoidf.getValue());
-                Config.setUseBoostPogne(boost.isSelected());
-                Config.setUseDropManagenull(drop.isSelected());
-                Config.setUseswitch(swi.isSelected());
-                Config.setDoubleOnFail(inc.isSelected());
+                model.getConfig().setMAX_RUNS(Integer.parseInt("" + runsf.getText().trim()));
+                model.getConfig().setGoalWin(Double.parseDouble(goalf.getText().trim()));
+                model.getConfig().setPortefeuilleStart(portef.getValue());
+                model.getConfig().setAvoid(avoidf.getValue());
+                model.getConfig().setUseBoostPogne(boost.isSelected());
+                model.getConfig().setUseDropManagenull(drop.isSelected());
+                model.getConfig().setUseswitch(swi.isSelected());
+                model.getConfig().setDoubleOnFail(inc.isSelected());
                 ArrayList<Integer> mises = new ArrayList<>();
-                for (int i = 0; i < model.getSize(); i++) {
-                    mises.add((Integer.parseInt(((String) model.getElementAt(i)).trim())));
+                for (int i = 0; i < listModel.getSize(); i++) {
+                    mises.add((Integer.parseInt(((String) listModel.getElementAt(i)).trim())));
                 }
-                Config.setMises(mises);
+                model.getConfig().setMises(mises);
                 if (cloud.isSelected()) {
                     SessionController.addSessionListener(new CloudGraph());
                 }
                 if (history.isSelected()) {
                     SessionController.addSessionListener(new HistoryGraph());
-                }
-                if (doublep.isSelected()) {
-                    new DoublePlayer();
-                } else {
-                    new Player();
                 }
             }
         });
@@ -131,13 +109,13 @@ public class Main extends JFrame {
         calclist.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.removeAllElements();
+                listModel.removeAllElements();
                 for (int i = 0; i < avoidf.getValue(); i++) {
-                    model.addElement("0");
+                    listModel.addElement("0");
                 }
                 double val = deb.getValue();
                 for (int i = 0; i < 20; i++) {
-                    model.addElement("" + (int) val);
+                    listModel.addElement("" + (int) val);
                     val *= Double.parseDouble("" + multip.getText());
                     if (setPlus1.isSelected()) {
                         val += 1;
@@ -222,10 +200,5 @@ public class Main extends JFrame {
         launchp.add(bar);
         add(launchp);
         calclist.doClick();
-        pack();
-        setLocationRelativeTo(null);
-        setVisible(true);
-
-        SessionController.addSessionListener(Report.getInstance());
     }
 }

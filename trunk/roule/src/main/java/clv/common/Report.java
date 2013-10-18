@@ -1,7 +1,7 @@
 package clv.common;
 
 import clv.Controller.SessionListener;
-import clv.Main;
+import clv.Casino;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +24,6 @@ public class Report implements SessionListener {
     @Override
     public void updateInternalData(Session s) {
         report.add(s);
-         Main.bar.setValue(report.size() * 100 / Config.getMAX_RUNS());
+  //       Casino.bar.setValue(report.size() * 100 / PlayerConfig.getMAX_RUNS());
     }
 }
