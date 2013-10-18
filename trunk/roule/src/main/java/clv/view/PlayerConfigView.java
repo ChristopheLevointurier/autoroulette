@@ -60,6 +60,7 @@ public class PlayerConfigView extends JFrame {
     private AbstractPlayer model;
 
     public PlayerConfigView(AbstractPlayer _player) {
+        super("tout est boiteux pour l'instant");
         model = _player;
         getContentPane().setLayout(new FlowLayout());
         listModel.addElement("                     ");
@@ -102,6 +103,7 @@ public class PlayerConfigView extends JFrame {
                 if (history.isSelected()) {
                     SessionController.addSessionListener(new HistoryGraph());
                 }
+                dispose();
             }
         });
 
@@ -200,5 +202,8 @@ public class PlayerConfigView extends JFrame {
         launchp.add(bar);
         add(launchp);
         calclist.doClick();
+
+        setVisible(true);
+        pack();
     }
 }
