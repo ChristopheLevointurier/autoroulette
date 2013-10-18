@@ -4,8 +4,6 @@
  */
 package clv.sub;
 
-import static clv.sub.RouletteNumber.RouletteColor.BLACK;
-
 /**
  *
  * @author CLV
@@ -21,13 +19,15 @@ public class Mise {
     private int SIXAIN_5 = 0;
     private int SIXAIN_6 = 0;
 
+    public Mise() {
+    }
+
     public int getNOIR() {
         return NOIR;
     }
 
-
-    public void setNOIR(int NOIR) {
-        this.NOIR = NOIR;
+    public void setNOIR(int _NOIR) {
+        NOIR = _NOIR;
     }
 
     public int getROUGE() {
@@ -84,5 +84,9 @@ public class Mise {
 
     public void setSIXAIN_6(int SIXAIN_6) {
         this.SIXAIN_6 = SIXAIN_6;
+    }
+
+    public String toString() {
+        return "Mise: NOIR =" + NOIR + " ROUGE=" + ROUGE;
     }
 }

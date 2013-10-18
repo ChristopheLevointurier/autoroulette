@@ -6,6 +6,7 @@ package clv.common;
 
 import clv.AbstractPlayer;
 import clv.sub.Etat;
+import clv.sub.Mise;
 import clv.sub.RouletteNumber.RouletteColor;
 import clv.view.PlayerView;
 
@@ -17,17 +18,22 @@ public class Player extends AbstractPlayer {
 
     //parie uniquement sur noir
     public Player() {
-        
-        lastState= new Etat();
+
+        lastState = new Etat();
+        mise = new Mise();
+        config = new PlayerConfig();
         view = new PlayerView(this);
+        portefeuille = config.getPortefeuilleStart();
     }
 
     @Override
     public void bet() {
-        if ( lastState.getNumber().getCoul() == RouletteColor.BLACK) {
-            mise.setNOIR(1);
-        } else {
-            mise.setNOIR(lastState.getMise().getNOIR() * 2);
+        int miseAFaire = 1;
+        if (lastState.getNumber().getCoul() == RouletteColor.RED) {
+            miseAFaire = (lastState.getMise().getNOIR() * 2);
         }
+        portefeuille -= miseAFaire;
+        mise.setNOIR(miseAFaire);
+        System.out.println(id + " " + mise.toString());
     }
 }
