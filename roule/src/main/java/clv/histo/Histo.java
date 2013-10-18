@@ -2,13 +2,13 @@ package clv.histo;
 
 import java.util.Random;
 import clv.Main;
-import clv.sub.Roulette;
 import clv.sub.RouletteNumber;
 import clv.sub.RouletteNumber.RouletteColor;
 
 public class Histo implements Runnable {
 
 	private static final int MAX_RUNS = 100000;
+	private static Random r = new Random(System.currentTimeMillis());
 	private RouletteColor pari = RouletteColor.RED;
 	private boolean switchOnO = false;
 
@@ -34,7 +34,7 @@ public class Histo implements Runnable {
 		int cptFails = 0;
 		int cptWinws = 0;
 		while (cptRuns < MAX_RUNS) {
-			RouletteNumber lance = Roulette.getNextNumber();
+			RouletteNumber lance = Main.table.get(r.nextInt(37));
 			cptRuns++;
 
 			if (lance.getCoul() == pari) {

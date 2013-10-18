@@ -13,7 +13,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.util.Rotation;
 import org.jfree.util.SortOrder;
 
-import clv.view.sub.DynamicPieDataSet;
+import clv.sub.DynamicPieDataSet;
 
 public class HistoGraph extends JFrame {
 

@@ -5,7 +5,7 @@ import clv.Controller.SessionListener;
 import clv.common.Config;
 import clv.common.Report;
 import clv.common.Session;
-import clv.view.sub.DynamicPieDataSet;
+import clv.sub.DynamicPieDataSet;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
