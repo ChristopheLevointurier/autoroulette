@@ -1,7 +1,7 @@
 package clv.histo;
 
 import java.util.Random;
-import clv.Main;
+import clv.Casino;
 import clv.sub.Roulette;
 import clv.sub.RouletteNumber;
 import clv.sub.RouletteNumber.RouletteColor;

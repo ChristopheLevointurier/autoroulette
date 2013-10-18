@@ -1,6 +1,6 @@
 package clv.view;
 
-import clv.common.Config;
+import clv.common.PlayerConfig;
 import clv.common.Report;
 import clv.common.Session;
 import clv.view.sub.DynamicPieDataSet;
@@ -44,10 +44,10 @@ public class FailsWinsGraph extends JFrame {//, Runnable {
     private double goal = 0;
 
     public FailsWinsGraph() {
-        super("Start=" + ((Config.getPortefeuilleStart() * 200) / 1000) + "kcfp, goal:" + Config.getGoalWin() * ((Config.getPortefeuilleStart() * 200) / 1000) + "kcfp.  boost=" + Config.isUseBoostPogne());
-        goal = Config.getGoalWin();
-        liste = new JList(Config.getMises().toArray());
-        portefeuilleStart = Config.getPortefeuilleStart();
+        super("Start=");// + ((PlayerConfig.getPortefeuilleStart() * 200) / 1000) + "kcfp, goal:" + PlayerConfig.getGoalWin() * ((PlayerConfig.getPortefeuilleStart() * 200) / 1000) + "kcfp.  boost=" + PlayerConfig.isUseBoostPogne());
+     //   goal = PlayerConfig.getGoalWin();
+     //   liste = new JList(PlayerConfig.getMises().toArray());
+     //   portefeuilleStart = PlayerConfig.getPortefeuilleStart();
         runsChart = initChart(runsWhenLoosedataset);
         runsWhenWinChart = initChart(runsWhenWindataset);
         switchChart = initChart(switchWhenLoosedataset);

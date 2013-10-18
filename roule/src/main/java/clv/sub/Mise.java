@@ -2,13 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package clv;
+package clv.sub;
+
+import static clv.sub.RouletteNumber.RouletteColor.BLACK;
 
 /**
  *
  * @author CLV
  */
-class Mise {
+public class Mise {
 
     private int NOIR = 0;
     private int ROUGE = 0;
@@ -22,6 +24,7 @@ class Mise {
     public int getNOIR() {
         return NOIR;
     }
+
 
     public void setNOIR(int NOIR) {
         this.NOIR = NOIR;

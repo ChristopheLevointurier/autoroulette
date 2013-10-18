@@ -4,8 +4,6 @@
  */
 package clv.sub;
 
-import static clv.sub.typeRoulette.FR;
-import static clv.sub.typeRoulette.US;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -13,20 +11,22 @@ import java.util.Random;
  *
  * @author CLV
  */
-enum typeRoulette {
-
-    FR, US, MEX
-};
-
 public class Roulette {
 
+    public enum TypeRoulette {
+
+        FR, EN, US, MEX
+    };
     private static Random r = new Random(System.currentTimeMillis());
     private static HashMap<Integer, RouletteNumber> table = new HashMap<>();
     private static Roulette instance;
+    private TypeRoulette type = TypeRoulette.EN;
 
-    private Roulette(typeRoulette t) {
+    private Roulette(TypeRoulette t) {
+        type = t;
         switch (t) {
             case FR:
+            case EN:
                 for (int i = 0; i <= 36; i++) {
                     table.put(i, new RouletteNumber(i));
                 }
@@ -50,12 +50,25 @@ public class Roulette {
 
     private static Roulette getInstance() {
         if (instance == null) {
-            instance = new Roulette(FR);
+            instance = new Roulette(TypeRoulette.FR);
         }
         return instance;
     }
 
+    public static Roulette setType(TypeRoulette t) {
+        instance = new Roulette(t);
+        return instance;
+    }
+
+    public static TypeRoulette getType() {
+        return getInstance().type;
+    }
+
     public static RouletteNumber getNextNumber() {
         return getInstance().getNext();
+    }
+
+    public static RouletteNumber get(int v) {
+        return getInstance().table.get(v);
     }
 }

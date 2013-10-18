@@ -2,10 +2,8 @@ package clv.view;
 
 import clv.Controller.SessionController;
 import clv.Controller.SessionListener;
-import clv.common.Config;
-import clv.common.Report;
+import clv.common.PlayerConfig;
 import clv.common.Session;
-import clv.view.sub.DynamicPieDataSet;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,29 +11,21 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import javax.swing.AbstractAction;
-import javax.swing.BoxLayout;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYDotRenderer;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.xy.DefaultXYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.util.Rotation;
-import org.jfree.util.SortOrder;
 
 public class CloudGraph extends JFrame implements SessionListener {//, Runnable {
 
@@ -52,9 +42,9 @@ public class CloudGraph extends JFrame implements SessionListener {//, Runnable 
     private double goal = 0;
 
     public CloudGraph() {
-        super("Goal:" + Config.getGoalWin() + "  boost=" + Config.isUseBoostPogne());
-        goal = Config.getGoalWin();
-        liste = new JList(Config.getMises().toArray());
+        super("Goal:");// + PlayerConfig.getGoalWin() + "  boost=" + PlayerConfig.isUseBoostPogne());
+      //  goal = PlayerConfig.getGoalWin();
+      //  liste = new JList(PlayerConfig.getMises().toArray());
 
 
         cloudWinDataSet = new XYSeries(0, false, true);
@@ -106,13 +96,13 @@ public class CloudGraph extends JFrame implements SessionListener {//, Runnable 
     public void updateInternalData(Session s) {
 
         int indexSerie = 1;
-        if (s.getLastPortefeuilleValue() < (Config.getPortefeuilleStart() * goal)) {
+       /** if (s.getLastPortefeuilleValue() < (PlayerConfig.getPortefeuilleStart() * goal)) {
             fails++;
         }
-        if (s.getLastPortefeuilleValue() >= (Config.getPortefeuilleStart() * goal)) {
+        if (s.getLastPortefeuilleValue() >= (PlayerConfig.getPortefeuilleStart() * goal)) {
             indexSerie = 0;
             wins++;
-        }
+        }**/
         xyseriescollection.getSeries(indexSerie).add(s.getCptRuns(), s.getLastPortefeuilleValue());
 
 
