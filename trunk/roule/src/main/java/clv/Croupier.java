@@ -11,8 +11,11 @@ import clv.sub.RouletteNumber;
 import static clv.sub.RouletteNumber.RouletteColor.BLACK;
 import static clv.sub.RouletteNumber.RouletteColor.GREEN;
 import static clv.sub.RouletteNumber.RouletteColor.RED;
+import clv.view.CroupierView;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,6 +25,15 @@ public class Croupier {
 
     private static List<AbstractPlayer> players = new ArrayList<>();
     private static boolean manualMode = true;
+
+    public Croupier(boolean viewMode) {
+        if (viewMode) {
+            new CroupierView();
+        } else {
+            manualMode = false;
+            run();
+        }
+    }
 
     public static void addPlayer(AbstractPlayer p) {
         players.add(p);
@@ -37,13 +49,22 @@ public class Croupier {
 
     public static void run() {
 
-        for (AbstractPlayer p : players) {
-            p.bet();
-        }
-        RouletteNumber number = Roulette.getNextNumber();
-        for (AbstractPlayer p : players) {
-            pay(p, number);
-        }
+        do {
+            for (AbstractPlayer p : players) {
+                p.bet();
+            }
+            RouletteNumber number = Roulette.getNextNumber();
+            for (AbstractPlayer p : players) {
+                pay(p, number);
+            }
+            if (players.isEmpty()) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    System.out.println("croupier réveillé en pleine sieste.");
+                }
+            }
+        } while (!manualMode);
     }
 
     public static boolean isManualMode() {
