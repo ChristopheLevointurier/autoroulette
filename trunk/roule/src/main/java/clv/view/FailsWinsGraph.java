@@ -1,5 +1,6 @@
 package clv.view;
 
+import clv.Controller.SessionListener;
 import clv.common.PlayerConfig;
 import clv.common.Report;
 import clv.common.Session;
@@ -27,7 +28,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.util.Rotation;
 import org.jfree.util.SortOrder;
 
-public class FailsWinsGraph extends JFrame {//, Runnable {
+public class FailsWinsGraph extends JFrame implements SessionListener {//, Runnable {
 
     /**
      *
@@ -45,9 +46,9 @@ public class FailsWinsGraph extends JFrame {//, Runnable {
 
     public FailsWinsGraph() {
         super("Start=");// + ((PlayerConfig.getPortefeuilleStart() * 200) / 1000) + "kcfp, goal:" + PlayerConfig.getGoalWin() * ((PlayerConfig.getPortefeuilleStart() * 200) / 1000) + "kcfp.  boost=" + PlayerConfig.isUseBoostPogne());
-     //   goal = PlayerConfig.getGoalWin();
-     //   liste = new JList(PlayerConfig.getMises().toArray());
-     //   portefeuilleStart = PlayerConfig.getPortefeuilleStart();
+        //   goal = PlayerConfig.getGoalWin();
+        //   liste = new JList(PlayerConfig.getMises().toArray());
+        //   portefeuilleStart = PlayerConfig.getPortefeuilleStart();
         runsChart = initChart(runsWhenLoosedataset);
         runsWhenWinChart = initChart(runsWhenWindataset);
         switchChart = initChart(switchWhenLoosedataset);
@@ -171,5 +172,25 @@ public class FailsWinsGraph extends JFrame {//, Runnable {
         plot.setForegroundAlpha(0.5f);
         c.setPreferredSize(new java.awt.Dimension(200, 200));
         return c;
+    }
+
+    @Override
+    public void updateInternalData(Session s) {
+
+        int indexSerie = 1;
+        /**
+         * if (s.getLastPortefeuilleValue() <
+         * (PlayerConfig.getPortefeuilleStart() * goal)) { fails++; } if
+         * (s.getLastPortefeuilleValue() >= (PlayerConfig.getPortefeuilleStart()
+         * * goal)) { indexSerie = 0; wins++; }
+         * xyseriescollection.getSeries(indexSerie).add(s.getCptRuns(),
+         * s.getLastPortefeuilleValue());
+         *
+         *
+         * cloudchart.getChart().setTitle(" Jeux=" + (wins + fails) + " ratio="
+         * + (int) (((double) wins / (double) (wins + fails)) * 100) + "%
+         * wins");
+        cloudchart.getChart().fireChartChanged();*
+         */
     }
 }
