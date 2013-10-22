@@ -5,9 +5,7 @@
 package clv.view;
 
 import clv.AbstractPlayer;
-import clv.Controller.SessionController;
 import static clv.Casino.bar;
-import clv.common.PlayerConfig;
 import clv.common.Report;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -48,12 +46,6 @@ public class PlayerConfigView extends JFrame {
     private JTextField goalName = new JTextField("condition win:");
     private JTextField goalf = new JTextField("1.83      "); // 1.28 pour 75%
     private JCheckBox boost = new JCheckBox("BoostePogne", false);
-    private JCheckBox swi = new JCheckBox("Switch", true);
-    private JCheckBox inc = new JCheckBox("inc fail", true);
-    private JCheckBox drop = new JCheckBox("dropGetNull", false);
-    private JCheckBox cloud = new JCheckBox("CloudGraph", false);
-    private JCheckBox doublep = new JCheckBox("DoublePlayer", true);
-    private JCheckBox history = new JCheckBox("HistoryGraph", false);
     private JTextField avoid = new JTextField("EchapFaibleProba");
     private JSlider avoidf = new JSlider(JSlider.HORIZONTAL, 0, 5, 1);
     private JRadioButton setPlus1 = new JRadioButton("+1", false), setPlus0 = new JRadioButton("+0", true), setPlusCrois = new JRadioButton("+1,2,3,4..", false);
@@ -89,20 +81,11 @@ public class PlayerConfigView extends JFrame {
                 model.getConfig().setPortefeuilleStart(portef.getValue());
                 model.getConfig().setAvoid(avoidf.getValue());
                 model.getConfig().setUseBoostPogne(boost.isSelected());
-                model.getConfig().setUseDropManagenull(drop.isSelected());
-                model.getConfig().setUseswitch(swi.isSelected());
-                model.getConfig().setDoubleOnFail(inc.isSelected());
                 ArrayList<Integer> mises = new ArrayList<>();
                 for (int i = 0; i < listModel.getSize(); i++) {
                     mises.add((Integer.parseInt(((String) listModel.getElementAt(i)).trim())));
                 }
                 model.getConfig().setMises(mises);
-                if (cloud.isSelected()) {
-                    SessionController.addSessionListener(new CloudGraph());
-                }
-                if (history.isSelected()) {
-                    SessionController.addSessionListener(new HistoryGraph());
-                }
                 dispose();
             }
         });
@@ -144,10 +127,7 @@ public class PlayerConfigView extends JFrame {
         listButs.add(setPlus1);
         listButs.add(setPlusCrois);
         listButs.add(boost);
-        listButs.add(drop);
-        listButs.add(swi);
-        listButs.add(inc);
-
+       
 
         avoidf.setMajorTickSpacing(1);
         avoidf.setPaintTicks(true);
@@ -195,9 +175,6 @@ public class PlayerConfigView extends JFrame {
         goalp.add(goalName);
         goalp.add(goalf);
         launchp.add(goalp);
-        launchp.add(cloud);
-        launchp.add(history);
-        launchp.add(doublep);
         launchp.add(go);
         launchp.add(bar);
         add(launchp);

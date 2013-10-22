@@ -24,6 +24,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
@@ -35,7 +36,10 @@ public class CroupierView extends JFrame {
 
     private JCheckBoxMenuItem manualCheck = new JCheckBoxMenuItem("Mode manuel", Croupier.isManualMode());
     private JCheckBoxMenuItem HistoryVue = new JCheckBoxMenuItem("Historiques", false);
+    private JCheckBoxMenuItem cloud = new JCheckBoxMenuItem("cloud", false);
     private JCheckBoxMenuItem failwinsVue = new JCheckBoxMenuItem("Fails/Wins", false);
+    private JCheckBoxMenuItem tableVue = new JCheckBoxMenuItem("Voir la table", false);
+    private JMenuItem addPlayer = new JMenuItem("Ajouter Joueur");
 
     // private Croupier model;
     public CroupierView() {
@@ -44,15 +48,21 @@ public class CroupierView extends JFrame {
         JMenuBar menu = new JMenuBar();
         JMenu configCroup = new JMenu("Croupier Config");
         JMenu configVue = new JMenu("Fenetres");
+        JMenu joueurs = new JMenu("Joueurs");
+        joueurs.add(addPlayer);
         configCroup.add(manualCheck);
         menu.add(configCroup);
+
+        configVue.add(tableVue);
+        configVue.addSeparator();
         configVue.add(HistoryVue);
+        configVue.add(cloud);
         configVue.add(failwinsVue);
         menu.add(configVue);
+        menu.add(joueurs);
         setJMenuBar(menu);
         getContentPane().setLayout(new FlowLayout());
         JButton go = new JButton("Launch");
-        JButton addPlayer = new JButton("AddPlayer");
 
         JPanel listButs = new JPanel();
         listButs.setLayout(new BoxLayout(listButs, BoxLayout.Y_AXIS));
@@ -61,9 +71,28 @@ public class CroupierView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Report.getReport().clear();
+                
+                        if (cloud.isSelected()) {
+                    SessionController.addSessionListener(new CloudGraph());
+                }         if (failwinsVue.isSelected()) {
+                    SessionController.addSessionListener(new FailsWinsGraph());
+                }
+                if (HistoryVue.isSelected()) {
+                    SessionController.addSessionListener(new HistoryGraph());
+                }
+        
+                
                 Croupier.run();
             }
         });
+
+        manualCheck.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Croupier.setManualMode(manualCheck.isSelected());
+            }
+        });
+
 
         addPlayer.addActionListener(new ActionListener() {
             @Override
@@ -74,7 +103,6 @@ public class CroupierView extends JFrame {
         SessionController.addSessionListener(Report.getInstance());
 
         getContentPane().add(go, BorderLayout.SOUTH);
-        getContentPane().add(addPlayer, BorderLayout.NORTH);
 
         setVisible(true);
         pack();
