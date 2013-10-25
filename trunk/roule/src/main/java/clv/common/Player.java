@@ -23,7 +23,6 @@ public class Player extends AbstractPlayer {
         mise = new Mise();
         config = new PlayerConfig();
         view = new PlayerView(this);
-        portefeuille = config.getPortefeuilleStart();
     }
 
     @Override

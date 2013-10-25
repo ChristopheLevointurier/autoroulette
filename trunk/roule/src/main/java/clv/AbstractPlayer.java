@@ -51,4 +51,10 @@ public abstract class AbstractPlayer {
         lastState.setNumber(r);
         lastState.setMise(mise);
     }
+
+    public void raz() {
+        lastState = new Etat();
+        mise = new Mise();
+        portefeuille = config.getPortefeuilleStart();
+    }
 }

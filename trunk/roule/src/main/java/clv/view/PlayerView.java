@@ -7,6 +7,7 @@ package clv.view;
 import clv.AbstractPlayer;
 import clv.Croupier;
 import clv.common.Report;
+import clv.sub.ValueSelectorMenuItem;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,6 +21,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 
 /**
  *
@@ -35,6 +37,7 @@ public class PlayerView extends JFrame {
     private JCheckBoxMenuItem switchUse = new JCheckBoxMenuItem("switchOnFail", true);
     private JCheckBoxMenuItem drop = new JCheckBoxMenuItem("dropGetNull", false);
     private JCheckBoxMenuItem tableVue = new JCheckBoxMenuItem("Voir la table", false);
+    private JMenuItem portefStart = new JMenuItem("NbrJetonsDebut");
 
     public PlayerView(AbstractPlayer _model) {
         super("playerView");
@@ -46,12 +49,15 @@ public class PlayerView extends JFrame {
         pack();
 
         JMenuBar menu = new JMenuBar();
-        JMenu configCroup = new JMenu("Joueur Config");
+        JMenu configPLay = new JMenu("Joueur Config");
         JMenu configVue = new JMenu("Fenetres");
-        configCroup.add(doubleOnFail);
-        configCroup.add(switchUse);
-        configCroup.add(drop);
-        menu.add(configCroup);
+        configPLay.add(doubleOnFail);
+        configPLay.add(switchUse);
+        configPLay.add(drop);
+        configPLay.addSeparator();
+        portefStart.setText("NbrJetonsDebut:" + model.getConfig().getPortefeuilleStart());
+        configPLay.add(portefStart);
+        menu.add(configPLay);
 
         configVue.add(tableVue);
         configVue.addSeparator();
@@ -85,11 +91,13 @@ public class PlayerView extends JFrame {
         });
 
 
-
-
-
-
-
+        portefStart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ValueSelectorMenuItem selec = new ValueSelectorMenuItem("" + model.getConfig().getPortefeuilleStart(), "Nbr de jeton au début");
+                model.getConfig().setPortefeuilleStart(selec.getIntValue());
+            }
+        });
 
         config.addActionListener(new ActionListener() {
             @Override
@@ -97,7 +105,7 @@ public class PlayerView extends JFrame {
                 new PlayerConfigView(model);
             }
         });
-
+        pack();
     }
 
     public void maj() {
