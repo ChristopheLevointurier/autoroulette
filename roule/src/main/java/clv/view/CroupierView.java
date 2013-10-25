@@ -40,7 +40,8 @@ public class CroupierView extends JFrame {
     private JCheckBoxMenuItem failwinsVue = new JCheckBoxMenuItem("Fails/Wins", false);
     private JCheckBoxMenuItem tableVue = new JCheckBoxMenuItem("Voir la table", false);
     private JMenuItem addPlayer = new JMenuItem("Ajouter Joueur");
-
+private  JButton go;
+    
     // private Croupier model;
     public CroupierView() {
         super("Roulette");
@@ -62,7 +63,7 @@ public class CroupierView extends JFrame {
         menu.add(joueurs);
         setJMenuBar(menu);
         getContentPane().setLayout(new FlowLayout());
-        JButton go = new JButton("Launch");
+         go = new JButton("Start session");
 
         JPanel listButs = new JPanel();
         listButs.setLayout(new BoxLayout(listButs, BoxLayout.Y_AXIS));
@@ -81,8 +82,8 @@ public class CroupierView extends JFrame {
                     SessionController.addSessionListener(new HistoryGraph());
                 }
         
-                
-                Croupier.run();
+                go.setText("continue");
+                Croupier.startSession();
             }
         });
 

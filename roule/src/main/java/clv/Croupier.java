@@ -6,7 +6,6 @@ package clv;
 
 import clv.sub.Roulette;
 import clv.sub.Roulette.TypeRoulette;
-import static clv.sub.Roulette.TypeRoulette.EN;
 import clv.sub.RouletteNumber;
 import static clv.sub.RouletteNumber.RouletteColor.BLACK;
 import static clv.sub.RouletteNumber.RouletteColor.GREEN;
@@ -14,8 +13,6 @@ import static clv.sub.RouletteNumber.RouletteColor.RED;
 import clv.view.CroupierView;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -25,13 +22,14 @@ public class Croupier {
 
     private static List<AbstractPlayer> players = new ArrayList<>();
     private static boolean manualMode = true;
+    private static boolean running = false;
 
     public Croupier(boolean viewMode) {
         if (viewMode) {
             new CroupierView();
         } else {
             manualMode = false;
-            run();
+            startSession();
         }
     }
 
@@ -65,6 +63,16 @@ public class Croupier {
                 }
             }
         } while (!manualMode);
+    }
+
+    public static void startSession() {
+        if (!running) {
+            for (AbstractPlayer p : players) {
+                p.raz();
+            }
+            running = true;
+        }
+        run();
     }
 
     public static boolean isManualMode() {
