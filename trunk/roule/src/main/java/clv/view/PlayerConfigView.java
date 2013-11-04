@@ -39,12 +39,7 @@ public class PlayerConfigView extends JFrame {
     private JTextField multip = new JTextField("2.000");
     private JTextField debfield = new JTextField("miseInit");
     private JTextField multfield = new JTextField("multiplicateur");
-    private JTextField runsName = new JTextField("Nombre sessions:");
-    private JTextField runsf = new JTextField("100000   ");
-    private JTextField portefName = new JTextField("Nombre jetons start:");
-    private JSlider portef = new JSlider(JSlider.HORIZONTAL, 0, 250, 50);
-    private JTextField goalName = new JTextField("condition win:");
-    private JTextField goalf = new JTextField("1.83      "); // 1.28 pour 75%
+     private JSlider portef = new JSlider(JSlider.HORIZONTAL, 0, 250, 50);
     private JCheckBox boost = new JCheckBox("BoostePogne", false);
     private JTextField avoid = new JTextField("EchapFaibleProba");
     private JSlider avoidf = new JSlider(JSlider.HORIZONTAL, 0, 5, 1);
@@ -76,8 +71,6 @@ public class PlayerConfigView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Report.getReport().clear();
-                model.getConfig().setMAX_RUNS(Integer.parseInt("" + runsf.getText().trim()));
-                model.getConfig().setGoalWin(Double.parseDouble(goalf.getText().trim()));
                 model.getConfig().setPortefeuilleStart(portef.getValue());
                 model.getConfig().setAvoid(avoidf.getValue());
                 model.getConfig().setUseBoostPogne(boost.isSelected());
@@ -154,27 +147,15 @@ public class PlayerConfigView extends JFrame {
         JPanel launchp = new JPanel();
         launchp.setLayout(new BoxLayout(launchp, BoxLayout.Y_AXIS));
 
-        JPanel runs = new JPanel();
-        runs.setLayout(new FlowLayout());
-        runsName.setEditable(false);
-        runs.add(runsName);
-        runs.add(runsf);
-        launchp.add(runs);
         JPanel porte = new JPanel();
         porte.setLayout(new FlowLayout());
-        portefName.setEditable(false);
-        porte.add(portefName);
         porte.add(portef);
         launchp.add(porte);
         JPanel goalp = new JPanel();
         goalp.setLayout(new FlowLayout());
-        portefName.setEditable(false);
-        goalName.setEditable(false);
-        multfield.setEditable(false);
+       multfield.setEditable(false);
         debfield.setEditable(false);
-        goalp.add(goalName);
-        goalp.add(goalf);
-        launchp.add(goalp);
+       launchp.add(goalp);
         launchp.add(go);
         launchp.add(bar);
         add(launchp);

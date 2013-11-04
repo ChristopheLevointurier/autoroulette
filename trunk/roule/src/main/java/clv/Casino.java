@@ -11,6 +11,6 @@ public class Casino {
      * @param args
      */
     public static void main(String[] args) {
-        new Croupier(true);
+        new Croupier(false);
     }
 }

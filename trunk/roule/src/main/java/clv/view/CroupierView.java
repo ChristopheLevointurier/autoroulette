@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -40,8 +41,11 @@ public class CroupierView extends JFrame {
     private JCheckBoxMenuItem failwinsVue = new JCheckBoxMenuItem("Fails/Wins", false);
     private JCheckBoxMenuItem tableVue = new JCheckBoxMenuItem("Voir la table", false);
     private JMenuItem addPlayer = new JMenuItem("Ajouter Joueur");
-private  JButton go;
-    
+    private JMenuItem nbrS = new JMenuItem("Nbr sessions:" + Croupier.getNbrSessions());
+    private JButton go = new JButton("Start session");
+    private JButton goSession = new JButton("New group session");
+    private JLabel nbrSrest = new JLabel("Sessions restantes:" + Croupier.getNbrSessions());
+
     // private Croupier model;
     public CroupierView() {
         super("Roulette");
@@ -52,7 +56,10 @@ private  JButton go;
         JMenu joueurs = new JMenu("Joueurs");
         joueurs.add(addPlayer);
         configCroup.add(manualCheck);
+
+        configCroup.add(nbrS);
         menu.add(configCroup);
+
 
         configVue.add(tableVue);
         configVue.addSeparator();
@@ -63,7 +70,6 @@ private  JButton go;
         menu.add(joueurs);
         setJMenuBar(menu);
         getContentPane().setLayout(new FlowLayout());
-         go = new JButton("Start session");
 
         JPanel listButs = new JPanel();
         listButs.setLayout(new BoxLayout(listButs, BoxLayout.Y_AXIS));
@@ -72,20 +78,35 @@ private  JButton go;
             @Override
             public void actionPerformed(ActionEvent e) {
                 Report.getReport().clear();
-                
-                        if (cloud.isSelected()) {
+
+                if (cloud.isSelected()) {
                     SessionController.addSessionListener(new CloudGraph());
-                }         if (failwinsVue.isSelected()) {
+                }
+                if (failwinsVue.isSelected()) {
                     SessionController.addSessionListener(new FailsWinsGraph());
                 }
                 if (HistoryVue.isSelected()) {
                     SessionController.addSessionListener(new HistoryGraph());
                 }
-        
+
                 go.setText("continue");
-                Croupier.startSession();
+                nbrSrest.setText("Sessions restantes:" + Croupier.getNbrSessions());
+                Croupier.doClick();
             }
         });
+
+
+        goSession.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Report.getReport().clear();
+                go.setText("Start session");
+                nbrSrest.setText("Sessions restantes:" + Croupier.getNbrSessions());
+                Croupier.newSessionGroup();
+            }
+        });
+
+
 
         manualCheck.addActionListener(new ActionListener() {
             @Override
@@ -103,7 +124,14 @@ private  JButton go;
         });
         SessionController.addSessionListener(Report.getInstance());
 
-        getContentPane().add(go, BorderLayout.SOUTH);
+        JPanel butPanel = new JPanel();
+        butPanel.setLayout(new BoxLayout(butPanel, BoxLayout.Y_AXIS));
+
+        butPanel.add(go);
+        butPanel.add(nbrSrest);
+        butPanel.add(goSession);
+
+        getContentPane().add(butPanel, BorderLayout.SOUTH);
 
         setVisible(true);
         pack();

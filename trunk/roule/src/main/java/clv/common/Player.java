@@ -33,6 +33,6 @@ public class Player extends AbstractPlayer {
         }
         portefeuille -= miseAFaire;
         mise.setNOIR(miseAFaire);
-        System.out.println(id + " " + mise.toString());
+        System.out.println(id + " " + portefeuille + " " + mise.toString());
     }
 }

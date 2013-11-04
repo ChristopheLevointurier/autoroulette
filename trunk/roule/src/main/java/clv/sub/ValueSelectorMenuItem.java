@@ -26,10 +26,13 @@ public class ValueSelectorMenuItem {
     }
     
     public int getIntValue() {
-        return Integer.parseInt(JOptionPane.showInputDialog(null, title + ":", input));
+        return Integer.parseInt(JOptionPane.showInputDialog(null, title + ":", input).trim());
     } 
     
     public float getFloatValue() {
-        return Float.parseFloat(JOptionPane.showInputDialog(null, title + ":", input));
+        return Float.parseFloat(JOptionPane.showInputDialog(null, title + ":", input).trim());
+    }
+    public double getDoubleValue() {
+        return Double.parseDouble(JOptionPane.showInputDialog(null, title + ":", input).trim());
     }
 }

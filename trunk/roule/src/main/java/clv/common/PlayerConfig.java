@@ -20,8 +20,7 @@ public class PlayerConfig {
     private boolean useDropManagenull = false;
     private int avoid = 0;
     private ArrayList<Integer> mises = new ArrayList<>();
-    private double goalWin;
-    private int MAX_RUNS = 100000;
+    private double goalWin = 1.83;
  
     public int getPortefeuilleStart() {
         return portefeuilleStart;
@@ -87,11 +86,5 @@ public class PlayerConfig {
         this.goalWin = goalWin;
     }
 
-    public int getMAX_RUNS() {
-        return MAX_RUNS;
-    }
-
-    public void setMAX_RUNS(int MAX_RUNS) {
-        this.MAX_RUNS = MAX_RUNS;
-    } 
+   
 }

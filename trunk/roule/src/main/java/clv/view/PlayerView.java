@@ -38,6 +38,7 @@ public class PlayerView extends JFrame {
     private JCheckBoxMenuItem drop = new JCheckBoxMenuItem("dropGetNull", false);
     private JCheckBoxMenuItem tableVue = new JCheckBoxMenuItem("Voir la table", false);
     private JMenuItem portefStart = new JMenuItem("NbrJetonsDebut");
+    private JMenuItem goalName = new JMenuItem("Coeff win");
 
     public PlayerView(AbstractPlayer _model) {
         super("playerView");
@@ -56,7 +57,9 @@ public class PlayerView extends JFrame {
         configPLay.add(drop);
         configPLay.addSeparator();
         portefStart.setText("NbrJetonsDebut:" + model.getConfig().getPortefeuilleStart());
+        goalName.setText("Coeff win:" + model.getConfig().getGoalWin());
         configPLay.add(portefStart);
+        configPLay.add(goalName);
         menu.add(configPLay);
 
         configVue.add(tableVue);
@@ -96,8 +99,20 @@ public class PlayerView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 ValueSelectorMenuItem selec = new ValueSelectorMenuItem("" + model.getConfig().getPortefeuilleStart(), "Nbr de jeton au début");
                 model.getConfig().setPortefeuilleStart(selec.getIntValue());
+                portefStart.setText("NbrJetonsDebut:" + model.getConfig().getPortefeuilleStart());
             }
         });
+
+
+        goalName.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ValueSelectorMenuItem selec = new ValueSelectorMenuItem("" + model.getConfig().getGoalWin(), "Coeff pour victoire:");
+                model.getConfig().setGoalWin(selec.getDoubleValue());
+                goalName.setText("Coeff win:" + model.getConfig().getGoalWin());
+            }
+        });
+
 
         config.addActionListener(new ActionListener() {
             @Override
