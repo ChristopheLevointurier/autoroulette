@@ -12,6 +12,7 @@ import static clv.sub.RouletteNumber.RouletteColor.GREEN;
 import static clv.sub.RouletteNumber.RouletteColor.RED;
 import clv.view.CroupierView;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -21,15 +22,39 @@ import java.util.List;
 public class Croupier {
 
     private static List<AbstractPlayer> players = new ArrayList<>();
+    private static List<AbstractPlayer> runningPlayers = new ArrayList<>();
     private static boolean manualMode = true;
     private static boolean running = false;
+    private static int nbrSessions = 2;
+    public static boolean wait = true;
 
-    public Croupier(boolean viewMode) {
-        if (viewMode) {
+    public static boolean isWait() {
+        return wait;
+    }
+
+    public static void setWait(boolean wait) {
+        Croupier.wait = wait;
+    }
+
+    public static void doClick() {
+        if (!running) {
+            running = true;
+            runAllSessions();
+            return;
+        }
+        wait = false;
+    }
+
+    public static void newSessionGroup() {
+        System.out.println("newSessionGroup");
+    }
+
+    public Croupier(boolean batchMode) {
+        if (!batchMode) {
             new CroupierView();
         } else {
             manualMode = false;
-            startSession();
+            runAllSessions();
         }
     }
 
@@ -45,34 +70,57 @@ public class Croupier {
         Roulette.setType(t);
     }
 
-    public static void run() {
-
+    public static void runAllSessions() {
         do {
-            for (AbstractPlayer p : players) {
+            runOneSession();
+            waiting();
+            nbrSessions--;
+        } while (nbrSessions > 0);
+    }
+
+    private static void runOneSession() {
+        runningPlayers.clear();
+        for (AbstractPlayer p : players) {
+            p.raz();
+            runningPlayers.add(p);
+        }
+        do {
+            for (AbstractPlayer p : runningPlayers) {
                 p.bet();
             }
             RouletteNumber number = Roulette.getNextNumber();
-            for (AbstractPlayer p : players) {
+            Iterator<AbstractPlayer> i = runningPlayers.iterator();
+            while (i.hasNext()) {
+                AbstractPlayer p = i.next();
                 pay(p, number);
-            }
-            if (players.isEmpty()) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ex) {
-                    System.out.println("croupier réveillé en pleine sieste.");
+                if (p.gameover()) {
+                    runningPlayers.remove(p);
                 }
             }
-        } while (!manualMode);
+            waiting();
+        } while (!runningPlayers.isEmpty()); //tant qu'il reste des joueurs    
     }
 
-    public static void startSession() {
-        if (!running) {
-            for (AbstractPlayer p : players) {
-                p.raz();
+    private static void waiting() {
+        if (manualMode) {
+            while (wait) {
+                try {
+                    Thread.sleep(1000);
+                    System.out.println("w...");
+                } catch (InterruptedException ex) {
+                    System.out.println("next run");
+                }
             }
-            running = true;
+            wait = true;
         }
-        run();
+    }
+
+    public static int getNbrSessions() {
+        return nbrSessions;
+    }
+
+    public static void setNbrSessions(int nbrSessions) {
+        Croupier.nbrSessions = nbrSessions;
     }
 
     public static boolean isManualMode() {

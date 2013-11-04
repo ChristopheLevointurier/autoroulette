@@ -25,6 +25,38 @@ public abstract class AbstractPlayer {
     protected int portefeuille;
     protected Etat lastState;
     protected PlayerView view;
+    protected boolean dead = false;
+    protected boolean win = false;
+
+    public boolean gameover() {
+        if (!(dead || win)) {
+            return isDead() || isWin();
+        } else {
+            return dead || win;
+        }
+    }
+
+    public boolean isWin() {
+        if (portefeuille >= config.getPortefeuilleStart() * config.getGoalWin()) {
+            win = true;
+        }
+        return win;
+    }
+
+    public void setWin(boolean win) {
+        this.win = win;
+    }
+
+    public boolean isDead() {
+        if (portefeuille <= 0) {
+            dead = true;
+        }
+        return dead;
+    }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
 
     public PlayerConfig getConfig() {
         return config;
