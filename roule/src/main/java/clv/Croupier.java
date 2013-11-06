@@ -23,7 +23,6 @@ public class Croupier {
 
     private static List<AbstractPlayer> players = new ArrayList<>();
     private static List<AbstractPlayer> runningPlayers = new ArrayList<>();
-    private static boolean manualMode = true;
     private static boolean running = false;
     private static int nbrSessions = 2;
     public static boolean wait = true;
@@ -37,25 +36,11 @@ public class Croupier {
     }
 
     public static void doClick() {
-        if (!running) {
-            running = true;
-            runAllSessions();
-            return;
-        }
         wait = false;
     }
 
     public static void newSessionGroup() {
         System.out.println("newSessionGroup");
-    }
-
-    public Croupier(boolean batchMode) {
-        if (!batchMode) {
-            new CroupierView();
-        } else {
-            manualMode = false;
-            runAllSessions();
-        }
     }
 
     public static void addPlayer(AbstractPlayer p) {
@@ -68,6 +53,15 @@ public class Croupier {
 
     public static void setRoulette(TypeRoulette t) {
         Roulette.setType(t);
+    }
+
+    public static void run() {
+        waiting();
+        do {
+            running = true;
+            runAllSessions();
+            running = false;
+        } while (!Casino.batchMode);
     }
 
     public static void runAllSessions() {
@@ -102,11 +96,10 @@ public class Croupier {
     }
 
     private static void waiting() {
-        if (manualMode) {
+        if (!Casino.batchMode) {
             while (wait) {
                 try {
-                    Thread.sleep(1000);
-                    System.out.println("w...");
+                    Thread.sleep(100);
                 } catch (InterruptedException ex) {
                     System.out.println("next run");
                 }
@@ -121,14 +114,6 @@ public class Croupier {
 
     public static void setNbrSessions(int nbrSessions) {
         Croupier.nbrSessions = nbrSessions;
-    }
-
-    public static boolean isManualMode() {
-        return manualMode;
-    }
-
-    public static void setManualMode(boolean _manualMode) {
-        manualMode = _manualMode;
     }
 
     private static void pay(AbstractPlayer p, RouletteNumber number) {
