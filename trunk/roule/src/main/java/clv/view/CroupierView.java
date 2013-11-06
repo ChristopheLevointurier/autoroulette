@@ -4,6 +4,7 @@
  */
 package clv.view;
 
+import clv.Casino;
 import clv.Controller.SessionController;
 import clv.Croupier;
 import clv.common.Player;
@@ -35,7 +36,7 @@ import javax.swing.KeyStroke;
  */
 public class CroupierView extends JFrame {
 
-    private JCheckBoxMenuItem manualCheck = new JCheckBoxMenuItem("Mode manuel", Croupier.isManualMode());
+    private JCheckBoxMenuItem manualCheck = new JCheckBoxMenuItem("Mode manuel", Casino.batchMode);
     private JCheckBoxMenuItem HistoryVue = new JCheckBoxMenuItem("Historiques", false);
     private JCheckBoxMenuItem cloud = new JCheckBoxMenuItem("cloud", false);
     private JCheckBoxMenuItem failwinsVue = new JCheckBoxMenuItem("Fails/Wins", false);
@@ -111,7 +112,7 @@ public class CroupierView extends JFrame {
         manualCheck.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Croupier.setManualMode(manualCheck.isSelected());
+                Casino.batchMode = (manualCheck.isSelected());
             }
         });
 
@@ -139,7 +140,7 @@ public class CroupierView extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                Croupier.setManualMode(true);
+                Casino.batchMode = true;
                 dispose();
                 System.exit(0);
             }
