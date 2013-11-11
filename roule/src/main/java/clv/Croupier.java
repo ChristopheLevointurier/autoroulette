@@ -4,13 +4,14 @@
  */
 package clv;
 
+import clv.Controller.EventController;
+import clv.common.Utils;
 import clv.sub.Roulette;
 import clv.sub.Roulette.TypeRoulette;
 import clv.sub.RouletteNumber;
 import static clv.sub.RouletteNumber.RouletteColor.BLACK;
 import static clv.sub.RouletteNumber.RouletteColor.GREEN;
 import static clv.sub.RouletteNumber.RouletteColor.RED;
-import clv.view.CroupierView;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,8 +25,10 @@ public class Croupier {
     private static List<AbstractPlayer> players = new ArrayList<>();
     private static List<AbstractPlayer> runningPlayers = new ArrayList<>();
     private static boolean running = false;
+    private static int nbrSessionsStart = 2;
     private static int nbrSessions = 2;
     public static boolean wait = true;
+    private static RouletteNumber number;
 
     public static boolean isWait() {
         return wait;
@@ -40,15 +43,25 @@ public class Croupier {
     }
 
     public static void newSessionGroup() {
-        System.out.println("newSessionGroup");
+        nbrSessions = nbrSessionsStart;
+    }
+
+    public static int getPlayerAmount() {
+        return players.size();
+    }
+
+    public static int getActivePlayerAmount() {
+        return runningPlayers.size();
     }
 
     public static void addPlayer(AbstractPlayer p) {
         players.add(p);
+        runningPlayers.add(p);
     }
 
     public static void removePlayer(AbstractPlayer p) {
         players.remove(p);
+        runningPlayers.remove(p);
     }
 
     public static void setRoulette(TypeRoulette t) {
@@ -65,11 +78,13 @@ public class Croupier {
     }
 
     public static void runAllSessions() {
+        nbrSessions = nbrSessionsStart;
         do {
             runOneSession();
             waiting();
             nbrSessions--;
         } while (nbrSessions > 0);
+        EventController.broadcast(Utils.AppEvent.END_SESSION_GROUP);
     }
 
     private static void runOneSession() {
@@ -82,17 +97,23 @@ public class Croupier {
             for (AbstractPlayer p : runningPlayers) {
                 p.bet();
             }
-            RouletteNumber number = Roulette.getNextNumber();
-            Iterator<AbstractPlayer> i = runningPlayers.iterator();
-            while (i.hasNext()) {
-                AbstractPlayer p = i.next();
+            EventController.broadcast(Utils.AppEvent.BET_DONE);
+            number = Roulette.getNextNumber();
+            EventController.broadcast(Utils.AppEvent.NEW_NUMBER);
+            List<AbstractPlayer> deadPlayers = new ArrayList<>();
+
+            for (AbstractPlayer p : runningPlayers) {
                 pay(p, number);
                 if (p.gameover()) {
-                    runningPlayers.remove(p);
+                    deadPlayers.add(p);
                 }
+            }
+            for (AbstractPlayer p : deadPlayers) {
+                runningPlayers.remove(p);
             }
             waiting();
         } while (!runningPlayers.isEmpty()); //tant qu'il reste des joueurs    
+        EventController.broadcast(Utils.AppEvent.END_SESSION);
     }
 
     private static void waiting() {
@@ -112,8 +133,8 @@ public class Croupier {
         return nbrSessions;
     }
 
-    public static void setNbrSessions(int nbrSessions) {
-        Croupier.nbrSessions = nbrSessions;
+    public static void setNbrSessionsStart(int nbrSessionsSt) {
+        Croupier.nbrSessionsStart = nbrSessionsSt;
     }
 
     private static void pay(AbstractPlayer p, RouletteNumber number) {
@@ -132,6 +153,10 @@ public class Croupier {
                 p.addMoney(p.getMise().getROUGE() * 2);
         }
         p.pushState(number);
+    }
+
+    public static RouletteNumber getNumber() {
+        return number;
     }
     /**
      * ***

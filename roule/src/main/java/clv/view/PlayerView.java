@@ -5,23 +5,31 @@
 package clv.view;
 
 import clv.AbstractPlayer;
+import clv.Controller.EventController;
 import clv.Croupier;
-import clv.common.Report;
+import clv.common.Utils;
 import clv.sub.ValueSelectorMenuItem;
+import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BoxLayout;
+import javax.swing.InputMap;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.JToggleButton;
+import javax.swing.KeyStroke;
 
 /**
  *
@@ -120,10 +128,41 @@ public class PlayerView extends JFrame {
                 new PlayerConfigView(model);
             }
         });
+
+
+        JPanel content = (JPanel) getContentPane();
+        InputMap inputMap = content.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap.put(KeyStroke.getKeyStroke("ESCAPE"), "CLOSE");
+        final PlayerView frame = this;
+        Action actionListener = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+            }
+        };
+        content.getActionMap().put("CLOSE", actionListener);
+
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(final WindowEvent e) {
+                Croupier.removePlayer(model);
+                EventController.broadcast(Utils.AppEvent.EXIT_PLAYER);
+                //   ModelController.removeModelListener((IModelListener) e.getWindow());
+                dispose();
+            }
+        });
+
         pack();
     }
 
     public void maj() {
         multip.setText("" + model.getPortefeuille());
+        if (model.isDead()) {
+            multip.setBackground(Color.red);
+        }
+        if (model.isWin()) {
+            multip.setBackground(Color.green);
+        }
     }
 }

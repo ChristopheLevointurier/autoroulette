@@ -18,9 +18,7 @@ public class Player extends AbstractPlayer {
 
     //parie uniquement sur noir
     public Player() {
-
-        lastState = new Etat();
-        mise = new Mise();
+        raz();
         config = new PlayerConfig();
         view = new PlayerView(this);
     }
