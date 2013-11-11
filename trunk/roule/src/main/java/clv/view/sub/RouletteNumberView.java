@@ -5,8 +5,7 @@
 package clv.view.sub;
 
 import clv.sub.RouletteNumber;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.awt.Color;
 import javax.swing.JTextField;
 
 /**
@@ -19,6 +18,7 @@ public final class RouletteNumberView extends JTextField {
 
     public RouletteNumberView() {
         setToDisplay(RouletteNumber.getNumber(0));
+        setForeground(Color.BLUE.brighter());
     }
 
     public void setToDisplay(RouletteNumber _toDisplay) {
@@ -28,7 +28,6 @@ public final class RouletteNumberView extends JTextField {
 
     public void upd() {
         setBackground(toDisplay.getCoul().getRealColor());
-        // setForeground(toDisplay.getCoul().getRealColor());
         setText(" __ " + toDisplay.getValeur() + " __ ");
         setSize(getPreferredSize());
     }

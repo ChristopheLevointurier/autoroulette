@@ -18,8 +18,8 @@ public class Player extends AbstractPlayer {
 
     //parie uniquement sur noir
     public Player() {
-        raz();
         config = new PlayerConfig();
+        raz();
         view = new PlayerView(this);
     }
 
