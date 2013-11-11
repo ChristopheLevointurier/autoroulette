@@ -4,7 +4,6 @@
  */
 package clv.common;
 
-import clv.sub.RouletteNumber;
 import java.util.ArrayList;
 
 /**

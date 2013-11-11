@@ -5,10 +5,14 @@
 package clv.view;
 
 import clv.Casino;
+import clv.Controller.EventController;
+import clv.Controller.EventListener;
 import clv.Controller.SessionController;
 import clv.Croupier;
 import clv.common.Player;
 import clv.common.Report;
+import clv.common.Utils;
+import clv.view.sub.RouletteView;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
@@ -34,7 +38,7 @@ import javax.swing.KeyStroke;
  *
  * @author CLV
  */
-public class CroupierView extends JFrame {
+public class CroupierView extends JFrame implements EventListener {
 
     private JCheckBoxMenuItem manualCheck = new JCheckBoxMenuItem("Mode manuel", Casino.batchMode);
     private JCheckBoxMenuItem HistoryVue = new JCheckBoxMenuItem("Historiques", false);
@@ -46,6 +50,8 @@ public class CroupierView extends JFrame {
     private JButton go = new JButton("Start session");
     private JButton goSession = new JButton("New group session");
     private JLabel nbrSrest = new JLabel("Sessions restantes:" + Croupier.getNbrSessions());
+    private JLabel nbrJoueurs = new JLabel("Joueurs :" + Croupier.getPlayerAmount());
+    private RouletteView roul = new RouletteView();
 
     // private Croupier model;
     public CroupierView() {
@@ -121,6 +127,7 @@ public class CroupierView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Croupier.addPlayer(new Player());
+                EventController.broadcast(Utils.AppEvent.NEW_PLAYER);
             }
         });
         SessionController.addSessionListener(Report.getInstance());
@@ -132,7 +139,9 @@ public class CroupierView extends JFrame {
         butPanel.add(nbrSrest);
         butPanel.add(goSession);
 
-        getContentPane().add(butPanel, BorderLayout.SOUTH);
+        getContentPane().add(butPanel);
+        getContentPane().add(nbrJoueurs);
+        getContentPane().add(roul);
 
         setVisible(true);
         pack();
@@ -157,6 +166,11 @@ public class CroupierView extends JFrame {
             }
         });
 
+        EventController.addListener(this);
+    }
 
+    @Override
+    public void updateInternalData(Utils.AppEvent s) {
+        nbrJoueurs.setText("Joueurs :" + Croupier.getPlayerAmount());
     }
 }

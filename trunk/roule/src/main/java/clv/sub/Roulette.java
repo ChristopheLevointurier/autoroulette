@@ -24,18 +24,20 @@ public class Roulette {
 
     private Roulette(TypeRoulette t) {
         type = t;
+        for (int i = 0; i <= 36; i++) {
+            table.put(i, new RouletteNumber(i));
+        }
         switch (t) {
             case FR:
             case EN:
-                for (int i = 0; i <= 36; i++) {
-                    table.put(i, new RouletteNumber(i));
-                }
+                break;
             case US: {
-
                 table.put(37, new RouletteNumber(37));
+                break;
             }
             case MEX: {
                 table.put(38, new RouletteNumber(37));
+                break;
             }
         }
         System.out.println("init roulette " + t.name() + " done:");

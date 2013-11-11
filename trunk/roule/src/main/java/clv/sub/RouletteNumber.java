@@ -1,5 +1,7 @@
 package clv.sub;
 
+import java.awt.Color;
+
 public class RouletteNumber {
 
     private RouletteSixain six;
@@ -47,6 +49,10 @@ public class RouletteNumber {
         }
     }
 
+    public static RouletteNumber getNumber(int i) {
+        return new RouletteNumber(i);
+    }
+
     public RouletteColor getCoul() {
         return coul;
     }
@@ -57,12 +63,20 @@ public class RouletteNumber {
 
     @Override
     public String toString() {
-        return ("(" + valeur + "," + coul + ","+six+")");
+        return ("(" + valeur + "," + coul + "," + six + ")");
     }
 
     public enum RouletteColor {
 
-        BLACK, RED, GREEN;
+        BLACK(Color.BLACK), RED(Color.RED), GREEN(Color.GREEN);
+        protected Color color;
+
+        RouletteColor(Color coul) {
+            color = coul;
+        }
+        public Color getRealColor() {
+            return color;
+        }
     }
 
     public enum RouletteSixain {
