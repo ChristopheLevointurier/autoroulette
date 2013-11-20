@@ -5,6 +5,7 @@
 package clv;
 
 import clv.Controller.EventController;
+import clv.common.Report;
 import clv.common.Utils;
 import clv.sub.Roulette;
 import clv.sub.Roulette.TypeRoulette;
@@ -12,6 +13,7 @@ import clv.sub.RouletteNumber;
 import static clv.sub.RouletteNumber.RouletteColor.BLACK;
 import static clv.sub.RouletteNumber.RouletteColor.GREEN;
 import static clv.sub.RouletteNumber.RouletteColor.RED;
+import clv.view.sub.Flag;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,22 +26,12 @@ public class Croupier {
     private static List<AbstractPlayer> players = new ArrayList<>();
     private static List<AbstractPlayer> runningPlayers = new ArrayList<>();
     private static boolean running = false;
-    private static int nbrSessionsStart = 2;
-    private static int nbrSessions = 2;
-    public static boolean wait = true;
+    private static int nbrSessionsStart = 3;
+    private static int nbrSessions = 3;
+    public static Flag waitRun = new Flag(true);
+    public static Flag waitSession = new Flag(true);
+    public static Flag waitSpin = new Flag(true);
     private static RouletteNumber number;
-
-    public static boolean isWait() {
-        return wait;
-    }
-
-    public static void setWait(boolean wait) {
-        Croupier.wait = wait;
-    }
-
-    public static void doClick() {
-        wait = false;
-    }
 
     public static void newSessionGroup() {
         nbrSessions = nbrSessionsStart;
@@ -74,11 +66,20 @@ public class Croupier {
         Roulette.setType(t);
     }
 
+    public static void doClickSpin() {
+        waitSpin.set(false);
+    }
+
+    public static void doClicksession() {
+        waitSpin.set(false);
+        waitSession.set(false);
+    }
+
     public static void run() {
-        waiting();
         do {
             running = true;
             runAllSessions();
+            wait(waitRun);
             running = false;
         } while (!Casino.batchMode);
     }
@@ -87,7 +88,7 @@ public class Croupier {
         nbrSessions = nbrSessionsStart;
         do {
             runOneSession();
-            waiting();
+            wait(waitSession);
             nbrSessions--;
         } while (nbrSessions > 0);
         EventController.broadcast(Utils.AppEvent.END_SESSION_GROUP);
@@ -95,6 +96,15 @@ public class Croupier {
 
     private static void runOneSession() {
         runningPlayers.clear();
+        Report.getReport().clear();
+
+        /**
+         * if (cloud.isSelected()) { SessionController.addSessionListener(new
+         * CloudGraph()); } if (failwinsVue.isSelected()) {
+         * SessionController.addSessionListener(new FailsWinsGraph()); } if
+         * (HistoryVue.isSelected()) { SessionController.addSessionListener(new
+         * HistoryGraph()); }
+         */
         for (AbstractPlayer p : players) {
             p.raz();
             runningPlayers.add(p);
@@ -117,21 +127,22 @@ public class Croupier {
             for (AbstractPlayer p : deadPlayers) {
                 runningPlayers.remove(p);
             }
-            waiting();
+            wait(waitSpin);
         } while (!runningPlayers.isEmpty()); //tant qu'il reste des joueurs    
         EventController.broadcast(Utils.AppEvent.END_SESSION);
     }
 
-    private static void waiting() {
+    private static void wait(Flag wait) {
         if (!Casino.batchMode) {
-            while (wait) {
+            while (wait.isTrue()) {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException ex) {
-                    System.out.println("next run");
+                    System.out.println(">interrupted");
                 }
             }
-            wait = true;
+        //    System.out.println("go");
+            wait.set(false);
         }
     }
 
