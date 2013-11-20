@@ -28,6 +28,7 @@ public final class RouletteNumberView extends JTextField {
 
     public void upd() {
         setBackground(toDisplay.getCoul().getRealColor());
+        setForeground(toDisplay.getCoul().getTxtColor());
         setText(" __ " + toDisplay.getValeur() + " __ ");
         setSize(getPreferredSize());
     }

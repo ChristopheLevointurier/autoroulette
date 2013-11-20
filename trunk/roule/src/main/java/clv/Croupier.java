@@ -13,7 +13,6 @@ import static clv.sub.RouletteNumber.RouletteColor.BLACK;
 import static clv.sub.RouletteNumber.RouletteColor.GREEN;
 import static clv.sub.RouletteNumber.RouletteColor.RED;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -57,6 +56,13 @@ public class Croupier {
     public static void addPlayer(AbstractPlayer p) {
         players.add(p);
         runningPlayers.add(p);
+    }
+
+    public static void addPlayers(List<AbstractPlayer> pp) {
+        for (AbstractPlayer p : pp) {
+            players.add(p);
+            runningPlayers.add(p);
+        }
     }
 
     public static void removePlayer(AbstractPlayer p) {
