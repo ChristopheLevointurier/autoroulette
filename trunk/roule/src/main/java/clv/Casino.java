@@ -17,7 +17,7 @@ public class Casino {
             new CroupierView();
         } else {
             System.out.println("pas de config dispo");
+            // Croupier.run();
         }
-        Croupier.run();
     }
 }

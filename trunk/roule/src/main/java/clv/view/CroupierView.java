@@ -32,6 +32,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
 /**
@@ -51,8 +52,9 @@ public class CroupierView extends JFrame implements EventListener {
     private JButton go = new JButton("Spin");
     private JButton finishSession = new JButton("Finish session");
     private JButton resetSessions = new JButton("New group session");
-    private JLabel nbrSrest = new JLabel("Sessions restantes:" + Croupier.getNbrSessions());
-    private JLabel nbrJoueurs = new JLabel("Joueurs :" + Croupier.getPlayerAmount());
+    private JTextField nbrSpin = new JTextField("Spins :" + Croupier.getNbrSpins());
+    private JTextField nbrSrest = new JTextField("Sessions restantes:" + Croupier.getNbrSessions());
+    private JTextField nbrJoueurs = new JTextField("Joueurs :" + Croupier.getPlayerAmount());
     private RouletteView roul = new RouletteView();
 
     // private Croupier model;
@@ -88,13 +90,14 @@ public class CroupierView extends JFrame implements EventListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Croupier.doClickSpin();
+                refreshData();
             }
         });
         finishSession.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Croupier.doClicksession();
-                nbrSrest.setText("Sessions restantes:" + Croupier.getNbrSessions());
+                refreshData();
             }
         });
 
@@ -103,7 +106,7 @@ public class CroupierView extends JFrame implements EventListener {
             public void actionPerformed(ActionEvent e) {
                 Report.getReport().clear();
                 Croupier.newSessionGroup();
-                nbrSrest.setText("Sessions restantes:" + Croupier.getNbrSessions());
+                refreshData();
             }
         });
 
@@ -154,6 +157,11 @@ public class CroupierView extends JFrame implements EventListener {
         session.add(roul);
         session.add(resetSessions);
 
+        nbrSpin.setEditable(false);
+        nbrSrest.setEditable(false);
+        nbrJoueurs.setEditable(false);
+
+        infoPanel.add(nbrSpin);
         infoPanel.add(nbrSrest);
         infoPanel.add(nbrJoueurs);
 
@@ -188,8 +196,14 @@ public class CroupierView extends JFrame implements EventListener {
         EventController.addListener(this);
     }
 
+    private void refreshData() {
+        nbrSpin.setText("Spins :" + Croupier.getNbrSpins());
+        nbrJoueurs.setText("Joueurs :" + Croupier.getPlayerAmount());
+        nbrSrest.setText("Sessions restantes:" + Croupier.getNbrSessions());
+    }
+
     @Override
     public void updateInternalData(Utils.AppEvent s) {
-        nbrJoueurs.setText("Joueurs :" + Croupier.getPlayerAmount());
+        refreshData();
     }
 }

@@ -88,5 +88,7 @@ public abstract class AbstractPlayer {
         lastState = new Etat();
         mise = new Mise();
         portefeuille = config.getPortefeuilleStart();
+        dead = false;
+        win = false;
     }
 }
