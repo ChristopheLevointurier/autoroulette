@@ -127,11 +127,6 @@ public class Croupier {
 
     private static void runSpin() {
         setUpSession();
-        if (sessionReady && runningPlayers.isEmpty()) {
-            nbrSessions--;
-            sessionReady = false;
-            return;
-        }
         if (!sessionReady) {
             return;
         }
@@ -152,6 +147,10 @@ public class Croupier {
         }
         for (AbstractPlayer p : deadPlayers) {
             runningPlayers.remove(p);
+        }
+        if (runningPlayers.isEmpty()) {
+            nbrSessions--;
+            sessionReady = false;
         }
     }
 
