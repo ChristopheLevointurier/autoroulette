@@ -87,31 +87,23 @@ public class CroupierView extends JFrame implements EventListener {
         go.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Report.getReport().clear();
-
-                if (cloud.isSelected()) {
-                    SessionController.addSessionListener(new CloudGraph());
-                }
-                if (failwinsVue.isSelected()) {
-                    SessionController.addSessionListener(new FailsWinsGraph());
-                }
-                if (HistoryVue.isSelected()) {
-                    SessionController.addSessionListener(new HistoryGraph());
-                }
-
-                nbrSrest.setText("Sessions restantes:" + Croupier.getNbrSessions());
-                Croupier.doClick();
+                Croupier.doClickSpin();
             }
         });
-
+        finishSession.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Croupier.doClicksession();
+                nbrSrest.setText("Sessions restantes:" + Croupier.getNbrSessions());
+            }
+        });
 
         resetSessions.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Report.getReport().clear();
-                go.setText("Start session");
-                nbrSrest.setText("Sessions restantes:" + Croupier.getNbrSessions());
                 Croupier.newSessionGroup();
+                nbrSrest.setText("Sessions restantes:" + Croupier.getNbrSessions());
             }
         });
 
