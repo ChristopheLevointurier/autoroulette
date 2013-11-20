@@ -26,8 +26,10 @@ public class Croupier {
     private static List<AbstractPlayer> players = new ArrayList<>();
     private static List<AbstractPlayer> runningPlayers = new ArrayList<>();
     private static boolean running = false;
+    private static boolean sessionReady = false;
     private static int nbrSessionsStart = 3;
     private static int nbrSessions = 3;
+    private static int nbrSpins = 0;
     public static Flag waitRun = new Flag(true);
     public static Flag waitSession = new Flag(true);
     public static Flag waitSpin = new Flag(true);
@@ -67,85 +69,98 @@ public class Croupier {
     }
 
     public static void doClickSpin() {
-        waitSpin.set(false);
+        //waitSpin.set(false);
+        runSpin();
     }
 
     public static void doClicksession() {
-        waitSpin.set(false);
-        waitSession.set(false);
+        //  waitSpin.set(false);
+        //   waitSession.set(false);
+        runOneSession();
     }
 
-    public static void run() {
-        do {
-            running = true;
-            runAllSessions();
-            wait(waitRun);
-            running = false;
-        } while (!Casino.batchMode);
+    public static int getNbrSpins() {
+        return nbrSpins;
     }
 
+    /**
+     * public static void run() { do { running = true; runAllSessions();
+     * wait(waitRun); running = false; } while (!Casino.batchMode); }*
+     */
     public static void runAllSessions() {
         nbrSessions = nbrSessionsStart;
         do {
             runOneSession();
-            wait(waitSession);
-            nbrSessions--;
         } while (nbrSessions > 0);
         EventController.broadcast(Utils.AppEvent.END_SESSION_GROUP);
     }
 
+    private static void setUpSession() {
+        if (!sessionReady && nbrSessions > 0) {
+            runningPlayers.clear();
+            Report.getReport().clear();
+            nbrSpins = 0;
+            /**
+             * if (cloud.isSelected()) {
+             * SessionController.addSessionListener(new CloudGraph()); } if
+             * (failwinsVue.isSelected()) {
+             * SessionController.addSessionListener(new FailsWinsGraph()); } if
+             * (HistoryVue.isSelected()) {
+             * SessionController.addSessionListener(new HistoryGraph()); }
+             */
+            for (AbstractPlayer p : players) {
+                p.raz();
+                runningPlayers.add(p);
+            }
+            sessionReady = true;
+        }
+    }
+
     private static void runOneSession() {
-        runningPlayers.clear();
-        Report.getReport().clear();
-
-        /**
-         * if (cloud.isSelected()) { SessionController.addSessionListener(new
-         * CloudGraph()); } if (failwinsVue.isSelected()) {
-         * SessionController.addSessionListener(new FailsWinsGraph()); } if
-         * (HistoryVue.isSelected()) { SessionController.addSessionListener(new
-         * HistoryGraph()); }
-         */
-        for (AbstractPlayer p : players) {
-            p.raz();
-            runningPlayers.add(p);
-        }
-        do {
-            for (AbstractPlayer p : runningPlayers) {
-                p.bet();
-            }
-            EventController.broadcast(Utils.AppEvent.BET_DONE);
-            number = Roulette.getNextNumber();
-            EventController.broadcast(Utils.AppEvent.NEW_NUMBER);
-            List<AbstractPlayer> deadPlayers = new ArrayList<>();
-
-            for (AbstractPlayer p : runningPlayers) {
-                pay(p, number);
-                if (p.gameover()) {
-                    deadPlayers.add(p);
-                }
-            }
-            for (AbstractPlayer p : deadPlayers) {
-                runningPlayers.remove(p);
-            }
-            wait(waitSpin);
-        } while (!runningPlayers.isEmpty()); //tant qu'il reste des joueurs    
-        EventController.broadcast(Utils.AppEvent.END_SESSION);
-    }
-
-    private static void wait(Flag wait) {
-        if (!Casino.batchMode) {
-            while (wait.isTrue()) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                    System.out.println(">interrupted");
-                }
-            }
-        //    System.out.println("go");
-            wait.set(false);
+        if (nbrSessions > 0) {
+            do {
+                runSpin();
+            } while (!runningPlayers.isEmpty()); //tant qu'il reste des joueurs    
+            EventController.broadcast(Utils.AppEvent.END_SESSION);
         }
     }
 
+    private static void runSpin() {
+        setUpSession();
+        if (sessionReady && runningPlayers.isEmpty()) {
+            nbrSessions--;
+            sessionReady = false;
+            return;
+        }
+        if (!sessionReady) {
+            return;
+        }
+        for (AbstractPlayer p : runningPlayers) {
+            p.bet();
+        }
+        EventController.broadcast(Utils.AppEvent.BET_DONE);
+        number = Roulette.getNextNumber();
+        nbrSpins++;
+        EventController.broadcast(Utils.AppEvent.NEW_NUMBER);
+        List<AbstractPlayer> deadPlayers = new ArrayList<>();
+
+        for (AbstractPlayer p : runningPlayers) {
+            pay(p, number);
+            if (p.gameover()) {
+                deadPlayers.add(p);
+            }
+        }
+        for (AbstractPlayer p : deadPlayers) {
+            runningPlayers.remove(p);
+        }
+    }
+
+    /**
+     * private static void wait(Flag wait) { if (!Casino.batchMode) { while
+     * (wait.isTrue()) { try { Thread.sleep(100); } catch (InterruptedException
+     * ex) { System.out.println(">interrupted"); } } //
+     * System.out.println("go"); wait.set(true); } }*
+     */
     public static int getNbrSessions() {
         return nbrSessions;
     }

@@ -156,8 +156,8 @@ public class PlayerView extends JFrame {
         });
 
         pack();
-        FRAME_WIDTH = (int)getSize().getWidth();
-        FRAME_HEIGHT = (int)getSize().getHeight();
+        FRAME_WIDTH = (int) getSize().getWidth();
+        FRAME_HEIGHT = (int) getSize().getHeight();
 
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         int jou = Croupier.getPlayerAmount();
@@ -172,6 +172,9 @@ public class PlayerView extends JFrame {
         }
         if (model.isWin()) {
             multip.setBackground(Color.green);
+        }
+        if (!model.isWin() && !model.isDead()) {
+            multip.setBackground(Color.white);
         }
     }
 }
