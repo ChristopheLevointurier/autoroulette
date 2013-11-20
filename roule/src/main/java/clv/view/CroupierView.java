@@ -12,8 +12,8 @@ import clv.Croupier;
 import clv.common.Player;
 import clv.common.Report;
 import clv.common.Utils;
+import clv.sub.ValueSelectorMenuItem;
 import clv.view.sub.RouletteView;
-import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -46,9 +46,11 @@ public class CroupierView extends JFrame implements EventListener {
     private JCheckBoxMenuItem failwinsVue = new JCheckBoxMenuItem("Fails/Wins", false);
     private JCheckBoxMenuItem tableVue = new JCheckBoxMenuItem("Voir la table", false);
     private JMenuItem addPlayer = new JMenuItem("Ajouter Joueur");
+    private JMenuItem addPlayers = new JMenuItem("Ajouter Joueurs");
     private JMenuItem nbrS = new JMenuItem("Nbr sessions:" + Croupier.getNbrSessions());
-    private JButton go = new JButton("Start session");
-    private JButton goSession = new JButton("New group session");
+    private JButton go = new JButton("Spin");
+    private JButton finishSession = new JButton("Finish session");
+    private JButton resetSessions = new JButton("New group session");
     private JLabel nbrSrest = new JLabel("Sessions restantes:" + Croupier.getNbrSessions());
     private JLabel nbrJoueurs = new JLabel("Joueurs :" + Croupier.getPlayerAmount());
     private RouletteView roul = new RouletteView();
@@ -62,6 +64,7 @@ public class CroupierView extends JFrame implements EventListener {
         JMenu configVue = new JMenu("Fenetres");
         JMenu joueurs = new JMenu("Joueurs");
         joueurs.add(addPlayer);
+        joueurs.add(addPlayers);
         configCroup.add(manualCheck);
 
         configCroup.add(nbrS);
@@ -96,14 +99,13 @@ public class CroupierView extends JFrame implements EventListener {
                     SessionController.addSessionListener(new HistoryGraph());
                 }
 
-                go.setText("continue");
                 nbrSrest.setText("Sessions restantes:" + Croupier.getNbrSessions());
                 Croupier.doClick();
             }
         });
 
 
-        goSession.addActionListener(new ActionListener() {
+        resetSessions.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Report.getReport().clear();
@@ -130,22 +132,47 @@ public class CroupierView extends JFrame implements EventListener {
                 EventController.broadcast(Utils.AppEvent.NEW_PLAYER);
             }
         });
+
+        addPlayers.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ValueSelectorMenuItem selec = new ValueSelectorMenuItem("1", "Nouveaux joueurs:");
+                int nbr = selec.getIntValue();
+                for (int i = 0; i < nbr; i++) {
+                    Croupier.addPlayer(new Player());
+                }
+                EventController.broadcast(Utils.AppEvent.NEW_PLAYER);
+            }
+        });
+
         SessionController.addSessionListener(Report.getInstance());
 
-        JPanel butPanel = new JPanel();
-        butPanel.setLayout(new BoxLayout(butPanel, BoxLayout.Y_AXIS));
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        butPanel.add(go);
-        butPanel.add(nbrSrest);
-        butPanel.add(goSession);
 
-        getContentPane().add(butPanel);
-        getContentPane().add(nbrJoueurs);
-        getContentPane().add(roul);
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.X_AXIS));
+
+        JPanel session = new JPanel();
+        session.setLayout(new BoxLayout(session, BoxLayout.X_AXIS));
+
+        session.add(go);
+        session.add(finishSession);
+        session.add(roul);
+        session.add(resetSessions);
+
+        infoPanel.add(nbrSrest);
+        infoPanel.add(nbrJoueurs);
+
+        mainPanel.add(session);
+        mainPanel.add(infoPanel);
+
+        getContentPane().add(mainPanel);
 
         setVisible(true);
         pack();
-
+        setLocationRelativeTo(null);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {

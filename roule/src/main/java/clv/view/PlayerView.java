@@ -10,6 +10,7 @@ import clv.Croupier;
 import clv.common.Utils;
 import clv.sub.ValueSelectorMenuItem;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -47,6 +48,7 @@ public class PlayerView extends JFrame {
     private JCheckBoxMenuItem tableVue = new JCheckBoxMenuItem("Voir la table", false);
     private JMenuItem portefStart = new JMenuItem("NbrJetonsDebut");
     private JMenuItem goalName = new JMenuItem("Coeff win");
+    private int FRAME_WIDTH = 150, FRAME_HEIGHT = 80;
 
     public PlayerView(AbstractPlayer _model) {
         super("playerView");
@@ -154,6 +156,13 @@ public class PlayerView extends JFrame {
         });
 
         pack();
+        FRAME_WIDTH = (int)getSize().getWidth();
+        FRAME_HEIGHT = (int)getSize().getHeight();
+
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+        int jou = Croupier.getPlayerAmount();
+        int modulo = (int) d.getWidth() / FRAME_WIDTH;
+        setLocation((jou % modulo) * FRAME_WIDTH, FRAME_HEIGHT * (jou / modulo));
     }
 
     public void maj() {

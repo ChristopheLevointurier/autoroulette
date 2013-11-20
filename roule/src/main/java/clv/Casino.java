@@ -1,6 +1,5 @@
 package clv;
 
-import static clv.Croupier.runAllSessions;
 import clv.view.CroupierView;
 import javax.swing.JProgressBar;
 
@@ -16,6 +15,8 @@ public class Casino {
     public static void main(String[] args) {
         if (!batchMode) {
             new CroupierView();
+        } else {
+            System.out.println("pas de config dispo");
         }
         Croupier.run();
     }

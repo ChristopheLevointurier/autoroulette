@@ -68,14 +68,21 @@ public class RouletteNumber {
 
     public enum RouletteColor {
 
-        BLACK(Color.BLACK), RED(Color.RED), GREEN(Color.GREEN);
+        BLACK(Color.BLACK, Color.white), RED(Color.RED, Color.yellow.brighter()), GREEN(Color.GREEN, Color.blue.darker());
         protected Color color;
+        protected Color txtColor;
 
-        RouletteColor(Color coul) {
+        RouletteColor(Color coul, Color txc) {
             color = coul;
+            txtColor = txc;
         }
+
         public Color getRealColor() {
             return color;
+        }
+
+        public Color getTxtColor() {
+            return txtColor;
         }
     }
 
