@@ -9,6 +9,7 @@ import clv.sub.Etat;
 import clv.sub.Mise;
 import clv.sub.RouletteNumber.RouletteColor;
 import clv.view.PlayerView;
+import java.util.Random;
 
 /**
  *
@@ -16,7 +17,7 @@ import clv.view.PlayerView;
  */
 public class Player extends AbstractPlayer {
 
-    //parie uniquement sur noir
+    //commence au hasard sur  noir ou rouge
     public Player() {
         config = new PlayerConfig();
         raz();
@@ -25,12 +26,38 @@ public class Player extends AbstractPlayer {
 
     @Override
     public void bet() {
-        int miseAFaire = 1;
-        if (lastState.getNumber().getCoul() == RouletteColor.RED) {
-            miseAFaire = (lastState.getMise().getNOIR() * 2);
+        int miseAFaireROUGE = 0;
+        int miseAFaireNOIR = 0;
+        if (lastState.getMise().getNOIR() > 0 && lastState.getNumber().getCoul() == RouletteColor.RED) {
+            if (config.isUseswitch()) {
+                miseAFaireROUGE = (lastState.getMise().getNOIR() * 2);
+            } else {
+                miseAFaireNOIR = (lastState.getMise().getNOIR() * 2);
+            }
         }
-        portefeuille -= miseAFaire;
-        mise.setNOIR(miseAFaire);
-        System.out.println(id + " " + portefeuille + " " + mise.toString());
+        if (lastState.getMise().getROUGE() > 0 && lastState.getNumber().getCoul() == RouletteColor.BLACK) {
+            if (config.isUseswitch()) {
+                miseAFaireNOIR = (lastState.getMise().getROUGE() * 2);
+            } else {
+                miseAFaireROUGE = (lastState.getMise().getROUGE() * 2);
+            }
+        }
+        if (miseAFaireROUGE == 0 && miseAFaireNOIR == 0) {
+            Random r = new Random(System.currentTimeMillis());
+            if (r.nextBoolean()) {
+                miseAFaireNOIR = 1;
+            } else {
+                miseAFaireROUGE = 1;
+            }
+        }
+        portefeuille -= miseAFaireROUGE;
+        portefeuille -= miseAFaireNOIR;
+        mise.setROUGE(miseAFaireROUGE);
+        mise.setNOIR(miseAFaireNOIR);
+    }
+
+    @Override
+    public String toString() {
+        return id + " " + portefeuille + " " + mise.toString();
     }
 }

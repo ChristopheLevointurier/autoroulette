@@ -42,7 +42,7 @@ public class Roulette {
         }
         System.out.println("init roulette " + t.name() + " done:");
         for (RouletteNumber r : table.values()) {
-            System.out.print(r);
+            System.out.println(r);
         }
     }
 
