@@ -29,17 +29,28 @@ public class Player extends AbstractPlayer {
         int miseAFaireROUGE = 0;
         int miseAFaireNOIR = 0;
         if (lastState.getMise().getNOIR() > 0 && lastState.getNumber().getCoul() == RouletteColor.RED) {
-            if (config.isUseswitch()) {
-                miseAFaireROUGE = (lastState.getMise().getNOIR() * 2);
-            } else {
-                miseAFaireNOIR = (lastState.getMise().getNOIR() * 2);
-            }
+            miseAFaireNOIR = (lastState.getMise().getNOIR() * 2);
         }
         if (lastState.getMise().getROUGE() > 0 && lastState.getNumber().getCoul() == RouletteColor.BLACK) {
+            miseAFaireROUGE = (lastState.getMise().getROUGE() * 2);
+        }
+
+        if (lastState.getMise().getNOIR() > 0 && lastState.getNumber().getCoul() == RouletteColor.BLACK) {
             if (config.isUseswitch()) {
-                miseAFaireNOIR = (lastState.getMise().getROUGE() * 2);
+                miseAFaireROUGE = 1;
+                miseAFaireNOIR = 0;
             } else {
-                miseAFaireROUGE = (lastState.getMise().getROUGE() * 2);
+                miseAFaireNOIR = 1;
+                miseAFaireROUGE = 0;
+            }
+        }
+        if (lastState.getMise().getROUGE() > 0 && lastState.getNumber().getCoul() == RouletteColor.RED) {
+            if (config.isUseswitch()) {
+                miseAFaireNOIR = 1;
+                miseAFaireROUGE = 0;
+            } else {
+                miseAFaireROUGE = 1;
+                miseAFaireNOIR = 0;
             }
         }
         if (miseAFaireROUGE == 0 && miseAFaireNOIR == 0) {
