@@ -135,6 +135,7 @@ public class Croupier {
         }
         EventController.broadcast(Utils.AppEvent.BET_DONE);
         number = Roulette.getNextNumber();
+        System.out.println("\nSpin:" + number);
         nbrSpins++;
         EventController.broadcast(Utils.AppEvent.NEW_NUMBER);
         List<AbstractPlayer> deadPlayers = new ArrayList<>();
@@ -144,6 +145,7 @@ public class Croupier {
             if (p.gameover()) {
                 deadPlayers.add(p);
             }
+            System.out.println(p);
         }
         for (AbstractPlayer p : deadPlayers) {
             runningPlayers.remove(p);
