@@ -5,8 +5,6 @@
 package clv.common;
 
 import clv.AbstractPlayer;
-import clv.sub.Etat;
-import clv.sub.Mise;
 import clv.sub.RouletteNumber.RouletteColor;
 import clv.view.PlayerView;
 import java.util.Random;
@@ -17,7 +15,6 @@ import java.util.Random;
  */
 public class Player extends AbstractPlayer {
 
-    //commence au hasard sur  noir ou rouge
     public Player() {
         config = new PlayerConfig();
         raz();
@@ -53,14 +50,7 @@ public class Player extends AbstractPlayer {
                 miseAFaireNOIR = 0;
             }
         }
-        if (miseAFaireROUGE == 0 && miseAFaireNOIR == 0) {
-            Random r = new Random(System.currentTimeMillis());
-            if (r.nextBoolean()) {
-                miseAFaireNOIR = 1;
-            } else {
-                miseAFaireROUGE = 1;
-            }
-        }
+
         portefeuille -= miseAFaireROUGE;
         portefeuille -= miseAFaireNOIR;
         mise.setROUGE(miseAFaireROUGE);
@@ -70,5 +60,15 @@ public class Player extends AbstractPlayer {
     @Override
     public String toString() {
         return id + " " + portefeuille + " " + mise.toString();
+    }
+
+    @Override
+    public void initValues() {
+        Random r = new Random(System.currentTimeMillis());
+        if (r.nextBoolean()) { //commence au hasard sur  noir ou rouge
+            mise.setNOIR(1);
+        } else {
+            mise.setROUGE(1);
+        }
     }
 }
