@@ -81,12 +81,13 @@ public class Player extends AbstractPlayer {
     @Override
     public void initValues() {
         Random r = new Random(System.currentTimeMillis());
+        //TODO fail
         if (r.nextBoolean()) { //commence au hasard sur  noir ou rouge
             mise.setNOIR(1);
-            System.out.println(" go for Black");
+            System.out.println(System.currentTimeMillis()+" go for Black");
         } else {
             mise.setROUGE(1);
-            System.out.println(" go for Red");
+            System.out.println(System.currentTimeMillis()+" go for Red");
         }
     }
 }

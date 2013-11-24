@@ -91,7 +91,7 @@ public abstract class AbstractPlayer {
         dead = false;
         win = false;
         try {
-            Thread.sleep(1);
+            Thread.sleep(10);
         } catch (Exception e) {
         }
         initValues();
