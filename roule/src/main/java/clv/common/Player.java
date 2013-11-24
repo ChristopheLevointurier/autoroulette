@@ -5,6 +5,7 @@
 package clv.common;
 
 import clv.AbstractPlayer;
+import clv.Casino;
 import clv.sub.RouletteNumber;
 import clv.sub.RouletteNumber.RouletteColor;
 import clv.view.PlayerView;
@@ -80,14 +81,12 @@ public class Player extends AbstractPlayer {
 
     @Override
     public void initValues() {
-        Random r = new Random(System.currentTimeMillis());
-        //TODO fail
-        if (r.nextBoolean()) { //commence au hasard sur  noir ou rouge
+        if (Casino.r.nextBoolean()) { //commence au hasard sur  noir ou rouge
             mise.setNOIR(1);
-            System.out.println(System.currentTimeMillis()+" go for Black");
+            System.out.println(id+" go for Black");
         } else {
             mise.setROUGE(1);
-            System.out.println(System.currentTimeMillis()+" go for Red");
+            System.out.println(id+" go for Red");
         }
     }
 }

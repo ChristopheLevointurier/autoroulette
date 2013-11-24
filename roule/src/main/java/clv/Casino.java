@@ -2,6 +2,7 @@ package clv;
 
 import clv.common.Player;
 import clv.view.CroupierView;
+import java.util.Random;
 import javax.swing.JProgressBar;
 
 public class Casino {
@@ -10,6 +11,8 @@ public class Casino {
     public static JProgressBar bar = new JProgressBar();
     public static boolean batchMode = false;
 
+    public static Random r= new Random(System.currentTimeMillis());
+    
     /**
      * @param args
      */

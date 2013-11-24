@@ -90,10 +90,6 @@ public abstract class AbstractPlayer {
         portefeuille = config.getPortefeuilleStart();
         dead = false;
         win = false;
-        try {
-            Thread.sleep(10);
-        } catch (Exception e) {
-        }
         initValues();
     }
 
