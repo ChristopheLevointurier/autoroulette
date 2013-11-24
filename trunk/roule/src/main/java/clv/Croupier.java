@@ -143,6 +143,7 @@ public class Croupier {
         for (AbstractPlayer p : runningPlayers) {
             pay(p, number);
             if (p.gameover()) {
+                System.out.println(p);
                 deadPlayers.add(p);
             }
             System.out.println(p);
