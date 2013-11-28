@@ -42,7 +42,7 @@ import javax.swing.KeyStroke;
 public class CroupierView extends JFrame implements EventListener {
 
     private JCheckBoxMenuItem manualCheck = new JCheckBoxMenuItem("Mode manuel", Casino.batchMode);
-    private JCheckBoxMenuItem HistoryVue = new JCheckBoxMenuItem("Historiques", false);
+    private JCheckBoxMenuItem historyVue = new JCheckBoxMenuItem("Historiques", true);
     private JCheckBoxMenuItem cloud = new JCheckBoxMenuItem("cloud", false);
     private JCheckBoxMenuItem failwinsVue = new JCheckBoxMenuItem("Fails/Wins", false);
     private JCheckBoxMenuItem tableVue = new JCheckBoxMenuItem("Voir la table", false);
@@ -56,6 +56,7 @@ public class CroupierView extends JFrame implements EventListener {
     private JTextField nbrSrest = new JTextField("Sessions restantes:" + Croupier.getNbrSessions());
     private JTextField nbrJoueurs = new JTextField("Joueurs :" + Croupier.getPlayerAmount());
     private RouletteView roul = new RouletteView();
+    private HistoryGraph historyVueFrame = new HistoryGraph();
 
     // private Croupier model;
     public CroupierView() {
@@ -75,7 +76,7 @@ public class CroupierView extends JFrame implements EventListener {
 
         configVue.add(tableVue);
         configVue.addSeparator();
-        configVue.add(HistoryVue);
+        configVue.add(historyVue);
         configVue.add(cloud);
         configVue.add(failwinsVue);
         menu.add(configVue);
@@ -85,6 +86,16 @@ public class CroupierView extends JFrame implements EventListener {
 
         JPanel listButs = new JPanel();
         listButs.setLayout(new BoxLayout(listButs, BoxLayout.Y_AXIS));
+        SessionController.addSessionListener(historyVueFrame);
+
+        historyVue.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                historyVueFrame.setVisible(historyVue.isSelected());
+            }
+        });
+
 
         go.addActionListener(new ActionListener() {
             @Override

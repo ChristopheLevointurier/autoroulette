@@ -4,11 +4,15 @@
  */
 package clv;
 
+import clv.Controller.SessionController;
 import clv.sub.Mise;
 import clv.common.PlayerConfig;
+import clv.common.Session;
 import clv.sub.Etat;
 import clv.sub.RouletteNumber;
 import clv.view.PlayerView;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -23,6 +27,15 @@ public abstract class AbstractPlayer {
     protected PlayerConfig config;
     protected Mise mise;
     protected int portefeuille;
+    /**
+     * session data
+     */
+    protected List<Integer> portefeuilleHistory = new ArrayList<>();
+    protected int cptFailsMax = 0;
+    protected int nbrswitch = 0;
+    /**
+     * /session
+     */
     protected Etat lastState;
     protected PlayerView view;
     protected boolean dead = false;
@@ -39,8 +52,17 @@ public abstract class AbstractPlayer {
     public boolean isWin() {
         if (portefeuille >= config.getPortefeuilleStart() * config.getGoalWin()) {
             win = true;
+            SessionController.addSession(makeSession());
         }
         return win;
+    }
+
+    private Session makeSession() {
+        Session s = new Session(this);
+        portefeuilleHistory = new ArrayList<>();
+        cptFailsMax = 0;
+        nbrswitch = 0;
+        return s;
     }
 
     public void setWin(boolean win) {
@@ -50,6 +72,7 @@ public abstract class AbstractPlayer {
     public boolean isDead() {
         if (portefeuille <= 0) {
             dead = true;
+            SessionController.addSession(makeSession());
         }
         return dead;
     }
@@ -74,8 +97,9 @@ public abstract class AbstractPlayer {
         return portefeuille;
     }
 
-    public void setPortefeuille(int portefeuille) {
-        this.portefeuille = portefeuille;
+    public void setPortefeuille(int _portefeuille) {
+        portefeuilleHistory.add(portefeuille);
+        portefeuille = _portefeuille;
         view.maj();
     }
 
@@ -93,5 +117,28 @@ public abstract class AbstractPlayer {
         initValues();
     }
 
+    public List<Integer> getPortefeuilleHistory() {
+        return portefeuilleHistory;
+    }
+
+    public int getCptFailsMax() {
+        return cptFailsMax;
+    }
+
+    public void setCptFailsMax(int cptFailsMax) {
+        this.cptFailsMax = cptFailsMax;
+    }
+
+    public int getNbrswitch() {
+        return nbrswitch;
+    }
+
+    public void addNbrswitch() {
+        this.nbrswitch++;
+    }
+
+    
+    
+    
     public abstract void initValues();
 }
