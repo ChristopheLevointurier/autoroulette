@@ -2,7 +2,6 @@ package clv.view;
 
 import clv.Controller.SessionController;
 import clv.Controller.SessionListener;
-import clv.common.PlayerConfig;
 import clv.common.Session;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -33,16 +32,11 @@ public class HistoryGraph extends JFrame implements SessionListener {//, Runnabl
     private static final long serialVersionUID = 1L;
     private ChartPanel histchart;
     private XYSeriesCollection xyseriescollection = new XYSeriesCollection();
-    private int wins = 0, fails = 0;
     private JList liste;
-    private double goal = 0;
 
     public HistoryGraph() {
-        super("Goal:" );
-      //  goal = PlayerConfig.getGoalWin();
-      //  liste = new JList(PlayerConfig.getMises().toArray());
-
-        histchart = new ChartPanel(ChartFactory.createXYLineChart("", "runs", "value", xyseriescollection, PlotOrientation.VERTICAL,false, false, false));
+        super("HistoryGraph");
+        histchart = new ChartPanel(ChartFactory.createXYLineChart("", "runs", "value", xyseriescollection, PlotOrientation.VERTICAL, false, false, false));
         XYPlot plot = histchart.getChart().getXYPlot();
         // plot.setRenderer(new XYDotRenderer());
         plot.setDomainCrosshairVisible(true);
@@ -60,7 +54,7 @@ public class HistoryGraph extends JFrame implements SessionListener {//, Runnabl
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        final HistoryGraph instance=this;
+        final HistoryGraph instance = this;
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {

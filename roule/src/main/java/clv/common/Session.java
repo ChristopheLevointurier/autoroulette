@@ -4,6 +4,7 @@
  */
 package clv.common;
 
+import clv.AbstractPlayer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,13 @@ public class Session {
         nbrswitch = _nbrswitch;
     }
 
+    public Session(AbstractPlayer p) {
+        portefeuilleHistory = p.getPortefeuilleHistory();
+        cptFailsMax = p.getCptFailsMax();
+        cptRuns = portefeuilleHistory.size();
+        nbrswitch = p.getNbrswitch();
+    }
+
     public List<Integer> getPortefeuilleHistory() {
         return portefeuilleHistory;
     }
@@ -39,9 +47,8 @@ public class Session {
     public int getNbrswitch() {
         return nbrswitch;
     }
-    
-    
-    public int getLastPortefeuilleValue(){
-        return portefeuilleHistory.get(portefeuilleHistory.size()-1);
+
+    public int getLastPortefeuilleValue() {
+        return portefeuilleHistory.get(portefeuilleHistory.size() - 1);
     }
 }
